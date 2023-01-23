@@ -26,11 +26,12 @@ namespace cs.project07.pokemon.game
 
         public void InitDefaults()
         {
+            Console.SetWindowSize(237, 40);
             Parent = this;
             Left = 0;
             Top = 0;
-            Width = 237;
-            Height = 63;
+            Width = Console.WindowWidth;
+            Height = Console.WindowHeight;
             BackgroundColor = ConsoleColor.DarkGray;
             ForegroundColor = ConsoleColor.Black;
             StatesList = new Stack<State>();
@@ -65,6 +66,8 @@ namespace cs.project07.pokemon.game
             Render();
             do
             {
+                Width = Console.WindowWidth;
+                Height = Console.WindowHeight;
                 HandleEvent();
                 Update();
                 Render();
