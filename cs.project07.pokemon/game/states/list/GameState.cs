@@ -50,10 +50,10 @@ namespace cs.project07.pokemon.game.states.list
                     // TODO Player use action
                     break;
                 case ConsoleKey.PageUp:
-                    Map.Zoom += 1;
+                    Map.Zoom ++;
                     break;
                 case ConsoleKey.PageDown:
-                    Map.Zoom -= 1;
+                    Map.Zoom --;
                     break;
             }
         }
