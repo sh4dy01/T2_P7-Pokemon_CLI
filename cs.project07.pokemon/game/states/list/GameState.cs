@@ -39,17 +39,21 @@ namespace cs.project07.pokemon.game.states.list
                     break;
                 case ConsoleKey.UpArrow:
                     // TODO Player move up
-                    Map.Zoom += 1;
                     break;
                 case ConsoleKey.RightArrow:
                     // TODO Player move right
                     break;
                 case ConsoleKey.DownArrow:
                     // TODO Player move down
-                    Map.Zoom -= 1;
                     break;
                 case ConsoleKey.Enter:
                     // TODO Player use action
+                    break;
+                case ConsoleKey.PageUp:
+                    Map.Zoom += 1;
+                    break;
+                case ConsoleKey.PageDown:
+                    Map.Zoom -= 1;
                     break;
             }
         }

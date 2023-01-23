@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Folder Include="game\entities\player\" />
+    <Folder Include="game\entities\" />
   </ItemGroup>
 
   <ItemGroup>
