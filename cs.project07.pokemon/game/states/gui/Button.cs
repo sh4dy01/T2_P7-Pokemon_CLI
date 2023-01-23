@@ -99,7 +99,7 @@ namespace cs.project07.pokemon.game.states.gui
 
         public void Render()
         {
-            if (Selected && Left - 3 >= 0)
+            if (Selected && Left >= 0)
             {
                 Console.SetCursorPosition(Left + (int)Offsets.X - 3, Top + (int)Offsets.Y);
                 Console.WriteLine(">> ");
