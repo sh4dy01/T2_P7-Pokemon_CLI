@@ -27,10 +27,10 @@ namespace cs.project07.pokemon.game
         public void InitDefaults()
         {
             Parent = this;
-            Left = 22;
-            Top = 5;
-            Width = 76;
-            Height = 20;
+            Left = 0;
+            Top = 0;
+            Width = 237;
+            Height = 63;
             BackgroundColor = ConsoleColor.DarkGray;
             ForegroundColor = ConsoleColor.Black;
             StatesList = new Stack<State>();
@@ -95,7 +95,7 @@ namespace cs.project07.pokemon.game
         public void Update()
         {
             // Recenter on x axis in case console had been resized
-            Left = Console.BufferWidth / 2 - Width / 2;
+            //Left = Console.BufferWidth / 2 - Width / 2;
 
             // Update the state instance if there's at least one, else it cut the program
             if (StatesList?.Count > 0)
@@ -114,7 +114,7 @@ namespace cs.project07.pokemon.game
             if (!Running) return;
 
             // Draw the window borders
-            DrawWindowBorder();
+            //DrawWindowBorder();
 
             // Render the state instance
             if (StatesList?.Count > 0)
