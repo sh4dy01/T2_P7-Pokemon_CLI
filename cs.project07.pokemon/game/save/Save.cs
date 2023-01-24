@@ -1,8 +1,17 @@
 ﻿using System.Security.Cryptography.X509Certificates;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
+
+
 
 namespace cs.project07.pokemon.game.save
 {
-
+    
     static class Save
     {
         private const string SAVEPATH = "../../../game/save/Save.txt";
