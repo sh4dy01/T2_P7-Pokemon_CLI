@@ -28,7 +28,7 @@ namespace cs.project07.pokemon.game.map
             get => _zoom;
             set
             {
-                if (value is >= 1 and <= 4)
+                if (value is >= 1 and <= 6)
                 {
                     _zoom = value;
                     if (Layers == null || Layers.Count <= 0) return;
@@ -76,8 +76,8 @@ namespace cs.project07.pokemon.game.map
                 ["WALL"] = new Layer(this)
                 {
                     Collidable = true,
-                    BackgroundColor = ConsoleColor.DarkYellow,
-                    ForegroundColor = ConsoleColor.DarkYellow
+                    BackgroundColor = ConsoleColor.Black,
+                    ForegroundColor = ConsoleColor.Black
                 },
 
                 ["GROUND"] = new Layer(this)
