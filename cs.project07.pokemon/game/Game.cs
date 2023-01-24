@@ -26,7 +26,7 @@ namespace cs.project07.pokemon.game
 
         public void InitDefaults()
         {
-            Console.SetWindowSize(237, 40);
+            Console.SetWindowSize(237, 63);
             Parent = this;
             Left = 0;
             Top = 0;
