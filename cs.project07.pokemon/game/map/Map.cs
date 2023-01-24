@@ -20,6 +20,7 @@ namespace cs.project07.pokemon.game.map
     {
         public Vector2 PlayerSpawnPosition;
         public Dictionary<string, Layer>? Layers;
+        public Vector2 playerDraw;
 
         private int _zoom;
         public int Zoom
@@ -90,20 +91,27 @@ namespace cs.project07.pokemon.game.map
                     Spawnable = true,
                     BackgroundColor = ConsoleColor.DarkGreen,
                     ForegroundColor = ConsoleColor.Black
+                },
+
+                ["PLAYER"] = new Layer(this)
+                {
+                    Spawnable = false,
+                    BackgroundColor = ConsoleColor.Black,
+                    ForegroundColor = ConsoleColor.Black
                 }
             };
-
-            /*Layers["PLAYER"] = new Layer(this);*/
         }
 
+        int rows;
+        int cols;
         public void ParseFileToLayers(string filePath)
         {
             char[] possibilities = { '#', '*', ' ', '@' };
 
             string[] lines = File.ReadAllLines(filePath);
             string firstLine = lines[0];
-            int rows = lines.Length;
-            int cols = firstLine.Length;
+            rows = lines.Length;
+            cols = firstLine.Length;
 
             foreach (char possibility in possibilities)
             {
@@ -119,6 +127,7 @@ namespace cs.project07.pokemon.game.map
                         else if (currentChar == '@') PlayerSpawnPosition = new Vector2(y, x);
                     }
                 }
+
 
                 switch (possibility)
                 {
@@ -139,12 +148,28 @@ namespace cs.project07.pokemon.game.map
         {
             Left = Parent.Left;
             Top = Parent.Top;
+            updatePlayer();
 
             // Update childs
             // ------ layers
             if (Layers == null || Layers.Count <= 0) return;
             foreach (Layer layer in Layers.Values)
                 layer.Update();
+        }
+
+        private void updatePlayer()
+        {
+            char[,] grid = new char[rows, cols];
+            if (Layers?["WALL"].Zoom != null)
+            {
+                grid[Layers["WALL"].Zoom * (int)playerDraw.X, Layers["WALL"].Zoom * (int)playerDraw.Y] = 'P';
+                Layers?["PLAYER"]?.InitData(grid);
+            }
+            /*else
+            {
+                grid[(int)playerDraw.X, (int)playerDraw.Y] = '@';
+                Layers?["PLAYER"]?.InitData(grid);
+            }*/
         }
 
         public void Render()

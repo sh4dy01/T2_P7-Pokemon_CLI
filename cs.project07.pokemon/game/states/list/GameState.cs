@@ -1,11 +1,12 @@
 ﻿using cs.project07.pokemon.game.map;
+using cs.project07.pokemon.game.entites;
 
 namespace cs.project07.pokemon.game.states.list
 {
     public class GameState : State
     {
         public Map Map;
-
+        public Player Player;
         public GameState(Game game) : base(game)
         {
             Init();
@@ -15,6 +16,7 @@ namespace cs.project07.pokemon.game.states.list
         {
             Name = "Pokemon";
             InitMap();
+            InitPlayer();
         }
 
         private void InitMap()
@@ -22,6 +24,13 @@ namespace cs.project07.pokemon.game.states.list
             Map = new Map(this);
             Map.ParseFileToLayers("game/Map/list/Outdoor.txt");
         }
+
+        private void InitPlayer()
+        {
+            Player = new Player(Map.PlayerSpawnPosition);
+            Map.playerDraw = Player.playerPosition;
+        }
+
         public override void HandleKeyEvent(ConsoleKey pressedKey)
         {
             switch (pressedKey)
@@ -29,22 +38,30 @@ namespace cs.project07.pokemon.game.states.list
                 case ConsoleKey.Insert:
                     // TODO Remove when Pause menu is complete
                     // Back to previous menu
-                    Game.StatesList?.Pop();
+                   Game.StatesList?.Pop();
                     break;
                 case ConsoleKey.Escape:
                     // TODO Pause menu
                     break;
                 case ConsoleKey.LeftArrow:
                     // TODO Player move left
+                    Player.mouvPlayer('O');
+                    Map.playerDraw = Player.playerPosition;
                     break;
                 case ConsoleKey.UpArrow:
                     // TODO Player move up
+                    Player.mouvPlayer('N');
+                    Map.playerDraw = Player.playerPosition;
                     break;
                 case ConsoleKey.RightArrow:
                     // TODO Player move right
+                    Player.mouvPlayer('E');
+                    Map.playerDraw = Player.playerPosition;
                     break;
                 case ConsoleKey.DownArrow:
                     // TODO Player move down
+                    Player.mouvPlayer('S');
+                    Map.playerDraw = Player.playerPosition;
                     break;
                 case ConsoleKey.Enter:
                     // TODO Player use action
