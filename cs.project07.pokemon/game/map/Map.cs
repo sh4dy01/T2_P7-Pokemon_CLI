@@ -125,7 +125,9 @@ namespace cs.project07.pokemon.game.map
             string[] lines = File.ReadAllLines(filePath);
             string firstLine = lines[0];
             int rows = lines.Length;
-            int cols = firstLine.Length;
+            //int cols = firstLine.Length;
+            int cols = 237;
+
 
             rows = lines.Length;
             cols = firstLine.Length;
@@ -160,9 +162,6 @@ namespace cs.project07.pokemon.game.map
                     case 'T':
                         Layers?["TELEPORTER"].InitData(grid);
                         break;
-                    //case '@':
-                    //    Layers?["PLAYER"].InitData(grid);
-                    //    break;
                 }
                 //Zoom = 4;
             }
