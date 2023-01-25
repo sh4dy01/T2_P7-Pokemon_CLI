@@ -20,7 +20,7 @@ namespace cs.project07.pokemon.game.states.list
         private void InitMap()
         {
             Map = new Map(this);
-            Map.ParseFileToLayers("game/Map/list/Outdoor.txt");
+            Map.ParseFileToLayers("game/map/list/Map2.txt");
         }
         public override void HandleKeyEvent(ConsoleKey pressedKey)
         {

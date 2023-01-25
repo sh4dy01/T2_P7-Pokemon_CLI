@@ -6,6 +6,7 @@
  * |*| => Grass (spawnable)  *
  * | | => Ground             *
  * |@| => Player spawn       *
+ * |T| => Teleporter         *
  *                           *
  *****************************/
 
@@ -90,6 +91,12 @@ namespace cs.project07.pokemon.game.map
                     Spawnable = true,
                     BackgroundColor = ConsoleColor.DarkGreen,
                     ForegroundColor = ConsoleColor.Green
+                },
+
+                ["TELEPORTER"] = new Layer(this)
+                {
+                    BackgroundColor = ConsoleColor.DarkMagenta,
+                    ForegroundColor = ConsoleColor.DarkMagenta
                 }
             };
 
@@ -98,12 +105,14 @@ namespace cs.project07.pokemon.game.map
 
         public void ParseFileToLayers(string filePath)
         {
-            char[] possibilities = { '#', '*', ' ', '@' };
+            char[] possibilities = { '#', '*', ' ', '@','T' };
 
             string[] lines = File.ReadAllLines(filePath);
             string firstLine = lines[0];
             int rows = lines.Length;
-            int cols = firstLine.Length;
+            //int cols = firstLine.Length;
+            int cols = 237;
+
 
             foreach (char possibility in possibilities)
             {
@@ -130,6 +139,9 @@ namespace cs.project07.pokemon.game.map
                         break;
                     case ' ':
                         Layers?["GROUND"].InitData(grid);
+                        break;
+                    case 'T':
+                        Layers?["TELEPORTER"].InitData(grid);
                         break;
                 }
             }
