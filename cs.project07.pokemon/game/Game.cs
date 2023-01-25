@@ -26,7 +26,8 @@ namespace cs.project07.pokemon.game
 
         public void InitDefaults()
         {
-            Console.SetWindowSize(237, 40);
+            Console.SetWindowSize(237, 60);
+            Console.SetWindowPosition(0, 0);
             Parent = this;
             Left = 0;
             Top = 0;
@@ -39,7 +40,7 @@ namespace cs.project07.pokemon.game
 
         private void InitStates()
         {
-            StatesList?.Push(new MenuState(this));
+            StatesList?.Push(new CombatState(this));
         }
 
         private void Init()
@@ -66,8 +67,6 @@ namespace cs.project07.pokemon.game
             Render();
             do
             {
-                Width = Console.WindowWidth;
-                Height = Console.WindowHeight;
                 HandleEvent();
                 Update();
                 Render();

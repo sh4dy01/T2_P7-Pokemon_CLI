@@ -7,7 +7,8 @@ namespace cs.project07.pokemon.game.states
 {
     public abstract class State : IUpdatable, IRenderable<Game>
     {
-        public string Name { get; set; }
+        string _name;
+        public string Name { get => _name; set => _name = value; }
 
         public Game Parent { get; set; }
         public int Left { get; set; }

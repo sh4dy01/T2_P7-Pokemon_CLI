@@ -7,7 +7,7 @@ internal enum Status { IDLE, ACTIVE }
 
 namespace cs.project07.pokemon.game.states.gui
 {
-    internal class Button : IUpdatable, IRenderable<State>
+    internal class Button : IUpdatable, IRenderable<DialogBox>
     {
         private bool _selected;
         public bool Selected
@@ -25,7 +25,7 @@ namespace cs.project07.pokemon.game.states.gui
 
         public string Text { get; set; }
 
-        public State Parent { get; set; }
+        public DialogBox Parent { get; set; }
         public int Left { get; set; }
         public int Top { get; set; }
         public int Width { get; set; }
@@ -40,11 +40,13 @@ namespace cs.project07.pokemon.game.states.gui
 
         public Vector2 Offsets;
 
-        public Button(State _Parent, string _Text)
+        public Button(DialogBox _Parent, string _Text)
         {
             InitDefaults();
             Parent = _Parent;
             Text = _Text;
+            Top = Parent.Top + Parent.Height/ 2;
+            Left = Parent.Left + Parent.Width / 2;
         }
 
         public void InitDefaults()

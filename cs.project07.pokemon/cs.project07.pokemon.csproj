@@ -8,7 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="game\entities\player\" />
+    <Compile Remove="game\entities\player\**" />
+    <EmbeddedResource Remove="game\entities\player\**" />
+    <None Remove="game\entities\player\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="game\entities\" />
   </ItemGroup>
 

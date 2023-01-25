@@ -12,6 +12,25 @@ namespace cs.project07.pokemon.game.states.gui.managers
 
         public Action<ConsoleKey> HandleKeyEvent { get; set; }
 
+        public void InitHandleKeyEvent()
+        {
+            HandleKeyEvent = (pressedKey) =>
+            {
+                switch (pressedKey)
+                {
+                    case ConsoleKey.UpArrow:
+                        Button.SelectPrevious(Buttons);
+                        break;
+                    case ConsoleKey.DownArrow:
+                        Button.SelectNext(Buttons);
+                        break;
+                    case ConsoleKey.Enter:
+                        Button.ExecuteAction(Buttons);
+                        break;
+                }
+            };
+        }
+        
         public void Update()
         {
             if (Buttons?.Count == 0) return;
