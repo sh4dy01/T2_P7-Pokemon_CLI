@@ -3,12 +3,15 @@ using cs.project07.pokemon.game.entites;
 using cs.project07.pokemon.game.states.gui.managers;
 using cs.project07.pokemon.game.states.gui;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 
 namespace cs.project07.pokemon.game.states.list
 {
     public class GameState : State
     {
-        public Map Map;
+        public Map CurrentMap;
+        private Dictionary<string, Map> Maps;
+
         public Player Player;
         private CombatState Combat;
         private Game game;
@@ -71,8 +74,16 @@ namespace cs.project07.pokemon.game.states.list
 
         private void InitMap()
         {
-            Map = new Map(this);
-            Map.ParseFileToLayers("game/map/list/Map2.txt");
+            Maps = new Dictionary<string, Map>
+            {
+                { "map1", new Map(this) },
+                { "map2", new Map(this) }
+            };
+
+            Maps["map1"].ParseFileToLayers("game/map/list/Map1.txt");
+            Maps["map2"].ParseFileToLayers("game/map/list/Map2.txt");
+
+            CurrentMap = Maps["map1"];
         }
 
         private void InitPlayer()
@@ -155,7 +166,7 @@ namespace cs.project07.pokemon.game.states.list
 
             // Update childs
             // ------ Map
-            Map?.Update();
+            CurrentMap?.Update();
         }
 
         public override void Render()
@@ -164,7 +175,7 @@ namespace cs.project07.pokemon.game.states.list
 
             // Render childs
             // ------ Map
-            Map?.Render();
+            CurrentMap?.Render();
             
             Player.drawPlayer();
         }
