@@ -43,25 +43,21 @@ namespace cs.project07.pokemon.game.states.list
                 case ConsoleKey.Escape:
                     // TODO Pause menu
                     break;
-                case ConsoleKey.LeftArrow:
-                    // TODO Player move left
-                    Player.mouvPlayer('O');
-                    Map.playerDraw = Player.playerPosition;
-                    break;
                 case ConsoleKey.UpArrow:
                     // TODO Player move up
                     Player.mouvPlayer('N');
-                    Map.playerDraw = Player.playerPosition;
-                    break;
-                case ConsoleKey.RightArrow:
-                    // TODO Player move right
-                    Player.mouvPlayer('E');
-                    Map.playerDraw = Player.playerPosition;
                     break;
                 case ConsoleKey.DownArrow:
                     // TODO Player move down
                     Player.mouvPlayer('S');
-                    Map.playerDraw = Player.playerPosition;
+                    break;
+                case ConsoleKey.LeftArrow:
+                    // TODO Player move left
+                    Player.mouvPlayer('O');
+                    break;
+                case ConsoleKey.RightArrow:
+                    // TODO Player move right
+                    Player.mouvPlayer('E');
                     break;
                 case ConsoleKey.Enter:
                     // TODO Player use action
@@ -77,7 +73,7 @@ namespace cs.project07.pokemon.game.states.list
 
         public override void Update()
         {
-            base.Update();
+            //base.Update();
 
             // Update childs
             // ------ Map
@@ -86,11 +82,12 @@ namespace cs.project07.pokemon.game.states.list
 
         public override void Render()
         {
-            base.Render();
+            //base.Render();
 
             // Render childs
             // ------ Map
             Map?.Render();
+            Player.drawPlayer();
             
         }
     }

@@ -91,14 +91,14 @@ namespace cs.project07.pokemon.game.map
                     Spawnable = true,
                     BackgroundColor = ConsoleColor.DarkGreen,
                     ForegroundColor = ConsoleColor.Black
-                },
-
-                ["PLAYER"] = new Layer(this)
-                {
-                    Spawnable = false,
-                    BackgroundColor = ConsoleColor.Black,
-                    ForegroundColor = ConsoleColor.Black
                 }
+
+                //["PLAYER"] = new Layer(this)
+                //{
+                //    Spawnable = false,
+                //    BackgroundColor = ConsoleColor.Black,
+                //    ForegroundColor = ConsoleColor.Black
+                //}
             };
         }
 
@@ -140,6 +140,9 @@ namespace cs.project07.pokemon.game.map
                     case ' ':
                         Layers?["GROUND"].InitData(grid);
                         break;
+                    //case '@':
+                    //    Layers?["PLAYER"].InitData(grid);
+                    //    break;
                 }
             }
         }
@@ -148,7 +151,7 @@ namespace cs.project07.pokemon.game.map
         {
             Left = Parent.Left;
             Top = Parent.Top;
-            updatePlayer();
+            //updatePlayer();
 
             // Update childs
             // ------ layers
@@ -162,14 +165,9 @@ namespace cs.project07.pokemon.game.map
             char[,] grid = new char[rows, cols];
             if (Layers?["WALL"].Zoom != null)
             {
-                grid[Layers["WALL"].Zoom * (int)playerDraw.X, Layers["WALL"].Zoom * (int)playerDraw.Y] = 'P';
+                grid[Layers["PLAYER"].Zoom * (int)playerDraw.X, Layers["PLAYER"].Zoom * (int)playerDraw.Y] = 'P';
                 Layers?["PLAYER"]?.InitData(grid);
             }
-            /*else
-            {
-                grid[(int)playerDraw.X, (int)playerDraw.Y] = '@';
-                Layers?["PLAYER"]?.InitData(grid);
-            }*/
         }
 
         public void Render()
