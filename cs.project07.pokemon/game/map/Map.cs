@@ -104,6 +104,7 @@ namespace cs.project07.pokemon.game.map
 
         int rows;
         int cols;
+        public char[,] grid;
         public void ParseFileToLayers(string filePath)
         {
             char[] possibilities = { '#', '*', ' ', '@' };
@@ -115,7 +116,7 @@ namespace cs.project07.pokemon.game.map
 
             foreach (char possibility in possibilities)
             {
-                char[,] grid = new char[rows, cols];
+                grid = new char[rows, cols];
                 for (int y = 0; y < rows; y++)
                 {
                     string line = lines[y];
@@ -144,6 +145,7 @@ namespace cs.project07.pokemon.game.map
                     //    Layers?["PLAYER"].InitData(grid);
                     //    break;
                 }
+                Zoom = 4;
             }
         }
 

@@ -25,7 +25,12 @@ namespace cs.project07.pokemon.game.entites
             ForegroundColor = ConsoleColor.Black;
         }
 
-        public void mouvPlayer(char dir)
+        public void zoomPlayer(int zoom)
+        {
+            playerPosition = new Vector2(zoom * playerPosition.X, zoom * playerPosition.Y);
+        }
+
+        public void mouvPlayer(char dir, int zoom)
         {
             switch (dir)
             {
@@ -47,7 +52,37 @@ namespace cs.project07.pokemon.game.entites
                     break;
             }
         }
-
+        public bool collision(char[,] grid, char dir)
+        {
+            switch (dir)
+            {
+                case 'N':
+                    if (grid[(int)playerPosition.X - 1, (int)playerPosition.Y] == '#')
+                    {
+                        return false;
+                    }
+                    break;
+                case 'S':
+                    if (grid[(int)playerPosition.X + 1, (int)playerPosition.Y] == '#')
+                    {
+                        return false;
+                    }
+                    break;
+                case 'O':
+                    if (grid[(int)playerPosition.X, (int)playerPosition.Y - 1] == '#')
+                    {
+                        return false;
+                    }
+                    break;
+                case 'E':
+                    if (grid[(int)playerPosition.X, (int)playerPosition.Y + 1] == '#')
+                    {
+                        return false;
+                    }
+                    break;
+            }
+            return true;
+        }
         public void drawPlayer()
         {
             Console.SetCursorPosition((int)playerPosition.Y, (int)playerPosition.X);
