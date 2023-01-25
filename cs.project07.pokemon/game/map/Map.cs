@@ -60,7 +60,7 @@ namespace cs.project07.pokemon.game.map
 
         public void InitDefaults()
         {
-            Zoom = 1;
+            Zoom = 4;
             Left = Parent.Left;
             Top = Parent.Top;
             Width = Parent.Width;
@@ -110,8 +110,7 @@ namespace cs.project07.pokemon.game.map
             string[] lines = File.ReadAllLines(filePath);
             string firstLine = lines[0];
             int rows = lines.Length;
-            //int cols = firstLine.Length;
-            int cols = 237;
+            int cols = firstLine.Length;
 
 
             foreach (char possibility in possibilities)
@@ -229,7 +228,7 @@ namespace cs.project07.pokemon.game.map
 
             public void InitDefaults()
             {
-                _zoom = 1;
+                _zoom = 4;
                 Visible = true;
                 Collidable = false;
                 Spawnable = false;
