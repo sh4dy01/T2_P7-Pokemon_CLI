@@ -125,8 +125,7 @@ namespace cs.project07.pokemon.game.map
             string[] lines = File.ReadAllLines(filePath);
             string firstLine = lines[0];
             int rows = lines.Length;
-            //int cols = firstLine.Length;
-            int cols = 237;
+            int cols = firstLine.Length;
 
 
             rows = lines.Length;
