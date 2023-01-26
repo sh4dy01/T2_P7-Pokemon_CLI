@@ -39,6 +39,7 @@ namespace cs.project07.pokemon.game.states.gui
                     InitSelectActionButtons();
                     break;
                 case CombatButtonState.SELECT_ATTACK:
+                    InitSelectAttackButtons(((CombatState)Parent).PlayerPokemon);
                     break;
                 case CombatButtonState.ACTION_USE:
                     break;
@@ -55,38 +56,55 @@ namespace cs.project07.pokemon.game.states.gui
             Text = "";
         }
         
-        public void InitSelectActionButtons() {
-            _buttons["FIGHT"] = new Button(this, "Play")
+        public void InitSelectAttackButtons(PokedexEntry pokemon) {
+            int i = 1;
+            foreach (var attack in pokemon.Attacks)
             {
-                Offsets = new Vector2(0, 2),
+                _buttons[attack.Name] = new Button(this, attack.Name)
+                {
+                    Offsets = new Vector2(-10, -1),
+                    Selected = true,
+                    Action = () =>
+                    {
+
+                    }
+                };
+            }
+        }
+
+        public void InitSelectActionButtons()
+        {
+            _buttons["FIGHT"] = new Button(this, "ATTACK")
+            {
+                Offsets = new Vector2(-10, -1),
                 Selected = true,
                 Action = () =>
                 {
-                    
+                    SwitchState(CombatButtonState.SELECT_ATTACK);
                 }
             };
-            _buttons["POKEMON"] = new Button(this, "Pokemon")
+            _buttons["POKEMON"] = new Button(this, "POKEMON")
             {
-                Offsets = new Vector2(0, 2),
+                Offsets = new Vector2(10, -1),
                 Action = () =>
                 {
 
                 }
             };
-            _buttons["INVENTORY"] = new Button(this, "Inventory")
+            _buttons["INVENTORY"] = new Button(this, "INVENTORY")
             {
-                Offsets = new Vector2(3, 0),
+                Offsets = new Vector2(-10, 2),
                 Action = () =>
                 {
-                    Game.StatesList?.Pop();
+
                 }
             };
-            _buttons["RUN"] = new Button(this, "Run")
+            _buttons["RUN"] = new Button(this, "RUN")
             {
-                Offsets = new Vector2(3, 2),
+                Offsets = new Vector2(10, 2),
                 Action = () =>
                 {
-                    Game.StatesList?.Pop();
+
                 }
             };
         }

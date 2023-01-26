@@ -34,6 +34,9 @@ namespace cs.project07.pokemon
 		private Element _element;
 		private Attack[] _attacks;
 
+		public string Name { get => _name; }
+		public Attack[] Attacks { get => _attacks; }
+
 		public PokedexEntry(int pokedexId, string name, Element element, int maxHealth, Attack[] attacks)
         {
 			_pokedexID = pokedexId;

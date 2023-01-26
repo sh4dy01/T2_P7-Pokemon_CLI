@@ -25,9 +25,11 @@ namespace cs.project07.pokemon.game.states.list
 
         private CombatDialogBox _dialogBox;
 
+        public PokedexEntry PlayerPokemon { get => _playerPokemon; }
+
         public CombatState(Game game, PokedexEntry? playerPokemon = null, PokedexEntry? enemyPokemon = null) : base(game)
         {
-            _playerPokemon = playerPokemon;
+            _playerPokemon = PokemonRegistry.GetRandomPokemon();
             _enemyPokemon = PokemonRegistry.GetRandomPokemon();
             _dialogBox = new CombatDialogBox(this);
             Init();
@@ -59,6 +61,7 @@ namespace cs.project07.pokemon.game.states.list
                     _dialogBox.SwitchState(CombatDialogBox.CombatButtonState.SELECT_ACTION);
                     break;
                 case CombatView.SELECT_ATTACK:
+                    _dialogBox.SwitchState(CombatDialogBox.CombatButtonState.SELECT_ATTACK);
                     break;
                 case CombatView.ACTION_USE:
                     break;
@@ -82,7 +85,19 @@ namespace cs.project07.pokemon.game.states.list
             switch (pressedKey)
             {
                 case ConsoleKey.Enter:
-                    SwitchView(CombatView.SELECT_ACTION);
+                    if (_dialogBox.ButtonManager.Buttons.Count <= 0)
+                    {
+                        var NextState = _currentView + 1;
+                        SwitchView(NextState);
+                        break;
+                    }
+                    Button.ExecuteAction(_dialogBox.ButtonManager.Buttons);
+                    break;
+                case ConsoleKey.UpArrow:
+                    Button.SelectPrevious(_dialogBox.ButtonManager.Buttons);
+                    break;
+                case ConsoleKey.DownArrow:
+                    Button.SelectNext(_dialogBox.ButtonManager.Buttons);
                     break;
             }
         }
