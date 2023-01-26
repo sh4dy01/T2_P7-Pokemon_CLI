@@ -1,4 +1,5 @@
-﻿using cs.project07.pokemon.game.map;
+﻿using cs.project07.pokemon.game.entites;
+using cs.project07.pokemon.game.map;
 using cs.project07.pokemon.game.states.gui;
 
 namespace cs.project07.pokemon.game.states.list
@@ -79,6 +80,11 @@ namespace cs.project07.pokemon.game.states.list
                     break;
             }
         }
+
+        /*public void SwitchPlayerPokemon(PokemonCaptured pokemon)
+        {
+            _playerPokemon = pokemon;
+        }*/ //TODO
         
         public override void HandleKeyEvent(ConsoleKey pressedKey)
         {
