@@ -3,6 +3,7 @@ using cs.project07.pokemon.game.states.list;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -18,6 +19,8 @@ namespace cs.project07.pokemon.game.states.gui
         protected ButtonManager _buttonManager;
         protected Dictionary<string, Button> _buttons;
 
+        public ButtonManager ButtonManager { get => _buttonManager; }
+
         public State Parent { get; set; }
         public int Left { get; set; }
         public int Top { get; set; }
@@ -30,7 +33,10 @@ namespace cs.project07.pokemon.game.states.gui
         public DialogBox(State state)
         {
             Parent = state;
-            InitDefaults();
+            if (state.Name == "Main Menu")
+                InitMenu();
+            else
+                InitDefaults();
         }
         
         public void InitDefaults()
@@ -44,11 +50,21 @@ namespace cs.project07.pokemon.game.states.gui
             _text = "Default Text";
         }
 
+        private void InitMenu()
+        {
+            Width = 100;
+            Height = 8;
+            Left = Parent.Left;
+            Top = Parent.Top;
+            BackgroundColor = ConsoleColor.Black;
+            ForegroundColor = ConsoleColor.White;
+            _text = null;
+        }
+
         protected void InitDefaultButtons()
         {
             _buttonManager = new ButtonManager();
             _buttons = _buttonManager.Buttons;
-            _buttonManager.InitHandleKeyEvent();
         }
 
         protected virtual void InitButtons()
