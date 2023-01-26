@@ -110,7 +110,7 @@ namespace cs.project07.pokemon.game
         {
             // Clear the console
             Console.ResetColor();
-            Console.Clear();
+            //Console.Clear();
 
             // Check if program still alive else return
             if (!Running) return;
@@ -127,42 +127,42 @@ namespace cs.project07.pokemon.game
         {
             Running = false;
             Console.ResetColor();
-            Console.Clear();
+            //Console.Clear();
         }
 
-        private void DrawWindowBorder()
-        {
+        //private void DrawWindowBorder()
+        //{
 
-            Console.BackgroundColor = BackgroundColor;
-            Console.ForegroundColor = ForegroundColor;
+        //    Console.BackgroundColor = BackgroundColor;
+        //    Console.ForegroundColor = ForegroundColor;
 
-            // Draw state title
-            Console.SetCursorPosition(Left - 1, Top - 3);
-            Console.WriteLine(new string(' ', Width + 2));
-            Console.SetCursorPosition(Left - 1, Top - 2);
-            Console.WriteLine(new string(' ', Width + 2));
-            if (StatesList?.Count > 0)
-            {
-                Console.SetCursorPosition(Left - 1 + Width / 2 - StatesList.First().Name.Length / 2, Top - 2);
-                Console.WriteLine(StatesList?.First().Name);
-            }
+        //    // Draw state title
+        //    Console.SetCursorPosition(Left - 1, Top - 3);
+        //    Console.WriteLine(new string(' ', Width + 2));
+        //    Console.SetCursorPosition(Left - 1, Top - 2);
+        //    Console.WriteLine(new string(' ', Width + 2));
+        //    if (StatesList?.Count > 0)
+        //    {
+        //        Console.SetCursorPosition(Left - 1 + Width / 2 - StatesList.First().Name.Length / 2, Top - 2);
+        //        Console.WriteLine(StatesList?.First().Name);
+        //    }
 
-            // Draw Top and bottom borders
-            Console.SetCursorPosition(Left - 1, Top - 1);
-            Console.WriteLine(new string(' ', Width + 2));
-            Console.SetCursorPosition(Left - 1, Top + Height);
-            Console.WriteLine(new string(' ', Width + 2));
+        //    // Draw Top and bottom borders
+        //    Console.SetCursorPosition(Left - 1, Top - 1);
+        //    Console.WriteLine(new string(' ', Width + 2));
+        //    Console.SetCursorPosition(Left - 1, Top + Height);
+        //    Console.WriteLine(new string(' ', Width + 2));
 
-            Console.WriteLine();
+        //    Console.WriteLine();
 
-            // Draw Left and right borders
-            for (int i = 0; i <= Height; i++)
-            {
-                Console.SetCursorPosition(Left - 1, Top + i);
-                Console.Write(" ");
-                Console.SetCursorPosition(Left + Width, Top + i);
-                Console.Write(" ");
-            }
-        }
+        //    // Draw Left and right borders
+        //    for (int i = 0; i <= Height; i++)
+        //    {
+        //        Console.SetCursorPosition(Left - 1, Top + i);
+        //        Console.Write(" ");
+        //        Console.SetCursorPosition(Left + Width, Top + i);
+        //        Console.Write(" ");
+        //    }
+        //}
     }
 }
