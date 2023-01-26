@@ -13,7 +13,9 @@
 using cs.project07.pokemon.game.states;
 using System.Collections;
 using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
 using System.Xml.Linq;
+using cs.project07.pokemon.game.save;
 
 namespace cs.project07.pokemon.game.map
 {
@@ -23,6 +25,8 @@ namespace cs.project07.pokemon.game.map
         public Dictionary<string, Layer>? Layers;
         public Vector2 playerDraw;
 
+        private List<Tuple<string, int, int, string, int, int>>? _Teleporters;
+        private string _Name;
         private int _zoom;
         public int Zoom
         {
@@ -47,9 +51,10 @@ namespace cs.project07.pokemon.game.map
         public ConsoleColor ForegroundColor { get; set; }
         public ConsoleColor BackgroundColor { get; set; }
 
-        public Map(State parent)
+        public Map(State parent, string Name)
         {
             Parent = parent;
+            _Name = Name;
             Init();
         }
 
@@ -68,6 +73,7 @@ namespace cs.project07.pokemon.game.map
             Height = Parent.Height;
             BackgroundColor = ConsoleColor.Gray;
             ForegroundColor = ConsoleColor.Black;
+            _Teleporters = Save.LoadMeta(_Name);
         }
 
         private void InitLayers()
