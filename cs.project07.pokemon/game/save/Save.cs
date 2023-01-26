@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-
-
+﻿using System.Security.Cryptography.X509Certificates;
 
 namespace cs.project07.pokemon.game.save
 {
-    
+
     static class Save
     {
-        private const string PATH = "./Save.txt";
+        private const string SAVEPATH = "../../../game/save/Save.txt";
+        private const string METAPATH = "../../../game/save/Meta.txt";
         static void SaveData(params Tuple<string, int>[] data)
         {
-            StreamWriter writer = new StreamWriter(File.OpenRead(PATH));
+            StreamWriter writer = new StreamWriter(File.OpenRead(SAVEPATH));
 
             foreach (var element in data)
             {
@@ -36,7 +29,7 @@ namespace cs.project07.pokemon.game.save
 
             Dictionary<string, int> data = new Dictionary<string, int>();
 
-            StreamReader reader = new StreamReader(File.OpenRead(PATH));
+            StreamReader reader = new StreamReader(File.OpenRead(SAVEPATH));
 
             while (line != "endFile")
             {
@@ -59,6 +52,62 @@ namespace cs.project07.pokemon.game.save
                 if (key != null && value != null)
                 {
                     data.Add(key, Convert.ToInt32(value));
+                }
+
+                line = reader.ReadLine();
+            }
+
+            reader.Close();
+
+
+            return data;
+        }
+
+        public static List<Tuple<string,int,int,string,int,int>>? LoadMeta(string mapName)
+        {
+            List<Tuple<string, int, int, string, int, int>>? data = new List<Tuple<string, int, int, string, int, int>>();
+            string line = "";
+            string map1;
+            string map2;
+            int posX1;
+            int posY1;
+            int posX2;
+            int posY2;
+
+
+            StreamReader reader = new StreamReader(File.OpenRead(METAPATH));
+
+            while (line != "endFile")
+            {
+                map1 = "";
+                map2 = "";
+                posX1 = 0;
+                posY1 = 0;
+                posX2 = 0;
+                posY2 = 0;
+
+                if (line == ">") 
+                {
+                    line = reader.ReadLine();
+                    map1 = line;
+                    if (map1 != mapName) continue;
+
+                    line = reader.ReadLine();
+                    posX1 = Convert.ToInt32(line);
+
+                    line = reader.ReadLine();
+                    posY1 = Convert.ToInt32(line);
+
+                    line = reader.ReadLine();
+                    map2 = line;
+
+                    line = reader.ReadLine();
+                    posX2 = Convert.ToInt32(line);
+
+                    line = reader.ReadLine();
+                    posY2 = Convert.ToInt32(line);
+
+                    data.Add(Tuple.Create(map1, posX1, posY1, map2, posX2, posY2));
                 }
 
                 line = reader.ReadLine();

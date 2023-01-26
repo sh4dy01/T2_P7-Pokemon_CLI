@@ -1,4 +1,5 @@
 ﻿using cs.project07.pokemon.game.map;
+using cs.project07.pokemon.game.save;
 using System.Runtime.CompilerServices;
 
 namespace cs.project07.pokemon.game.states.list
@@ -7,6 +8,7 @@ namespace cs.project07.pokemon.game.states.list
     {
         public Map CurrentMap;
         private Dictionary<string, Map> Maps;
+        
 
         public GameState(Game game) : base(game)
         {
@@ -23,12 +25,12 @@ namespace cs.project07.pokemon.game.states.list
         {
             Maps = new Dictionary<string, Map>
             {
-                { "map1", new Map(this) },
-                { "map2", new Map(this) }
+                { "map1", new Map(this,"map1") },
+                { "map2", new Map(this,"map2") }
             };
 
-            Maps["map1"].ParseFileToLayers("game/map/list/Map1.txt");
-            Maps["map2"].ParseFileToLayers("game/map/list/Map2.txt");
+            Maps["map1"].ParseFileToLayers("../../../game/map/list/Map1.txt");
+            Maps["map2"].ParseFileToLayers("../../../game/map/list/Map2.txt");
 
             CurrentMap = Maps["map1"];
         }
@@ -85,6 +87,11 @@ namespace cs.project07.pokemon.game.states.list
             // Render childs
             // ------ Map
             CurrentMap?.Render();
+            
+        }
+
+        public void ChangeMap (string mapName, int posX, int posY)
+        {
             
         }
     }
