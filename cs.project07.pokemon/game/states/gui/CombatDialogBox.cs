@@ -1,6 +1,7 @@
 ﻿using cs.project07.pokemon.game.states.gui.managers;
 using cs.project07.pokemon.game.states.list;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -11,62 +12,47 @@ namespace cs.project07.pokemon.game.states.gui
 {
     internal class CombatDialogBox : DialogBox
     {
-        public enum CombatButtonState
-        {
-            SELECT_ACTION,
-            SELECT_ATTACK,
-            ACTION_USE,
-            ACTION_PET,
-        };
-        
-        private CombatButtonState _currentState;
-        
+               
         public CombatDialogBox(CombatState state) : base(state)
         {
             InitDefaults();
             InitDefaultButtons();
-            _currentState = CombatButtonState.SELECT_ACTION;
         }
 
-        public void SwitchState(CombatButtonState state)
-        {
-            ResetButtons();
-            _currentState = state;
-            
-            switch (_currentState)
-            {
-                case CombatButtonState.SELECT_ACTION:
-                    InitSelectActionButtons();
-                    break;
-                case CombatButtonState.SELECT_ATTACK:
-                    InitSelectAttackButtons(((CombatState)Parent).PlayerPokemon);
-                    break;
-                case CombatButtonState.ACTION_USE:
-                    break;
-                case CombatButtonState.ACTION_PET:
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        private void ResetButtons()
+        public void ResetButtons()
         {
             _buttons.Clear();
             Text = "";
         }
         
-        public void InitSelectAttackButtons(PokedexEntry pokemon) {
-            int i = 1;
-            foreach (var attack in pokemon.Attacks)
+        public void InitSelectAttackButtons(Attack[] attacks) 
+        {
+            int offsetX = -10;
+            int offsetY = -1;
+            bool selected = true;
+
+            for (int i = 0; i < attacks.Length; i++)
             {
+                if (i > 0) selected = false;
+                if (i == 2)
+                {
+                    offsetX = 10;
+                    offsetY = -1;
+                }
+
+                if (i%2 == 1)
+                {
+                    offsetY = -offsetY;
+                }
+
+                var attack = attacks[i];
                 _buttons[attack.Name] = new Button(this, attack.Name)
                 {
-                    Offsets = new Vector2(-10, -1),
-                    Selected = true,
+                    Offsets = new Vector2(offsetX, offsetY),
+                    Selected = selected,
                     Action = () =>
                     {
-
+                        ((CombatState)Parent).DealEnemyDamage(attack.Damage);
                     }
                 };
             }
@@ -80,7 +66,7 @@ namespace cs.project07.pokemon.game.states.gui
                 Selected = true,
                 Action = () =>
                 {
-                    SwitchState(CombatButtonState.SELECT_ATTACK);
+                    ((CombatState)Parent).SwitchView(CombatState.CombatView.SELECT_ATTACK);
                 }
             };
             _buttons["POKEMON"] = new Button(this, "POKEMON")
@@ -88,7 +74,7 @@ namespace cs.project07.pokemon.game.states.gui
                 Offsets = new Vector2(10, -1),
                 Action = () =>
                 {
-
+                    //Switch to select pokemon state
                 }
             };
             _buttons["INVENTORY"] = new Button(this, "INVENTORY")
@@ -104,7 +90,7 @@ namespace cs.project07.pokemon.game.states.gui
                 Offsets = new Vector2(10, 2),
                 Action = () =>
                 {
-
+                    //Run action depending the lv and health of enemy
                 }
             };
         }

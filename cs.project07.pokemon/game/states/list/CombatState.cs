@@ -6,7 +6,7 @@ namespace cs.project07.pokemon.game.states.list
 {
     public class CombatState : State
     {
-        enum CombatView
+        public enum CombatView
         {
             INTRO,
             SELECT_ACTION,
@@ -19,20 +19,28 @@ namespace cs.project07.pokemon.game.states.list
             END_COMBAT
         };
 
-        private PokedexEntry _playerPokemon;
-        private PokedexEntry _enemyPokemon;
         private bool _isPlayerTurn;
-        private CombatView _currentView;
 
+        private Pokemon _playerPokemon;
+        private Pokemon _enemyPokemon;
+
+        private CombatView _currentView;
         private CombatDialogBox _dialogBox;
 
-        public PokedexEntry PlayerPokemon { get => _playerPokemon; }
+        private PokemonInfo _playerPokemonUI;
+        private PokemonInfo _enemyPokemonUI;
+
+        public Pokemon PlayerPokemon { get => _playerPokemon; }
+
 
         public CombatState(Game game, PokedexEntry? playerPokemon = null, PokedexEntry? enemyPokemon = null) : base(game)
         {
-            _playerPokemon = PokemonRegistry.GetRandomPokemon();
-            _enemyPokemon = PokemonRegistry.GetRandomPokemon();
+            _playerPokemon = new Pokemon(PokemonRegistry.GetRandomPokemon());
+            _enemyPokemon = new Pokemon(PokemonRegistry.GetRandomPokemon());
             _dialogBox = new CombatDialogBox(this);
+            _playerPokemonUI = new PokemonInfo(this, _playerPokemon, false);
+            _enemyPokemonUI = new PokemonInfo(this, _enemyPokemon, true);
+
             Init();
         }
 
@@ -49,8 +57,9 @@ namespace cs.project07.pokemon.game.states.list
             SwitchView(_currentView);
         }
         
-        private void SwitchView(CombatView view)
+        public void SwitchView(CombatView view)
         {
+            _dialogBox.ResetButtons();
             _currentView = view;
             
             switch (view)
@@ -59,22 +68,29 @@ namespace cs.project07.pokemon.game.states.list
                     _dialogBox.UpdateText("A wild " + _enemyPokemon.Name + " appeared !");
                     break;
                 case CombatView.SELECT_ACTION:
-                    _dialogBox.SwitchState(CombatDialogBox.CombatButtonState.SELECT_ACTION);
+                    _dialogBox.InitSelectActionButtons();
                     break;
                 case CombatView.SELECT_ATTACK:
-                    _dialogBox.SwitchState(CombatDialogBox.CombatButtonState.SELECT_ATTACK);
+                    _dialogBox.InitSelectAttackButtons(_playerPokemon.Attacks);
                     break;
                 case CombatView.ACTION_USE:
                     break;
                 case CombatView.ACTION_PET:
                     break;
                 case CombatView.EFFECTIVE:
+                    _dialogBox.ResetButtons();
+                    _dialogBox.UpdateText("Blablabal");
+                    _enemyPokemonUI.UpdateUI(_enemyPokemon);
                     break;
                 case CombatView.ENEMY_ATTACK:
+                    //Enemy attack turn
                     break;
                 case CombatView.ENEMY_EFFECTIVE:
+                    //Depending the element say if it's effective or not on our pokemon
                     break;
                 case CombatView.END_COMBAT:
+                    //Win text if enemy dead
+                    //Loose text if pokemon dead
                     break;
                 default:
                     break;
@@ -85,6 +101,12 @@ namespace cs.project07.pokemon.game.states.list
         {
             _playerPokemon = pokemon;
         }*/ //TODO
+
+        public void DealEnemyDamage(int amount)
+        {
+            _enemyPokemon.DealDamage(amount);
+            SwitchView(CombatView.EFFECTIVE);
+        }
         
         public override void HandleKeyEvent(ConsoleKey pressedKey)
         {
@@ -120,9 +142,12 @@ namespace cs.project07.pokemon.game.states.list
         {
             base.Render();
             _dialogBox.Render();
+            _playerPokemonUI.Render();
+            _enemyPokemonUI.Render();
+
             // Render childs
             // ------ Map
-            
+
         }
     }
 }

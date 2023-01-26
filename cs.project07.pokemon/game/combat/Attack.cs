@@ -12,6 +12,7 @@ namespace cs.project07.pokemon
         private Element _element;
 
         public string Name { get => _name; }
+        public int Damage { get => _damage; }
 
         public Attack(string name, int damage, Element element)
         {
