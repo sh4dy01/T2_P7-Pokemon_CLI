@@ -29,55 +29,69 @@ namespace cs.project07.pokemon.game.states.list
         {
             Player = new Player(Map.PlayerSpawnPosition);
             Map.playerDraw = Player.playerPosition;
+            Map.Zoom = 4;
+            Player.zoomPlayer(Map.Zoom);
         }
 
         public override void HandleKeyEvent(ConsoleKey pressedKey)
         {
-            switch (pressedKey)
+            if(Map.Layers["WALL"].Data != null)
             {
-                case ConsoleKey.Insert:
-                    // TODO Remove when Pause menu is complete
-                    // Back to previous menu
-                   Game.StatesList?.Pop();
-                    break;
-                case ConsoleKey.Escape:
-                    // TODO Pause menu
-                    break;
-                case ConsoleKey.LeftArrow:
-                    // TODO Player move left
-                    Player.mouvPlayer('O');
-                    Map.playerDraw = Player.playerPosition;
-                    break;
-                case ConsoleKey.UpArrow:
-                    // TODO Player move up
-                    Player.mouvPlayer('N');
-                    Map.playerDraw = Player.playerPosition;
-                    break;
-                case ConsoleKey.RightArrow:
-                    // TODO Player move right
-                    Player.mouvPlayer('E');
-                    Map.playerDraw = Player.playerPosition;
-                    break;
-                case ConsoleKey.DownArrow:
-                    // TODO Player move down
-                    Player.mouvPlayer('S');
-                    Map.playerDraw = Player.playerPosition;
-                    break;
-                case ConsoleKey.Enter:
-                    // TODO Player use action
-                    break;
-                case ConsoleKey.PageUp:
-                    Map.Zoom ++;
-                    break;
-                case ConsoleKey.PageDown:
-                    Map.Zoom --;
-                    break;
+                switch (pressedKey)
+                {
+                    case ConsoleKey.Insert:
+                        // TODO Remove when Pause menu is complete
+                        // Back to previous menu
+                        Game.StatesList?.Pop();
+                        break;
+                    case ConsoleKey.Escape:
+                        // TODO Pause menu
+                        break;
+                    case ConsoleKey.UpArrow:
+                        // TODO Player move up
+                        if (Player.collision(Map.Layers["WALL"].ZoomedData, 'N') == true && Map.Zoom == 4)
+                            Player.mouvPlayer('N', Map.Zoom);
+                        break;
+                    case ConsoleKey.DownArrow:
+                        // TODO Player move down
+                        if (Player.collision(Map.Layers["WALL"].ZoomedData, 'S') == true && Map.Zoom == 4)
+                            Player.mouvPlayer('S', Map.Zoom);
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        // TODO Player move left
+                        if (Player.collision(Map.Layers["WALL"].ZoomedData, 'O') == true && Map.Zoom == 4)
+                            Player.mouvPlayer('O', Map.Zoom);
+                        break;
+                    case ConsoleKey.RightArrow:
+                        // TODO Player move right
+                        if (Player.collision(Map.Layers["WALL"].ZoomedData, 'E') == true && Map.Zoom == 4)
+                            Player.mouvPlayer('E', Map.Zoom);
+                        break;
+                    case ConsoleKey.Enter:
+                        // TODO Player use action
+                        break;
+                    case ConsoleKey.M:
+                        if (Map.Zoom == 4)
+                        {
+                            Map.Zoom = 1;
+                            Player.zoomPlayer(Map.Zoom);
+                        }
+                        else if(Map.Zoom == 1)
+                        {
+                            Map.Zoom = 4;
+                            Player.zoomPlayer(Map.Zoom);
+                        }
+                        break;
+                    case ConsoleKey.PageDown:
+                        Map.Zoom--;
+                        break;
+                }
             }
         }
 
         public override void Update()
         {
-            base.Update();
+            //base.Update();
 
             // Update childs
             // ------ Map
@@ -86,12 +100,13 @@ namespace cs.project07.pokemon.game.states.list
 
         public override void Render()
         {
-            base.Render();
+            //base.Render();
 
             // Render childs
             // ------ Map
             Map?.Render();
             
+            Player.drawPlayer();
         }
     }
 }
