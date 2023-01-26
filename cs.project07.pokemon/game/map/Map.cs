@@ -126,8 +126,6 @@ namespace cs.project07.pokemon.game.map
             int rows = lines.Length;
             int cols = firstLine.Length;
 
-            rows = lines.Length;
-            cols = firstLine.Length;
 
             foreach (char possibility in possibilities)
             {
