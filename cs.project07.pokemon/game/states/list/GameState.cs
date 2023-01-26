@@ -29,6 +29,8 @@ namespace cs.project07.pokemon.game.states.list
         {
             Player = new Player(Map.PlayerSpawnPosition);
             Map.playerDraw = Player.playerPosition;
+            Map.Zoom = 4;
+            Player.zoomPlayer(Map.Zoom);
         }
 
         public override void HandleKeyEvent(ConsoleKey pressedKey)
@@ -47,22 +49,22 @@ namespace cs.project07.pokemon.game.states.list
                         break;
                     case ConsoleKey.UpArrow:
                         // TODO Player move up
-                        if (Player.collision(Map.Layers["WALL"].Data, 'N') == true)
+                        if (Player.collision(Map.Layers["WALL"].ZoomedData, 'N') == true && Map.Zoom == 4)
                             Player.mouvPlayer('N', Map.Zoom);
                         break;
                     case ConsoleKey.DownArrow:
                         // TODO Player move down
-                        if (Player.collision(Map.Layers["WALL"].Data, 'S') == true)
+                        if (Player.collision(Map.Layers["WALL"].ZoomedData, 'S') == true && Map.Zoom == 4)
                             Player.mouvPlayer('S', Map.Zoom);
                         break;
                     case ConsoleKey.LeftArrow:
                         // TODO Player move left
-                        if (Player.collision(Map.Layers["WALL"].Data, 'O') == true)
+                        if (Player.collision(Map.Layers["WALL"].ZoomedData, 'O') == true && Map.Zoom == 4)
                             Player.mouvPlayer('O', Map.Zoom);
                         break;
                     case ConsoleKey.RightArrow:
                         // TODO Player move right
-                        if (Player.collision(Map.Layers["WALL"].Data, 'E') == true)
+                        if (Player.collision(Map.Layers["WALL"].ZoomedData, 'E') == true && Map.Zoom == 4)
                             Player.mouvPlayer('E', Map.Zoom);
                         break;
                     case ConsoleKey.Enter:
@@ -103,8 +105,8 @@ namespace cs.project07.pokemon.game.states.list
             // Render childs
             // ------ Map
             Map?.Render();
-            Player.drawPlayer();
             
+            Player.drawPlayer();
         }
     }
 }

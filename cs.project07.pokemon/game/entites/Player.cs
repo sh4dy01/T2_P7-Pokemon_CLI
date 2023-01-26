@@ -27,7 +27,14 @@ namespace cs.project07.pokemon.game.entites
 
         public void zoomPlayer(int zoom)
         {
-            playerPosition = new Vector2(zoom * playerPosition.X, zoom * playerPosition.Y);
+            if(zoom == 4) 
+            {
+                playerPosition = new Vector2(playerPosition.X * zoom, playerPosition.Y * zoom);
+            }
+            else if(zoom == 1) 
+            {
+                playerPosition = new Vector2(playerPosition.X / 4, playerPosition.Y / 4);
+            }
         }
 
         public void mouvPlayer(char dir, int zoom)

@@ -145,7 +145,7 @@ namespace cs.project07.pokemon.game.map
                     //    Layers?["PLAYER"].InitData(grid);
                     //    break;
                 }
-                Zoom = 4;
+                //Zoom = 4;
             }
         }
 
@@ -186,6 +186,7 @@ namespace cs.project07.pokemon.game.map
         {
             public char[,]? Data;
             private char[,]? _zoomedData;
+            public char[,]? ZoomedData { get => _zoomedData; }
             private int _zoom;
             public int Zoom
             {
