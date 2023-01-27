@@ -43,23 +43,19 @@ namespace cs.project07.pokemon.game.entites
             {
                 case 'N':
                     playerPosition = new Vector2(playerPosition.X - 1, playerPosition.Y);
-                    //drawPlayer();
                     break;
                 case 'S':
                     playerPosition = new Vector2(playerPosition.X + 1, playerPosition.Y);
-                    //drawPlayer();
                     break;
                 case 'O':
                     playerPosition = new Vector2(playerPosition.X, playerPosition.Y - 1);
-                    //drawPlayer();
                     break;
                 case 'E':
                     playerPosition = new Vector2(playerPosition.X, playerPosition.Y + 1);
-                    //drawPlayer();
                     break;
             }
         }
-        public bool collision(char[,] grid, char dir)
+        public bool collisionWall(char[,] grid, char dir)
         {
             switch (dir)
             {
@@ -89,6 +85,15 @@ namespace cs.project07.pokemon.game.entites
                     break;
             }
             return true;
+        }
+
+        public bool collisionGrass(char[,] grid)
+        {
+            if (grid[(int)playerPosition.X, (int)playerPosition.Y] == '*')
+            {
+                return true;
+            }
+            return false;
         }
         public void drawPlayer()
         {
