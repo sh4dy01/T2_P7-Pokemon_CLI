@@ -10,16 +10,17 @@ namespace cs.project07.pokemon.game.entites
     {
         PokedexEntry _dex;
 
-        private int _currentHealth;
+        private bool _isDead = false;
+        private float _currentHealth;
         private int _level;
-        private int _experience;
-        private int _requiredExperience;
+        private float _experience;
+        private float _requiredExperience;
 
+        public bool IsDead { get => _isDead; set => _isDead = value; }
         public string Name { get => _dex.Name; }
         public int Level { get => _level; }
-        public int Currenthealth { get => _currentHealth; }
-        public int MaxHealth { get => _dex.MaxHealth; }
-
+        public float Currenthealth { get => _currentHealth; }
+        public float MaxHealth { get => _dex.MaxHealth; }
         public Attack[] Attacks { get => _dex.Attacks; }
 
 
@@ -34,7 +35,11 @@ namespace cs.project07.pokemon.game.entites
         public void DealDamage(int damage)
         {
             _currentHealth -= damage;
-            if (_currentHealth < 0) _currentHealth = 0;
+            if (_currentHealth <= 0)
+            {
+                _currentHealth = 0;
+                _isDead = true;
+            }
         }
 
         public void Heal(int amount)
@@ -53,6 +58,13 @@ namespace cs.project07.pokemon.game.entites
                 _requiredExperience += 20;
                 _level++;
             }
+        }
+
+        public Attack ChooseRandomAttack()
+        {
+            Random random = new Random();
+            int index = random.Next(0, Attacks.Length);
+            return Attacks[index];
         }
     }
 }
