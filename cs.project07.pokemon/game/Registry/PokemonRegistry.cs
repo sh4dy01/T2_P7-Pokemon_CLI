@@ -65,8 +65,8 @@ namespace cs.project07.pokemon
             },
             {493, new PokedexEntry(439, "ARCEUS", Element.NORMAL, 120, new Attack[]
                 {
-                    AttackRegistry.VINE_WHIP,
-                    AttackRegistry.TACKLE
+                    AttackRegistry.HYPER_BEAM,
+                    AttackRegistry.JUDGMENT
                 })
             },
         };

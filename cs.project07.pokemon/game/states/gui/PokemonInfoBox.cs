@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace cs.project07.pokemon.game.states.gui
 {
-    internal class PokemonInfo : IRenderable<State>
+    internal class PokemonInfoBox : IRenderable<State>
     {
         private Pokemon _pokemon;
         private bool _isEnemy;
         private float _percentage;
 
-        public PokemonInfo(State state, Pokemon pokemon, bool isEnemy) 
+        public PokemonInfoBox(State state, Pokemon pokemon, bool isEnemy) 
         {
             Parent = state;
             _pokemon = pokemon;
@@ -62,7 +62,7 @@ namespace cs.project07.pokemon.game.states.gui
             Console.SetCursorPosition(Left, Top);
             Console.WriteLine(_pokemon.Name);
             Console.SetCursorPosition(Left+Width-6, Top+1);
-            Console.WriteLine("Level : " + _pokemon.Level);
+            Console.WriteLine("Lv : " + _pokemon.Level);
             Console.SetCursorPosition(Left, Top + 3);
             Console.Write("HP: ");
 

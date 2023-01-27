@@ -27,8 +27,8 @@ namespace cs.project07.pokemon.game.states.list
         private CombatView _currentView;
         private CombatDialogBox _dialogBox;
 
-        private PokemonInfo _playerPokemonUI;
-        private PokemonInfo _enemyPokemonUI;
+        private PokemonInfoBox _playerPokemonUI;
+        private PokemonInfoBox _enemyPokemonUI;
 
         public Pokemon PlayerPokemon { get => _playerPokemon; }
 
@@ -38,8 +38,8 @@ namespace cs.project07.pokemon.game.states.list
             _playerPokemon = new Pokemon(PokemonRegistry.GetRandomPokemon());
             _enemyPokemon = new Pokemon(PokemonRegistry.GetRandomPokemon());
             _dialogBox = new CombatDialogBox(this);
-            _playerPokemonUI = new PokemonInfo(this, _playerPokemon, false);
-            _enemyPokemonUI = new PokemonInfo(this, _enemyPokemon, true);
+            _playerPokemonUI = new PokemonInfoBox(this, _playerPokemon, false);
+            _enemyPokemonUI = new PokemonInfoBox(this, _enemyPokemon, true);
 
             Init();
         }
@@ -81,16 +81,23 @@ namespace cs.project07.pokemon.game.states.list
                     _dialogBox.ResetButtons();
                     _dialogBox.UpdateText("Blablabal");
                     _enemyPokemonUI.UpdateUI(_enemyPokemon);
+                    _isPlayerTurn = false;
+                    CheckIfCombatEnd();
                     break;
                 case CombatView.ENEMY_ATTACK:
-                    //Enemy attack turn
+                    Attack attack = _enemyPokemon.ChooseRandomAttack();
+                    _playerPokemon.DealDamage(attack.Damage);
+                    _dialogBox.UpdateText("The enemy " + _enemyPokemon.Name + " used " + attack.Name + " !");
+                    _playerPokemonUI.UpdateUI(_playerPokemon);
                     break;
                 case CombatView.ENEMY_EFFECTIVE:
-                    //Depending the element say if it's effective or not on our pokemon
+                    _dialogBox.UpdateText("INSANE!");
+                    SwitchView(CombatView.SELECT_ACTION);
+                    _isPlayerTurn = true;
+                    CheckIfCombatEnd();
                     break;
                 case CombatView.END_COMBAT:
-                    //Win text if enemy dead
-                    //Loose text if pokemon dead
+                    Game.StatesList.Pop();
                     break;
                 default:
                     break;
@@ -101,6 +108,25 @@ namespace cs.project07.pokemon.game.states.list
         {
             _playerPokemon = pokemon;
         }*/ //TODO
+
+        public void CheckIfCombatEnd()
+        {
+            if (_playerPokemon.IsDead)
+            {
+                _dialogBox.UpdateText("You lost !");
+                //Switch Pokemon
+                SwitchView(CombatView.END_COMBAT);
+            }
+            else if (_enemyPokemon.IsDead)
+            {
+                _dialogBox.UpdateText("You won, GG !");
+                SwitchView(CombatView.END_COMBAT);
+            }
+            else if (_isPlayerTurn)
+            {
+                SwitchView(CombatView.SELECT_ACTION);
+            }
+        }
 
         public void DealEnemyDamage(int amount)
         {
