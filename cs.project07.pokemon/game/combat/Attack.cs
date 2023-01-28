@@ -7,18 +7,18 @@ namespace cs.project07.pokemon
 {
     public class Attack
     {
-        private string _name;
+        private readonly string _name;
         private int _damage;
-        private Element _element;
+        private readonly Type _type;
 
-        public string Name { get => _name; }
-        public int Damage { get => _damage; }
+        public string Name => _name;
+        public int Damage { get => _damage; set => _damage = value; }
 
-        public Attack(string name, int damage, Element element)
+        public Attack(string name, int damage, Type type)
         {
             _name = name;
             _damage = damage;
-            _element = element;
+            _type = type;
         }
     }
 }

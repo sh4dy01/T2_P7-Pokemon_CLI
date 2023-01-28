@@ -22,9 +22,13 @@ namespace cs.project07.pokemon.game.states.gui
         public void ResetButtons()
         {
             _buttons.Clear();
+        }
+
+        public void ResetText()
+        {
             Text = "";
         }
-        
+
         public void InitSelectAttackButtons(Attack[] attacks) 
         {
             int offsetX = -10;
@@ -52,7 +56,7 @@ namespace cs.project07.pokemon.game.states.gui
                     Selected = selected,
                     Action = () =>
                     {
-                        ((CombatState)Parent).DealEnemyDamage(attack.Damage);
+                        ((CombatState)Parent).DealEnemyDamage(attack);
                     }
                 };
             }

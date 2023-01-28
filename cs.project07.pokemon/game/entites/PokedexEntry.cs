@@ -5,13 +5,13 @@ using System.Text;
 
 namespace cs.project07.pokemon
 {
-	public enum Element
+	public enum Type
 	{
 		NORMAL,
 		FIRE,
 		WATER,
+        ELECTRIC,
 		GRASS,
-		ELECTRIC,
 		ICE,
 		FIGHTING,
 		POISON,
@@ -28,24 +28,24 @@ namespace cs.project07.pokemon
 
 	public class PokedexEntry
     {
-		protected int _pokedexID;
-        protected string _name;
-        protected float _maxHealth;
-        protected Element _element;
-        protected Attack[] _attacks;
+		private readonly int _pokedexID;
+        private readonly string _name;
+        private readonly float _maxHealth;
+        private readonly Type _type;
+        private readonly Attack[] _attacks;
 
-		public int PokedexID { get => _pokedexID; }
-        public string Name { get => _name; }
-        public float MaxHealth { get => _maxHealth; }
-        public Element Element { get => _element; }
-        public Attack[] Attacks { get => _attacks; }
+		public int PokedexID => _pokedexID;
+        public string Name => _name;
+        public float MaxHealth => _maxHealth;
+        public Type Type => _type;
+        public Attack[] Attacks => _attacks;
 
-        public PokedexEntry(int pokedexId, string name, Element element, float maxHealth, Attack[] attacks)
+        public PokedexEntry(int pokedexId, string name, Type type, float maxHealth, Attack[] attacks)
         {
 			_pokedexID = pokedexId;
 			_name = name;
 			_maxHealth = maxHealth;
-			_element = element;
+			_type = type;
 			_attacks = attacks;
         }
     }

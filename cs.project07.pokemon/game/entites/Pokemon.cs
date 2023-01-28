@@ -21,6 +21,7 @@ namespace cs.project07.pokemon.game.entites
         public int Level { get => _level; }
         public float Currenthealth { get => _currentHealth; }
         public float MaxHealth { get => _dex.MaxHealth; }
+        public Type Type { get => _dex.Type; }
         public Attack[] Attacks { get => _dex.Attacks; }
 
 
@@ -32,7 +33,7 @@ namespace cs.project07.pokemon.game.entites
             _experience = 0;
         }
 
-        public void DealDamage(int damage)
+        public void DealDamage(float damage)
         {
             _currentHealth -= damage;
             if (_currentHealth <= 0)
