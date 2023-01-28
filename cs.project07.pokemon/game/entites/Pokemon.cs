@@ -33,7 +33,7 @@ namespace cs.project07.pokemon.game.entites
             _experience = 0;
         }
 
-        public void DealDamage(float damage)
+        public void TakeDamage(float damage)
         {
             _currentHealth -= damage;
             if (_currentHealth <= 0)

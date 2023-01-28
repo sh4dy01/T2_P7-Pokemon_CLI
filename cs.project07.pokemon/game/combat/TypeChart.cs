@@ -1,13 +1,8 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace cs.project07.pokemon.game.combat
 {
-    internal class TypeChart
+    public class TypeChart
     {
         private static dynamic Chart { get; set; }
 
@@ -20,8 +15,9 @@ namespace cs.project07.pokemon.game.combat
             }
         }
 
-        public static int GetDamageMultiplier(Type attack, Type defense)
+        public static float GetDamageMultiplier(Type attack, Type defense)
         {
+            
             return Chart[attack.ToString().ToLower()][defense.ToString().ToLower()];
         }
     }

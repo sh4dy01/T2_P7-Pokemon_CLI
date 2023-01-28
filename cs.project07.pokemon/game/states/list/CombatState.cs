@@ -125,7 +125,7 @@ namespace cs.project07.pokemon.game.states.list
         public void DealEnemyDamage(Attack attack)
         {
             _dialogBox.UpdateText("You'r " + _playerPokemon.Name + " used " + attack.Name + " !");
-            _enemyPokemon.DealDamage(DamageWithMultiplier(attack, _playerPokemon, _enemyPokemon));
+            _enemyPokemon.TakeDamage(DamageWithMultiplier(attack, _playerPokemon, _enemyPokemon));
             _enemyPokemonUi.UpdateUI(_enemyPokemon);
             _isPlayerTurn = false;
             _dialogBox.ResetButtons();
@@ -135,7 +135,7 @@ namespace cs.project07.pokemon.game.states.list
         {
             Attack attack = _enemyPokemon.ChooseRandomAttack();
             _dialogBox.UpdateText("The enemy " + _enemyPokemon.Name + " used " + attack.Name + " !");
-            _playerPokemon.DealDamage(DamageWithMultiplier(attack, _enemyPokemon, _playerPokemon));
+            _playerPokemon.TakeDamage(DamageWithMultiplier(attack, _enemyPokemon, _playerPokemon));
             _playerPokemonUi.UpdateUI(_playerPokemon);
             _isPlayerTurn = true;
         }
@@ -159,7 +159,7 @@ namespace cs.project07.pokemon.game.states.list
                     _effectivenessMessage = INEFFECTIVE_MSG;
                     break;
                 default:
-                    _effectivenessMessage = "Ok.";
+                    _effectivenessMessage = "Ok...";
                     break;
             }
         }
