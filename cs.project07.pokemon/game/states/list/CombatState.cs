@@ -1,6 +1,7 @@
 ﻿using cs.project07.pokemon.game.entites;
 using cs.project07.pokemon.game.map;
 using cs.project07.pokemon.game.states.gui;
+using cs.project07.pokemon.game.states.gui.managers;
 
 namespace cs.project07.pokemon.game.states.list
 {
@@ -162,11 +163,13 @@ namespace cs.project07.pokemon.game.states.list
 
             // Update childs
             // ------ Map
+            _dialogBox?.Update();
         }
 
         public override void Render()
         {
             base.Render();
+            
             _dialogBox.Render();
             _playerPokemonUI.Render();
             _enemyPokemonUI.Render();
