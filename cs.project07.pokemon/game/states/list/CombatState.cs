@@ -1,35 +1,37 @@
 ﻿using cs.project07.pokemon.game.entites;
-using cs.project07.pokemon.game.map;
 using cs.project07.pokemon.game.states.gui;
-using cs.project07.pokemon.game.states.gui.managers;
+using cs.project07.pokemon.game.combat;
 
 namespace cs.project07.pokemon.game.states.list
 {
     public class CombatState : State
     {
+        const string EFFECTIVE_MSG = "It's super effective!";
+        const string INEFFECTIVE_MSG = "It's not very effective...";
         public enum CombatView
         {
             INTRO,
             SELECT_ACTION,
             SELECT_ATTACK,
+            EFFECTIVE,
             ACTION_USE,
             ACTION_PET,
-            EFFECTIVE,
             ENEMY_ATTACK,
             ENEMY_EFFECTIVE,
             END_COMBAT
         };
 
         private bool _isPlayerTurn;
+        private string _effectivenessMessage = "";
 
-        private Pokemon _playerPokemon;
-        private Pokemon _enemyPokemon;
+        private readonly Pokemon _playerPokemon;
+        private readonly Pokemon _enemyPokemon;
 
         private CombatView _currentView;
-        private CombatDialogBox _dialogBox;
+        private readonly CombatDialogBox _dialogBox;
 
-        private PokemonInfoBox _playerPokemonUI;
-        private PokemonInfoBox _enemyPokemonUI;
+        private PokemonInfoBox _playerPokemonUi;
+        private PokemonInfoBox _enemyPokemonUi;
 
         public Pokemon PlayerPokemon { get => _playerPokemon; }
 
@@ -39,8 +41,8 @@ namespace cs.project07.pokemon.game.states.list
             _playerPokemon = new Pokemon(PokemonRegistry.GetRandomPokemon());
             _enemyPokemon = new Pokemon(PokemonRegistry.GetRandomPokemon());
             _dialogBox = new CombatDialogBox(this);
-            _playerPokemonUI = new PokemonInfoBox(this, _playerPokemon, false);
-            _enemyPokemonUI = new PokemonInfoBox(this, _enemyPokemon, true);
+            _playerPokemonUi = new PokemonInfoBox(this, _playerPokemon, false);
+            _enemyPokemonUi = new PokemonInfoBox(this, _enemyPokemon, true);
 
             Init();
         }
@@ -69,38 +71,32 @@ namespace cs.project07.pokemon.game.states.list
                     _dialogBox.UpdateText("A wild " + _enemyPokemon.Name + " appeared !");
                     break;
                 case CombatView.SELECT_ACTION:
+                    _dialogBox.ResetText();
                     _dialogBox.InitSelectActionButtons();
                     break;
                 case CombatView.SELECT_ATTACK:
+                    _currentView = CombatView.SELECT_ATTACK;
                     _dialogBox.InitSelectAttackButtons(_playerPokemon.Attacks);
                     break;
-                case CombatView.ACTION_USE:
-                    break;
-                case CombatView.ACTION_PET:
-                    break;
                 case CombatView.EFFECTIVE:
-                    _dialogBox.ResetButtons();
-                    _dialogBox.UpdateText("Blablabal");
-                    _enemyPokemonUI.UpdateUI(_enemyPokemon);
-                    _isPlayerTurn = false;
+                    _dialogBox.UpdateText(_effectivenessMessage);
                     CheckIfCombatEnd();
                     break;
+                case CombatView.ACTION_USE:
+                    //TODO
+                    break;
+                case CombatView.ACTION_PET:
+                    //TODO
+                    break;
                 case CombatView.ENEMY_ATTACK:
-                    Attack attack = _enemyPokemon.ChooseRandomAttack();
-                    _playerPokemon.DealDamage(attack.Damage);
-                    _dialogBox.UpdateText("The enemy " + _enemyPokemon.Name + " used " + attack.Name + " !");
-                    _playerPokemonUI.UpdateUI(_playerPokemon);
+                    DealPlayerDamage();
                     break;
                 case CombatView.ENEMY_EFFECTIVE:
-                    _dialogBox.UpdateText("INSANE!");
-                    SwitchView(CombatView.SELECT_ACTION);
-                    _isPlayerTurn = true;
+                    _dialogBox.UpdateText(_effectivenessMessage);
                     CheckIfCombatEnd();
                     break;
                 case CombatView.END_COMBAT:
                     Game.StatesList.Pop();
-                    break;
-                default:
                     break;
             }
         }
@@ -127,14 +123,53 @@ namespace cs.project07.pokemon.game.states.list
             {
                 SwitchView(CombatView.SELECT_ACTION);
             }
+            else if (!_isPlayerTurn)
+            {
+                SwitchView(CombatView.ENEMY_ATTACK);
+            }
         }
 
-        public void DealEnemyDamage(int amount)
+        public void DealEnemyDamage(Attack attack)
         {
-            _enemyPokemon.DealDamage(amount);
-            SwitchView(CombatView.EFFECTIVE);
+            _dialogBox.UpdateText("You'r " + _playerPokemon.Name + " used " + attack.Name + " !");
+            _enemyPokemon.DealDamage(DamageWithMultiplier(attack, _playerPokemon, _enemyPokemon));
+            _enemyPokemonUi.UpdateUI(_enemyPokemon);
+            _isPlayerTurn = false;
+            _dialogBox.ResetButtons();
         }
-        
+        private void DealPlayerDamage()
+        {
+            Attack attack = _enemyPokemon.ChooseRandomAttack();
+            _dialogBox.UpdateText("The enemy " + _enemyPokemon.Name + " used " + attack.Name + " !");
+            _playerPokemon.DealDamage(DamageWithMultiplier(attack, _enemyPokemon, _playerPokemon));
+            _playerPokemonUi.UpdateUI(_playerPokemon);
+            _isPlayerTurn = true;
+        }
+
+        private float DamageWithMultiplier(Attack attack, Pokemon attacker, Pokemon defender)
+        {
+            float damageMultiplier = TypeChart.GetDamageMultiplier(attacker.Type, defender.Type);
+            UpdateEffectivenessMessage(damageMultiplier);
+            
+            return attack.Damage * damageMultiplier;
+        }
+
+        private void UpdateEffectivenessMessage(float damageMultiplier)
+        {
+            switch (damageMultiplier)
+            {
+                case 2:
+                    _effectivenessMessage = EFFECTIVE_MSG;
+                    break;
+                case 0.5f:
+                    _effectivenessMessage = INEFFECTIVE_MSG;
+                    break;
+                default:
+                    _effectivenessMessage = "Ok.";
+                    break;
+            }
+        }
+
         public override void HandleKeyEvent(ConsoleKey pressedKey)
         {
             switch (pressedKey)
@@ -171,9 +206,8 @@ namespace cs.project07.pokemon.game.states.list
             base.Render();
             
             _dialogBox.Render();
-            _playerPokemonUI.Render();
-            _enemyPokemonUI.Render();
-
+            _playerPokemonUi.Render();
+            _enemyPokemonUi.Render();
             // Render childs
             // ------ Map
 
