@@ -8,6 +8,7 @@ namespace cs.project07.pokemon.game.states.list
     {
         const string EFFECTIVE_MSG = "It's super effective!";
         const string INEFFECTIVE_MSG = "It's not very effective...";
+        
         public enum CombatView
         {
             INTRO,
@@ -24,22 +25,18 @@ namespace cs.project07.pokemon.game.states.list
         private bool _isPlayerTurn;
         private string _effectivenessMessage = "";
 
-        private readonly Pokemon _playerPokemon;
-        private readonly Pokemon _enemyPokemon;
-
         private CombatView _currentView;
         private readonly CombatDialogBox _dialogBox;
-
-        private PokemonInfoBox _playerPokemonUi;
-        private PokemonInfoBox _enemyPokemonUi;
-
-        public Pokemon PlayerPokemon { get => _playerPokemon; }
-
+        private readonly Pokemon _playerPokemon;
+        private readonly Pokemon _enemyPokemon;
+        private readonly PokemonInfoBox _playerPokemonUi;
+        private readonly PokemonInfoBox _enemyPokemonUi;
 
         public CombatState(Game game, PokedexEntry? playerPokemon = null, PokedexEntry? enemyPokemon = null) : base(game)
         {
-            _playerPokemon = new Pokemon(PokemonRegistry.GetRandomPokemon());
-            _enemyPokemon = new Pokemon(PokemonRegistry.GetRandomPokemon());
+            _playerPokemon = new Pokemon(PokemonRegistry.GetRandomPokemon()); //TODO : Get selected Pokemon
+            _enemyPokemon = new Pokemon(PokemonRegistry.GetRandomPokemon()); //TODO : Get the random pokemon
+
             _dialogBox = new CombatDialogBox(this);
             _playerPokemonUi = new PokemonInfoBox(this, _playerPokemon, false);
             _enemyPokemonUi = new PokemonInfoBox(this, _enemyPokemon, true);
@@ -52,14 +49,9 @@ namespace cs.project07.pokemon.game.states.list
             Name = "Combat";
             _isPlayerTurn = true;
             _currentView = CombatView.INTRO;
-            InitCombat();
-        }
-
-        private void InitCombat()
-        {
             SwitchView(_currentView);
         }
-        
+
         public void SwitchView(CombatView view)
         {
             _dialogBox.ResetButtons();
@@ -106,7 +98,7 @@ namespace cs.project07.pokemon.game.states.list
             _playerPokemon = pokemon;
         }*/ //TODO
 
-        public void CheckIfCombatEnd()
+        private void CheckIfCombatEnd()
         {
             if (_playerPokemon.IsDead)
             {
@@ -119,13 +111,14 @@ namespace cs.project07.pokemon.game.states.list
                 _dialogBox.UpdateText("You won, GG !");
                 SwitchView(CombatView.END_COMBAT);
             }
-            else if (_isPlayerTurn)
+            else switch (_isPlayerTurn)
             {
-                SwitchView(CombatView.SELECT_ACTION);
-            }
-            else if (!_isPlayerTurn)
-            {
-                SwitchView(CombatView.ENEMY_ATTACK);
+                case true:
+                    SwitchView(CombatView.SELECT_ACTION);
+                    break;
+                case false:
+                    SwitchView(CombatView.ENEMY_ATTACK);
+                    break;
             }
         }
 
@@ -137,6 +130,7 @@ namespace cs.project07.pokemon.game.states.list
             _isPlayerTurn = false;
             _dialogBox.ResetButtons();
         }
+        
         private void DealPlayerDamage()
         {
             Attack attack = _enemyPokemon.ChooseRandomAttack();
@@ -188,6 +182,14 @@ namespace cs.project07.pokemon.game.states.list
                     break;
                 case ConsoleKey.DownArrow:
                     Button.SelectNext(_dialogBox.ButtonManager.Buttons);
+                    break;
+                case ConsoleKey.Backspace:
+                    switch (_currentView)
+                    {
+                        case CombatView.SELECT_ATTACK:
+                            SwitchView(CombatView.SELECT_ACTION);
+                            break;
+                    }
                     break;
             }
         }
