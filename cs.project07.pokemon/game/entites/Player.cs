@@ -1,4 +1,5 @@
-﻿using System;
+﻿using cs.project07.pokemon.game.states.list;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -87,13 +88,17 @@ namespace cs.project07.pokemon.game.entites
             return true;
         }
 
-        public bool collisionGrass(char[,] grid)
+        public void collisionGrass(char[,] grid, Game game)
         {
             if (grid[(int)playerPosition.X, (int)playerPosition.Y] == '*')
             {
-                return true;
+                const int maxPercentage = 15;
+                int percentage = new Random().Next(1, 100);
+                if (percentage > 0 && percentage <= maxPercentage)
+                {
+                    Game.StatesList?.Push(new CombatState(game));
+                }
             }
-            return false;
         }
         public void drawPlayer()
         {

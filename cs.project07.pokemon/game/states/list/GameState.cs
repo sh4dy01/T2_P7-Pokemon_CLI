@@ -1,5 +1,8 @@
 ﻿using cs.project07.pokemon.game.map;
 using cs.project07.pokemon.game.entites;
+using cs.project07.pokemon.game.states.gui.managers;
+using cs.project07.pokemon.game.states.gui;
+using System.Numerics;
 
 namespace cs.project07.pokemon.game.states.list
 {
@@ -9,6 +12,10 @@ namespace cs.project07.pokemon.game.states.list
         public Player Player;
         private CombatState Combat;
         private Game game;
+
+        private ButtonManager _buttonManager;
+        private Dictionary<string, Button> _buttons;
+        private DialogBox _dialogBox;
         public GameState(Game gameReceive) : base(gameReceive)
         {
             game = gameReceive;
@@ -20,6 +27,46 @@ namespace cs.project07.pokemon.game.states.list
             Name = "Pokemon";
             InitMap();
             InitPlayer();
+            _dialogBox = new DialogBox(this);
+            InitMenu();
+        }
+
+        private void InitMenu()
+        {
+            _buttonManager = new ButtonManager();
+            _buttons = _buttonManager.Buttons;
+
+            _buttons["INVENTORY"] = new Button(_dialogBox, "Inventory")
+            {
+                Selected = true,
+                Action = () =>
+                {
+                    Game.StatesList?.Push(new InventoryState(Parent));
+                }
+            };
+            _buttons["SAVE"] = new Button(_dialogBox, "Save")
+            {
+                Selected = true,
+                Action = () =>
+                {
+                    //TO DO SAVE THE GAME
+                }
+            };
+            _buttons["EXIT"] = new Button(_dialogBox, "Exit")
+            {
+                Selected = true,
+                Action = () =>
+                {
+                    Game.StatesList?.Pop();
+                }
+            };
+
+            _buttonManager.InitHandleKeyEvent();
+
+            for (int i = 0; i < _buttons.Count; i++)
+            {
+                _buttons.ElementAt(i).Value.Offsets += new Vector2(3, 1 + i);
+            }
         }
 
         private void InitMap()
@@ -98,20 +145,7 @@ namespace cs.project07.pokemon.game.states.list
                         Map.Zoom--;
                         break;
                 }
-                GrassColision();
-            }
-        }
-
-        private void GrassColision()
-        {
-            if (Player.collisionGrass(Map.Layers["GRASS"].ZoomedData))
-            {
-                const int maxPercentage = 15;
-                int percentage = new Random().Next(1, 100);
-                if (percentage > 0 && percentage <= maxPercentage)
-                {
-                    Game.StatesList?.Push(new CombatState(game));
-                }
+                Player.collisionGrass(Map.Layers["GRASS"].ZoomedData, game);
             }
         }
 
