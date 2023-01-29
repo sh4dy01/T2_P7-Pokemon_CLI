@@ -85,6 +85,7 @@ namespace cs.project07.pokemon.game.states.list
 
         public override void HandleKeyEvent(ConsoleKey pressedKey)
         {
+            bool mouvThisTurn = false;
             if(Map.Layers["WALL"].Data != null)
             {
                 switch (pressedKey)
@@ -102,6 +103,7 @@ namespace cs.project07.pokemon.game.states.list
                         if (Player.collisionWall(Map.Layers["WALL"].ZoomedData, 'N') == true && Map.Zoom == 4)
                         {
                             Player.mouvPlayer('N', Map.Zoom);
+                            mouvThisTurn = true;
                         }
                         break;
                     case ConsoleKey.DownArrow:
@@ -109,6 +111,7 @@ namespace cs.project07.pokemon.game.states.list
                         if (Player.collisionWall(Map.Layers["WALL"].ZoomedData, 'S') == true && Map.Zoom == 4)
                         {
                             Player.mouvPlayer('S', Map.Zoom);
+                            mouvThisTurn = true;
                         }
                         break;
                     case ConsoleKey.LeftArrow:
@@ -116,6 +119,7 @@ namespace cs.project07.pokemon.game.states.list
                         if (Player.collisionWall(Map.Layers["WALL"].ZoomedData, 'O') == true && Map.Zoom == 4)
                         {
                             Player.mouvPlayer('O', Map.Zoom);
+                            mouvThisTurn = true;
                         }
                         break;
                     case ConsoleKey.RightArrow:
@@ -123,7 +127,7 @@ namespace cs.project07.pokemon.game.states.list
                         if (Player.collisionWall(Map.Layers["WALL"].ZoomedData, 'E') == true && Map.Zoom == 4)
                         {
                             Player.mouvPlayer('E', Map.Zoom);
-
+                            mouvThisTurn = true;
                         }
                         break;
                     case ConsoleKey.Enter:
@@ -145,7 +149,10 @@ namespace cs.project07.pokemon.game.states.list
                         Map.Zoom--;
                         break;
                 }
-                Player.collisionGrass(Map.Layers["GRASS"].ZoomedData, game);
+                if(mouvThisTurn == true)
+                {
+                    Player.collisionGrass(Map.Layers["GRASS"].ZoomedData, game);
+                }
             }
         }
 
