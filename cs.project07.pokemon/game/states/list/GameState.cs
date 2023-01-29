@@ -55,10 +55,6 @@ namespace cs.project07.pokemon.game.states.list
                         if (Player.collisionWall(Map.Layers["WALL"].ZoomedData, 'N') == true && Map.Zoom == 4)
                         {
                             Player.mouvPlayer('N', Map.Zoom);
-                            if (Player.collisionGrass(Map.Layers["GRASS"].ZoomedData))
-                            {
-                                Game.StatesList?.Push(new CombatState(game));
-                            }
                         }
                         break;
                     case ConsoleKey.DownArrow:
@@ -66,10 +62,6 @@ namespace cs.project07.pokemon.game.states.list
                         if (Player.collisionWall(Map.Layers["WALL"].ZoomedData, 'S') == true && Map.Zoom == 4)
                         {
                             Player.mouvPlayer('S', Map.Zoom);
-                            if (Player.collisionGrass(Map.Layers["GRASS"].ZoomedData))
-                            {
-                                Game.StatesList?.Push(new CombatState(game));
-                            }
                         }
                         break;
                     case ConsoleKey.LeftArrow:
@@ -77,10 +69,6 @@ namespace cs.project07.pokemon.game.states.list
                         if (Player.collisionWall(Map.Layers["WALL"].ZoomedData, 'O') == true && Map.Zoom == 4)
                         {
                             Player.mouvPlayer('O', Map.Zoom);
-                            if (Player.collisionGrass(Map.Layers["GRASS"].ZoomedData))
-                            {
-                                Game.StatesList?.Push(new CombatState(game));
-                            }
                         }
                         break;
                     case ConsoleKey.RightArrow:
@@ -88,10 +76,7 @@ namespace cs.project07.pokemon.game.states.list
                         if (Player.collisionWall(Map.Layers["WALL"].ZoomedData, 'E') == true && Map.Zoom == 4)
                         {
                             Player.mouvPlayer('E', Map.Zoom);
-                            if (Player.collisionGrass(Map.Layers["GRASS"].ZoomedData))
-                            {
-                                Game.StatesList?.Push(new CombatState(game));
-                            }
+
                         }
                         break;
                     case ConsoleKey.Enter:
@@ -103,7 +88,7 @@ namespace cs.project07.pokemon.game.states.list
                             Map.Zoom = 1;
                             Player.zoomPlayer(Map.Zoom);
                         }
-                        else if(Map.Zoom == 1)
+                        else if (Map.Zoom == 1)
                         {
                             Map.Zoom = 4;
                             Player.zoomPlayer(Map.Zoom);
@@ -112,6 +97,20 @@ namespace cs.project07.pokemon.game.states.list
                     case ConsoleKey.PageDown:
                         Map.Zoom--;
                         break;
+                }
+                GrassColision();
+            }
+        }
+
+        private void GrassColision()
+        {
+            if (Player.collisionGrass(Map.Layers["GRASS"].ZoomedData))
+            {
+                const int maxPercentage = 15;
+                int percentage = new Random().Next(1, 100);
+                if (percentage > 0 && percentage <= maxPercentage)
+                {
+                    Game.StatesList?.Push(new CombatState(game));
                 }
             }
         }
