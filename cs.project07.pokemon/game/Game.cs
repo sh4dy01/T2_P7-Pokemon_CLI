@@ -130,6 +130,11 @@ namespace cs.project07.pokemon.game
             //Console.Clear();
         }
 
+        //public void SwitchState(State state)
+        //{
+        //    StatesList?.Push(state);
+        //}
+
         //private void DrawWindowBorder()
         //{
 

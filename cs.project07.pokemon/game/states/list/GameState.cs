@@ -7,8 +7,11 @@ namespace cs.project07.pokemon.game.states.list
     {
         public Map Map;
         public Player Player;
-        public GameState(Game game) : base(game)
+        private CombatState Combat;
+        private Game game;
+        public GameState(Game gameReceive) : base(gameReceive)
         {
+            game = gameReceive;
             Init();
         }
 
@@ -49,23 +52,32 @@ namespace cs.project07.pokemon.game.states.list
                         break;
                     case ConsoleKey.UpArrow:
                         // TODO Player move up
-                        if (Player.collision(Map.Layers["WALL"].ZoomedData, 'N') == true && Map.Zoom == 4)
+                        if (Player.collisionWall(Map.Layers["WALL"].ZoomedData, 'N') == true && Map.Zoom == 4)
+                        {
                             Player.mouvPlayer('N', Map.Zoom);
+                        }
                         break;
                     case ConsoleKey.DownArrow:
                         // TODO Player move down
-                        if (Player.collision(Map.Layers["WALL"].ZoomedData, 'S') == true && Map.Zoom == 4)
+                        if (Player.collisionWall(Map.Layers["WALL"].ZoomedData, 'S') == true && Map.Zoom == 4)
+                        {
                             Player.mouvPlayer('S', Map.Zoom);
+                        }
                         break;
                     case ConsoleKey.LeftArrow:
                         // TODO Player move left
-                        if (Player.collision(Map.Layers["WALL"].ZoomedData, 'O') == true && Map.Zoom == 4)
+                        if (Player.collisionWall(Map.Layers["WALL"].ZoomedData, 'O') == true && Map.Zoom == 4)
+                        {
                             Player.mouvPlayer('O', Map.Zoom);
+                        }
                         break;
                     case ConsoleKey.RightArrow:
                         // TODO Player move right
-                        if (Player.collision(Map.Layers["WALL"].ZoomedData, 'E') == true && Map.Zoom == 4)
+                        if (Player.collisionWall(Map.Layers["WALL"].ZoomedData, 'E') == true && Map.Zoom == 4)
+                        {
                             Player.mouvPlayer('E', Map.Zoom);
+
+                        }
                         break;
                     case ConsoleKey.Enter:
                         // TODO Player use action
@@ -76,7 +88,7 @@ namespace cs.project07.pokemon.game.states.list
                             Map.Zoom = 1;
                             Player.zoomPlayer(Map.Zoom);
                         }
-                        else if(Map.Zoom == 1)
+                        else if (Map.Zoom == 1)
                         {
                             Map.Zoom = 4;
                             Player.zoomPlayer(Map.Zoom);
@@ -85,6 +97,20 @@ namespace cs.project07.pokemon.game.states.list
                     case ConsoleKey.PageDown:
                         Map.Zoom--;
                         break;
+                }
+                GrassColision();
+            }
+        }
+
+        private void GrassColision()
+        {
+            if (Player.collisionGrass(Map.Layers["GRASS"].ZoomedData))
+            {
+                const int maxPercentage = 15;
+                int percentage = new Random().Next(1, 100);
+                if (percentage > 0 && percentage <= maxPercentage)
+                {
+                    Game.StatesList?.Push(new CombatState(game));
                 }
             }
         }
