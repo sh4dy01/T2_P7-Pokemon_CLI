@@ -101,7 +101,8 @@ namespace cs.project07.pokemon.game.states.list
         {
             if(CurrentMap != null)
             {
-                bool mouv = false;
+                if(pressedKey == ConsoleKey.Escape)
+                    HandleKeyEventButtons(pressedKey);
                 switch (pressedKey)
                 {
                     case ConsoleKey.Insert:
@@ -111,7 +112,8 @@ namespace cs.project07.pokemon.game.states.list
                         break;
                     case ConsoleKey.UpArrow:
                         // TODO Player move up
-                        if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'N') == true && CurrentMap.Zoom == 4)
+                        if (Player.collisionWall(Map.Layers["WALL"].ZoomedData, 'N') == true 
+                            && Map.Zoom == 4 && !showMenu)
                         {
                             Player.mouvPlayer('N');
                             mouv = true;
@@ -121,7 +123,8 @@ namespace cs.project07.pokemon.game.states.list
                         break;
                     case ConsoleKey.DownArrow:
                         // TODO Player move down
-                        if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'S') == true && CurrentMap.Zoom == 4)
+                        if (Player.collisionWall(Map.Layers["WALL"].ZoomedData, 'S') == true 
+                            && Map.Zoom == 4 && !showMenu)
                         {
                             Player.mouvPlayer('S');
                             mouv = true;
@@ -131,7 +134,8 @@ namespace cs.project07.pokemon.game.states.list
                         break;
                     case ConsoleKey.LeftArrow:
                         // TODO Player move left
-                        if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'O') == true && CurrentMap.Zoom == 4)
+                        if (Player.collisionWall(Map.Layers["WALL"].ZoomedData, 'O') == true 
+                            && Map.Zoom == 4 && !showMenu)
                         {
                             Player.mouvPlayer('O');
                             mouv = true;
@@ -139,7 +143,8 @@ namespace cs.project07.pokemon.game.states.list
                         break;
                     case ConsoleKey.RightArrow:
                         // TODO Player move right
-                        if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'E') == true && CurrentMap.Zoom == 4)
+                        if (Player.collisionWall(Map.Layers["WALL"].ZoomedData, 'E') == true 
+                            && Map.Zoom == 4 && !showMenu)
                         {
                             Player.mouvPlayer('E');
                             mouv = true;
@@ -151,25 +156,22 @@ namespace cs.project07.pokemon.game.states.list
                             Button.ExecuteAction(_buttonManager.Buttons);
                         break;
                     case ConsoleKey.M:
-                        if (CurrentMap.Zoom == 4)
+                        if (Map.Zoom == 4 && !showMenu)
                         {
                             CurrentMap.Zoom = 1;
                             Player.zoomPlayer(CurrentMap.Zoom);
                         }
-                        else if (CurrentMap.Zoom == 1)
+                        else if (Map.Zoom == 1 && !showMenu)
                         {
                             CurrentMap.Zoom = 4;
                             Player.zoomPlayer(CurrentMap.Zoom);
                         }
                         break;
-                    case ConsoleKey.PageDown:
-                        CurrentMap.Zoom--;
-                        break;
                 }
-
-                if (mouv != true) return;
-                Player.collisionGrass(CurrentMap.Layers["GRASS"].ZoomedData, game);
-                Player.collisionTeleporter(CurrentMap._Teleporters);
+                if(mouvThisTurn == true)
+                {
+                    Player.collisionGrass(Map.Layers["GRASS"].ZoomedData, game);
+                }
             }
         }
 
@@ -185,7 +187,9 @@ namespace cs.project07.pokemon.game.states.list
 
             // Update childs
             // ------ Map
-            CurrentMap?.Update();
+            Map?.Update();
+            if(showMenu == true)
+                _buttonManager.Update();
         }
 
         public override void Render()
@@ -194,38 +198,11 @@ namespace cs.project07.pokemon.game.states.list
 
             // Render childs
             // ------ Map
-            CurrentMap?.Render();
+            Map?.Render();
+            if(showMenu == true)
+                _buttonManager?.Render();
             
-            Player.drawPlayer(CurrentMap.Zoom, SetCameraOffset());
-        }
-
-        public void ChangeMap (string mapName)
-        {
-            CurrentMap = Maps[mapName];
-            CurrentMap.Zoom = 4;
-        }
-
-        public Tuple<int,int> SetCameraOffset()
-        {
-            int ConsoleWidth = Convert.ToInt32(Game.ConsoleSize.X);
-            int ConsoleHeight = Convert.ToInt32(Game.ConsoleSize.Y);
-
-            int cameraOffsetX;
-            int cameraOffsetY;
-
-            Tuple<int, int> result;
-
-            cameraOffsetX = Convert.ToInt32(Player.playerPosition.X) - ConsoleHeight / 2;
-            cameraOffsetY = Convert.ToInt32(Player.playerPosition.Y) - ConsoleWidth / 2;
-
-            if (cameraOffsetX < 0) cameraOffsetX = 0;
-            if (cameraOffsetY < 0) cameraOffsetY = 0;
-            if (cameraOffsetY > ConsoleWidth*4) cameraOffsetY = ConsoleWidth * 4;
-            if (cameraOffsetX > ConsoleHeight*4) cameraOffsetX = ConsoleHeight * 4;
-
-            result = new Tuple<int, int>(cameraOffsetX, cameraOffsetY);
-
-            return result;
+            Player.drawPlayer();
         }
     }
 }
