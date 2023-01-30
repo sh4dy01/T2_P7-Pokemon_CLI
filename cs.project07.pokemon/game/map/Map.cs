@@ -128,9 +128,6 @@ namespace cs.project07.pokemon.game.map
             int cols = firstLine.Length;
 
 
-            rows = lines.Length;
-            cols = firstLine.Length;
-
             foreach (char possibility in possibilities)
             {
                 grid = new char[rows, cols];

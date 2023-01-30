@@ -190,5 +190,10 @@ namespace cs.project07.pokemon.game.states.list
         {
             
         }
+
+        public void ChangeMap (string mapName, int posX, int posY)
+        {
+            
+        }
     }
 }
