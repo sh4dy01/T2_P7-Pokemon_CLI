@@ -11,6 +11,7 @@ namespace cs.project07.pokemon.tests.game.combat
         [TestCase(20, Type.FIRE, Type.FIRE, 10)]
         [TestCase(100, Type.FIRE, Type.WATER, 50)]
         [TestCase(50, Type.ELECTRIC, Type.WATER, 100)]
+        [TestCase(100, Type.ELECTRIC, Type.GRASS, 50)]
         [TestCase(200, Type.GRASS, Type.GROUND, 400)]
         public void CalculateTheMultipliedDamageAmount(float damage, Type attack, Type defense, int expected)
         {
@@ -35,5 +36,30 @@ namespace cs.project07.pokemon.tests.game.combat
             pokemon.Heal(1000);
             Assert.That(pokemon.Currenthealth, Is.EqualTo(pokemon.MaxHealth));
         }
-    }
+
+        [Test]
+        public void CheckIfPokemonHasCorrectLevel()
+        {
+            Pokemon pokemon = new(PokemonRegistry.GetRandomPokemon());
+            Assert.That(pokemon.Level, Is.EqualTo(1));
+
+            pokemon.GainExperience(20);
+            Assert.That(pokemon.Level, Is.EqualTo(2));
+
+            pokemon = new(PokemonRegistry.GetRandomPokemon());
+            pokemon.GainExperience(1000);
+            Assert.That(pokemon.Level, Is.EqualTo(9));
+            Assert.That(pokemon.Experience, Is.EqualTo(120));
+        }
+
+        [Test]
+        public void CheckIfAttackIsCorrectlyUse() 
+        {
+            Pokemon pokemon = new(PokemonRegistry.GetRandomPokemon());
+
+            Attack pokemonAttack = pokemon.Attacks[0];
+            pokemonAttack.Use();
+
+            Assert.That(pokemonAttack, Is.EqualTo(pokemonAttack.Usage));
+        }
 }
