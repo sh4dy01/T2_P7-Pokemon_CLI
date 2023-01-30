@@ -41,7 +41,7 @@ namespace cs.project07.pokemon.game.states.list
             {
                 Action = () =>
                 {
-
+                    
                 }
             };
             _buttons["QUIT"] = new Button(_dialogBox, "Quit")
