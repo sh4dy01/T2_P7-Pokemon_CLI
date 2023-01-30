@@ -7,22 +7,25 @@ namespace cs.project07.pokemon
 {
     public static class AttackRegistry
     {
+        private const int TYPE_PP = 10;
+        private const int SPECIAL_PP = 5;
+
         private static Attack[] _attacks =
         {
-            new Attack("Tackle", 10, Element.NORMAL),
-            new Attack("Scratch", 10, Element.NORMAL),
-            new Attack("Growl", 10, Element.NORMAL),
-            new Attack("Quick attack", 10, Element.NORMAL),
-            new Attack("Splash", 10, Element.NORMAL),
+            new Attack("Tackle", 10, Type.NORMAL),
+            new Attack("Scratch", 10, Type.NORMAL),
+            new Attack("Growl", 10, Type.NORMAL),
+            new Attack("Quick attack", 10, Type.NORMAL),
+            new Attack("Splash", 0, Type.NORMAL),
 
-            new Attack("Vine whip", 10, Element.GRASS),
-            new Attack("Ember", 10, Element.FIRE),
-            new Attack("Water gun", 10, Element.WATER),
-            new Attack("Thunder shock", 10, Element.ELECTRIC),
-            new Attack("Rollout", 10, Element.GROUND),
-            new Attack("Confusion", 10, Element.PSYCHIC),
-            new Attack("Judgment", 10, Element.NORMAL),
-            new Attack("Hyper beam", 10, Element.NORMAL),
+            new Attack("Vine whip", 20, Type.GRASS, TYPE_PP),
+            new Attack("Ember", 20, Type.FIRE, TYPE_PP),
+            new Attack("Water gun", 20, Type.WATER, TYPE_PP),
+            new Attack("Thunder shock", 20, Type.ELECTRIC, TYPE_PP),
+            new Attack("Rollout", 20, Type.GROUND, TYPE_PP),
+            new Attack("Confusion", 30, Type.PSYCHIC, TYPE_PP),
+            new Attack("Judgment", 100, Type.NORMAL, SPECIAL_PP),
+            new Attack("Hyper beam", 100, Type.NORMAL, SPECIAL_PP),
         };
 
         static public Attack TACKLE = _attacks[0];
