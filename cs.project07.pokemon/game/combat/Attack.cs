@@ -8,17 +8,29 @@ namespace cs.project07.pokemon
     public class Attack
     {
         private readonly string _name;
-        private int _damage;
+        private int _power;
         private readonly Type _type;
+        private int _maxUsage;
+        private int _currentUsage;
+
 
         public string Name => _name;
-        public int Damage { get => _damage; set => _damage = value; }
+        public int Power { get => _power; set => _power = value; }
+        public Type Type { get => _type; }
+        public int Usage { get => _currentUsage; }
 
-        public Attack(string name, int damage, Type type)
+        public void Use()
+        {
+            _currentUsage--;
+        }
+
+        public Attack(string name, int damage, Type type, int maxUsage = 20)
         {
             _name = name;
-            _damage = damage;
+            _power = damage;
             _type = type;
+            _maxUsage = maxUsage;
+            _currentUsage = _maxUsage;
         }
     }
 }

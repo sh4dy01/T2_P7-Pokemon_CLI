@@ -41,26 +41,24 @@ namespace cs.project07.pokemon
             },
             {27, new PokedexEntry(27, "SANDSHREW", Type.GROUND, 50, new Attack[]
                 {
-                    AttackRegistry.VINE_WHIP,
-                    AttackRegistry.TACKLE
+                    AttackRegistry.ROLLOUT,
+                    AttackRegistry.SCRATCH
                 })
             },
             {52, new PokedexEntry(52, "MEOWTH", Type.NORMAL, 40, new Attack[]
                 {
-                    AttackRegistry.VINE_WHIP,
+                    AttackRegistry.QUICK_ATTACK,
                     AttackRegistry.TACKLE
                 })
             },
             {63, new PokedexEntry(63, "ABRA", Type.PSYCHIC, 25, new Attack[]
                 {
-                    AttackRegistry.VINE_WHIP,
-                    AttackRegistry.TACKLE
+                    AttackRegistry.CONFUSION,
                 })
             },
             {129, new PokedexEntry(129, "MAGIKARP", Type.WATER, 20, new Attack[]
                 {
-                    AttackRegistry.VINE_WHIP,
-                    AttackRegistry.TACKLE
+                    AttackRegistry.SPLASH,
                 })
             },
             {493, new PokedexEntry(439, "ARCEUS", Type.NORMAL, 120, new Attack[]
