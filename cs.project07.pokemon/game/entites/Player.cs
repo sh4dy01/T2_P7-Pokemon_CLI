@@ -106,6 +106,7 @@ namespace cs.project07.pokemon.game.entites
             Console.BackgroundColor = BackgroundColor;
             Console.ForegroundColor = ForegroundColor;
             Console.Write("P");
+            Console.SetCursorPosition(0,0);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace cs.project07.pokemon.game.states.list
         public Map CurrentMap;
         private Dictionary<string, Map> Maps;
 
-        public Player Player;
+        public Player Player { get; set; }
         private CombatState Combat;
         private Game game;
 
@@ -45,7 +45,7 @@ namespace cs.project07.pokemon.game.states.list
                 Selected = true,
                 Action = () =>
                 {
-                    Game.StatesList?.Push(new InventoryState(Parent));
+                    //Game.StatesList?.Push(new InventoryState(Parent));
                 }
             };
             _buttons["SAVE"] = new Button(_dialogBox, "Save")
@@ -81,23 +81,23 @@ namespace cs.project07.pokemon.game.states.list
                 { "map2", new Map(this,"map2") }
             };
 
-            Maps["map1"].ParseFileToLayers("../../../game/map/list/Map1.txt");
-            Maps["map2"].ParseFileToLayers("../../../game/map/list/Map2.txt");
+            Maps["map1"].ParseFileToLayers("game/map/list/Map1.txt");
+            Maps["map2"].ParseFileToLayers("game/map/list/Map2.txt");
 
             CurrentMap = Maps["map1"];
         }
 
         private void InitPlayer()
         {
-            Player = new Player(Map.PlayerSpawnPosition);
-            Map.playerDraw = Player.playerPosition;
-            Map.Zoom = 4;
-            Player.zoomPlayer(Map.Zoom);
+            Player = new Player(CurrentMap.PlayerSpawnPosition);
+            
+            CurrentMap.Zoom = 4;
+            Player.zoomPlayer(CurrentMap.Zoom);
         }
 
         public override void HandleKeyEvent(ConsoleKey pressedKey)
         {
-            if(Map.Layers["WALL"].Data != null)
+            if(CurrentMap.Layers["WALL"].Data != null)
             {
                 switch (pressedKey)
                 {
@@ -111,30 +111,30 @@ namespace cs.project07.pokemon.game.states.list
                         break;
                     case ConsoleKey.UpArrow:
                         // TODO Player move up
-                        if (Player.collisionWall(Map.Layers["WALL"].ZoomedData, 'N') == true && Map.Zoom == 4)
+                        if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'N') == true && CurrentMap.Zoom == 4)
                         {
-                            Player.mouvPlayer('N', Map.Zoom);
+                            Player.mouvPlayer('N', CurrentMap.Zoom);
                         }
                         break;
                     case ConsoleKey.DownArrow:
                         // TODO Player move down
-                        if (Player.collisionWall(Map.Layers["WALL"].ZoomedData, 'S') == true && Map.Zoom == 4)
+                        if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'S') == true && CurrentMap.Zoom == 4)
                         {
-                            Player.mouvPlayer('S', Map.Zoom);
+                            Player.mouvPlayer('S', CurrentMap.Zoom);
                         }
                         break;
                     case ConsoleKey.LeftArrow:
                         // TODO Player move left
-                        if (Player.collisionWall(Map.Layers["WALL"].ZoomedData, 'O') == true && Map.Zoom == 4)
+                        if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'O') == true && CurrentMap.Zoom == 4)
                         {
-                            Player.mouvPlayer('O', Map.Zoom);
+                            Player.mouvPlayer('O', CurrentMap.Zoom);
                         }
                         break;
                     case ConsoleKey.RightArrow:
                         // TODO Player move right
-                        if (Player.collisionWall(Map.Layers["WALL"].ZoomedData, 'E') == true && Map.Zoom == 4)
+                        if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'E') == true && CurrentMap.Zoom == 4)
                         {
-                            Player.mouvPlayer('E', Map.Zoom);
+                            Player.mouvPlayer('E', CurrentMap.Zoom);
 
                         }
                         break;
@@ -142,22 +142,22 @@ namespace cs.project07.pokemon.game.states.list
                         // TODO Player use action
                         break;
                     case ConsoleKey.M:
-                        if (Map.Zoom == 4)
+                        if (CurrentMap.Zoom == 4)
                         {
-                            Map.Zoom = 1;
-                            Player.zoomPlayer(Map.Zoom);
+                            CurrentMap.Zoom = 1;
+                            Player.zoomPlayer(CurrentMap.Zoom);
                         }
-                        else if (Map.Zoom == 1)
+                        else if (CurrentMap.Zoom == 1)
                         {
-                            Map.Zoom = 4;
-                            Player.zoomPlayer(Map.Zoom);
+                            CurrentMap.Zoom = 4;
+                            Player.zoomPlayer(CurrentMap.Zoom);
                         }
                         break;
                     case ConsoleKey.PageDown:
-                        Map.Zoom--;
+                        CurrentMap.Zoom--;
                         break;
                 }
-                Player.collisionGrass(Map.Layers["GRASS"].ZoomedData, game);
+                Player.collisionGrass(CurrentMap.Layers["GRASS"].ZoomedData, game);
             }
         }
 
@@ -186,14 +186,27 @@ namespace cs.project07.pokemon.game.states.list
             
         }
 
-        public void ChangeMap (string mapName, int posX, int posY)
+        public Tuple<int,int> SetCameraOffset()
         {
-            
-        }
+            int ConsoleWidth = Convert.ToInt32(Game.ConsoleSize.X);
+            int ConsoleHeight = Convert.ToInt32(Game.ConsoleSize.Y);
 
-        public void ChangeMap (string mapName, int posX, int posY)
-        {
-            
+            int cameraOffsetX;
+            int cameraOffsetY;
+
+            Tuple<int, int> result;
+
+            cameraOffsetX = Convert.ToInt32(Player.playerPosition.X) - ConsoleHeight / 2;
+            cameraOffsetY = Convert.ToInt32(Player.playerPosition.Y) - ConsoleWidth / 2;
+
+            if (cameraOffsetX < 0) cameraOffsetX = 0;
+            if (cameraOffsetY < 0) cameraOffsetY = 0;
+            if (cameraOffsetX > ConsoleWidth*4) cameraOffsetX = ConsoleWidth;
+            if (cameraOffsetY > ConsoleHeight*4) cameraOffsetY = ConsoleHeight;
+
+            result = new Tuple<int, int>(cameraOffsetX, cameraOffsetY);
+
+            return result;
         }
     }
 }

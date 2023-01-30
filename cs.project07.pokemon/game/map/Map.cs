@@ -16,6 +16,8 @@ using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml.Linq;
 using cs.project07.pokemon.game.save;
+using cs.project07.pokemon.game;
+using cs.project07.pokemon.game.states.list;
 
 namespace cs.project07.pokemon.game.map
 {
@@ -23,7 +25,6 @@ namespace cs.project07.pokemon.game.map
     {
         public Vector2 PlayerSpawnPosition;
         public Dictionary<string, Layer>? Layers;
-        public Vector2 playerDraw;
 
         private List<Tuple<string, int, int, string, int, int>>? _Teleporters;
         private string _Name;
@@ -176,16 +177,6 @@ namespace cs.project07.pokemon.game.map
                 layer.Update();
         }
 
-        private void updatePlayer()
-        {
-            char[,] grid = new char[rows, cols];
-            if (Layers?["WALL"].Zoom != null)
-            {
-                grid[Layers["PLAYER"].Zoom * (int)playerDraw.X, Layers["PLAYER"].Zoom * (int)playerDraw.Y] = 'P';
-                Layers?["PLAYER"]?.InitData(grid);
-            }
-        }
-
         public void Render()
         {
             // Render childs
@@ -304,15 +295,34 @@ namespace cs.project07.pokemon.game.map
                 int rows = _zoomedData.GetLength(0);
                 int cols = _zoomedData.GetLength(1);
 
-                for (int y = 0; y < rows; y++)
+                Tuple<int,int> CameraOffset = ((GameState)Parent.Parent).SetCameraOffset();
+
+                if (Zoom == 4)
                 {
-                    for (int x = 0; x < cols; x++)
+                    for (int y = 0; y < Game.ConsoleSize.Y; y++)
                     {
-                        char element = _zoomedData[y, x];
-                        if (element == '\0') continue;
-                        if (Left + x >= Left + Width || Top + y >= Top + Height) continue;
-                        Console.SetCursorPosition(Left + x, Top + y);
-                        Console.Write(element);
+                        for (int x = 0; x < Game.ConsoleSize.X; x++)
+                        {
+                            char element = _zoomedData[y + CameraOffset.Item1, x + CameraOffset.Item2];
+                            if (element == '\0') continue;
+                            if (Left + x >= Left + Width || Top + y >= Top + Height) continue;
+                            Console.SetCursorPosition(Left + x, Top + y);
+                            Console.Write(element);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int y = 0; y < rows; y++)
+                    {
+                        for (int x = 0; x < cols; x++)
+                        {
+                            char element = _zoomedData[y, x];
+                            if (element == '\0') continue;
+                            if (Left + x >= Left + Width || Top + y >= Top + Height) continue;
+                            Console.SetCursorPosition(Left + x, Top + y);
+                            Console.Write(element);
+                        }
                     }
                 }
             }
