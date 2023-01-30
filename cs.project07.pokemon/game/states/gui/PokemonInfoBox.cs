@@ -69,7 +69,8 @@ namespace cs.project07.pokemon.game.states.gui
             for (int i = 1; i <= 20; i++)
             {
                 Console.SetCursorPosition(Left+3+i, Top+3);
-                if (i*5 <= _percentage) Console.BackgroundColor = ConsoleColor.DarkGreen;
+                if (i * 5 <= _percentage && _percentage <= 40) Console.BackgroundColor = ConsoleColor.DarkYellow;
+                else if (i * 5 <= _percentage) Console.BackgroundColor = ConsoleColor.DarkGreen;
                 else Console.BackgroundColor = ConsoleColor.DarkRed;
                 Console.Write(' ');
             }
