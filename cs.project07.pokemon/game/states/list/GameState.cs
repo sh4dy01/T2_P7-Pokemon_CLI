@@ -157,7 +157,7 @@ namespace cs.project07.pokemon.game.states.list
                         CurrentMap.Zoom--;
                         break;
                 }
-                Player.collisionGrass(CurrentMap.Layers["GRASS"].ZoomedData, game);
+                //Player.collisionGrass(CurrentMap.Layers["GRASS"].ZoomedData, game);
             }
         }
 
@@ -178,7 +178,7 @@ namespace cs.project07.pokemon.game.states.list
             // ------ Map
             CurrentMap?.Render();
             
-            Player.drawPlayer();
+            Player.drawPlayer(CurrentMap.Zoom);
         }
 
         public void ChangeMap (string mapName, int posX, int posY)

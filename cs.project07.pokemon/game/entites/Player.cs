@@ -10,6 +10,7 @@ namespace cs.project07.pokemon.game.entites
 {
     public class Player
     {
+        const int incrementMouvement = 3;
         public Vector2 playerPosition;
         private ConsoleColor BackgroundColor;
         private ConsoleColor ForegroundColor;
@@ -43,16 +44,16 @@ namespace cs.project07.pokemon.game.entites
             switch (dir)
             {
                 case 'N':
-                    playerPosition = new Vector2(playerPosition.X - 1, playerPosition.Y);
+                    playerPosition = new Vector2(playerPosition.X - incrementMouvement, playerPosition.Y);
                     break;
                 case 'S':
-                    playerPosition = new Vector2(playerPosition.X + 1, playerPosition.Y);
+                    playerPosition = new Vector2(playerPosition.X + incrementMouvement, playerPosition.Y);
                     break;
                 case 'O':
-                    playerPosition = new Vector2(playerPosition.X, playerPosition.Y - 1);
+                    playerPosition = new Vector2(playerPosition.X, playerPosition.Y - incrementMouvement);
                     break;
                 case 'E':
-                    playerPosition = new Vector2(playerPosition.X, playerPosition.Y + 1);
+                    playerPosition = new Vector2(playerPosition.X, playerPosition.Y + incrementMouvement);
                     break;
             }
         }
@@ -61,25 +62,25 @@ namespace cs.project07.pokemon.game.entites
             switch (dir)
             {
                 case 'N':
-                    if (grid[(int)playerPosition.X - 1, (int)playerPosition.Y] == '#')
+                    if (grid[(int)playerPosition.X - incrementMouvement, (int)playerPosition.Y] == '#')
                     {
                         return false;
                     }
                     break;
                 case 'S':
-                    if (grid[(int)playerPosition.X + 1, (int)playerPosition.Y] == '#')
+                    if (grid[(int)playerPosition.X + incrementMouvement, (int)playerPosition.Y] == '#')
                     {
                         return false;
                     }
                     break;
                 case 'O':
-                    if (grid[(int)playerPosition.X, (int)playerPosition.Y - 1] == '#')
+                    if (grid[(int)playerPosition.X, (int)playerPosition.Y - incrementMouvement] == '#')
                     {
                         return false;
                     }
                     break;
                 case 'E':
-                    if (grid[(int)playerPosition.X, (int)playerPosition.Y + 1] == '#')
+                    if (grid[(int)playerPosition.X, (int)playerPosition.Y + incrementMouvement] == '#')
                     {
                         return false;
                     }
@@ -100,13 +101,15 @@ namespace cs.project07.pokemon.game.entites
                 }
             }
         }
-        public void drawPlayer()
+        public void drawPlayer(int zoom)
         {
-            Console.SetCursorPosition((int)playerPosition.Y, (int)playerPosition.X);
+            if(zoom == 1)
+                Console.SetCursorPosition((int)playerPosition.Y, (int)playerPosition.X);
+            else if(zoom == 4)
+                Console.SetCursorPosition((int)Game.ConsoleSize.X / 2, (int)Game.ConsoleSize.Y / 2);
             Console.BackgroundColor = BackgroundColor;
             Console.ForegroundColor = ForegroundColor;
             Console.Write("P");
-            Console.SetCursorPosition(0,0);
         }
     }
 }
