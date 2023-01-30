@@ -11,14 +11,17 @@ namespace cs.project07.pokemon.game.states.gui
     {
         private Pokemon _pokemon;
         private bool _isEnemy;
-        private float _percentage;
+        private float _healthPercentage;
+        private float _expPercentage;
+
 
         public PokemonInfoBox(State state, Pokemon pokemon, bool isEnemy) 
         {
             Parent = state;
             _pokemon = pokemon;
             _isEnemy = isEnemy;
-            _percentage = (_pokemon.Currenthealth / _pokemon.MaxHealth) * 100;
+            _healthPercentage = (_pokemon.Currenthealth / _pokemon.MaxHealth) * 100;
+            _expPercentage = (_pokemon.Experience / _pokemon.RequiredExp) * 100;
             InitDefaults();
         }
 
@@ -51,7 +54,8 @@ namespace cs.project07.pokemon.game.states.gui
         public void UpdateUI(Pokemon pokemon)
         {
             _pokemon = pokemon;
-            _percentage = (_pokemon.Currenthealth / _pokemon.MaxHealth) * 100;
+            _healthPercentage = (_pokemon.Currenthealth / _pokemon.MaxHealth) * 100;
+            _expPercentage = (_pokemon.Experience / _pokemon.RequiredExp) * 100;
         }
 
         public void Render()
@@ -69,12 +73,26 @@ namespace cs.project07.pokemon.game.states.gui
             for (int i = 1; i <= 20; i++)
             {
                 Console.SetCursorPosition(Left+3+i, Top+3);
-                if (i * 5 <= _percentage && _percentage <= 40) Console.BackgroundColor = ConsoleColor.DarkYellow;
-                else if (i * 5 <= _percentage) Console.BackgroundColor = ConsoleColor.DarkGreen;
+                if (i * 5 <= _healthPercentage && _healthPercentage <= 40) Console.BackgroundColor = ConsoleColor.DarkYellow;
+                else if (i * 5 <= _healthPercentage) Console.BackgroundColor = ConsoleColor.DarkGreen;
                 else Console.BackgroundColor = ConsoleColor.DarkRed;
-                Console.Write(' ');
+                Console.WriteLine(' ');
             }
             Console.BackgroundColor = ConsoleColor.Black;
+
+            if (!_isEnemy)
+            {
+                Console.SetCursorPosition(Left + Width - 2, Top + 4);
+                Console.WriteLine(_pokemon.Currenthealth + "/ " + _pokemon.MaxHealth);
+                
+                for (int i = 0; i < 20; i++)
+                {
+                    Console.SetCursorPosition(Left + Width + 3 - i, Top + 5);
+                    if (_expPercentage > i * 5) Console.BackgroundColor = ConsoleColor.Cyan;
+                    else Console.BackgroundColor = BackgroundColor;
+                    Console.WriteLine(' ');
+                }
+            }
         }
     }
 }
