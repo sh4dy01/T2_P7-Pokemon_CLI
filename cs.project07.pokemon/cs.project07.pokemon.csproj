@@ -19,27 +19,32 @@
     </Compile>
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="game\map\list\Map1.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="game\map\list\Map2.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="game\save\meta.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="game\save\Save.txt">
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="game\map\list\Map1.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="game\map\list\Map2.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="game\save\meta.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="game\save\Save.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Update="game\combat\type-chart.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="game\map\list\Outdoor.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="game\combat\type-chart.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="game\map\list\Outdoor.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>

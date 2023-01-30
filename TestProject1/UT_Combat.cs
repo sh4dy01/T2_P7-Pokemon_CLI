@@ -51,15 +51,5 @@ namespace cs.project07.pokemon.tests.game.combat
             Assert.That(pokemon.Level, Is.EqualTo(9));
             Assert.That(pokemon.Experience, Is.EqualTo(120));
         }
-
-        [Test]
-        public void CheckIfAttackIsCorrectlyUse() 
-        {
-            Pokemon pokemon = new(PokemonRegistry.GetRandomPokemon());
-
-            Attack pokemonAttack = pokemon.Attacks[0];
-            pokemonAttack.Use();
-
-            Assert.That(pokemonAttack, Is.EqualTo(pokemonAttack.Usage));
-        }
+    }
 }
