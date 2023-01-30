@@ -10,7 +10,7 @@ using System.Xml.Linq;
 
 namespace cs.project07.pokemon.game.states.gui
 {
-    internal class DialogBox : IRenderable<State>
+    internal class DialogBox : IRenderable<State>, IUpdatable
     {
         private int _width;
         private int _height;
@@ -104,6 +104,7 @@ namespace cs.project07.pokemon.game.states.gui
 
         private void PaintText()
         {
+            PaintBackground();
             Console.SetCursorPosition(Left + Width / 2 - _text.Length / 2, Top + Height / 2);
             Console.Write(_text);
         }
@@ -123,6 +124,13 @@ namespace cs.project07.pokemon.game.states.gui
             PaintBorder();
             PaintBackground();
             PaintText();
+        }
+
+        public void Update()
+        {
+            // Update the actual state
+            Left = Parent.Left + Parent.Width / 2 - Width / 2;
+            Top = Parent.Top + Parent.Height - Height - 5;
         }
     }
 }

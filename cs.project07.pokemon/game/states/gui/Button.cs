@@ -35,8 +35,8 @@ namespace cs.project07.pokemon.game.states.gui
 
         public ConsoleColor ActiveForegroundColor { get; set; }
         public ConsoleColor ActiveBackgroundColor { get; set; }
-        private ConsoleColor _currentBackgroundColor;
-        private ConsoleColor _currentForegroundColor;
+        public ConsoleColor _currentBackgroundColor { get; set; }
+        public ConsoleColor _currentForegroundColor { get; set; }
 
         public Vector2 Offsets;
 
@@ -58,10 +58,10 @@ namespace cs.project07.pokemon.game.states.gui
             Top = 0;
             Width = 0;
             Height = 0;
-            BackgroundColor = ConsoleColor.Gray;
-            ForegroundColor = ConsoleColor.Black;
-            ActiveBackgroundColor = ConsoleColor.DarkGray;
-            ActiveForegroundColor = ConsoleColor.Black;
+            BackgroundColor = ConsoleColor.Black;
+            ForegroundColor = ConsoleColor.White;
+            ActiveBackgroundColor = ConsoleColor.Black;
+            ActiveForegroundColor = ConsoleColor.White;
             _currentBackgroundColor = BackgroundColor;
             _currentForegroundColor = ForegroundColor;
             Offsets.X = 0;
@@ -101,14 +101,16 @@ namespace cs.project07.pokemon.game.states.gui
 
         public void Render()
         {
+            Console.ForegroundColor = ActiveForegroundColor;
+            Console.BackgroundColor = ActiveBackgroundColor;
+            
             if (Selected && Left >= 0)
             {
+                Console.BackgroundColor = ActiveBackgroundColor;
+                Console.ForegroundColor = ActiveForegroundColor;
                 Console.SetCursorPosition(Left + (int)Offsets.X - 3, Top + (int)Offsets.Y);
                 Console.WriteLine(">> ");
             }
-
-            Console.BackgroundColor = _currentBackgroundColor;
-            Console.ForegroundColor = _currentForegroundColor;
 
             Console.SetCursorPosition(Left + (int)Offsets.X, Top + (int)Offsets.Y);
             Console.WriteLine(Text);

@@ -1,4 +1,5 @@
 ﻿#pragma warning disable CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
+using cs.project07.pokemon.game.combat;
 using cs.project07.pokemon.game.states;
 using cs.project07.pokemon.game.states.list;
 
@@ -21,6 +22,7 @@ namespace cs.project07.pokemon.game
 
         public Game()
         {
+            Console.Title = "Pokemon";
             Init();
         }
 
@@ -29,18 +31,19 @@ namespace cs.project07.pokemon.game
             Console.SetWindowSize(237, 60);
             Console.SetWindowPosition(0, 0);
             Parent = this;
-            Left = 0;
-            Top = 0;
+            Left = Console.WindowLeft;
+            Top = Console.WindowTop;
             Width = Console.WindowWidth;
             Height = Console.WindowHeight;
             BackgroundColor = ConsoleColor.DarkGray;
             ForegroundColor = ConsoleColor.Black;
             StatesList = new Stack<State>();
+            TypeChart.Init();
         }
 
         private void InitStates()
         {
-            StatesList?.Push(new MenuState(this));
+            StatesList?.Push(new CombatState(this));
         }
 
         private void Init()
@@ -53,12 +56,6 @@ namespace cs.project07.pokemon.game
 
             // Hide cursor
             Console.CursorVisible = false;
-
-            // Set size
-            /*Can't find screen resolution*/
-
-            // Set position
-            /*Can't find screen resolution*/
         }
 
         public void Run()

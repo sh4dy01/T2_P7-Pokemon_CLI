@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cs.project07.pokemon", "cs.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{5CB87EFF-EBBC-41AF-AC80-0B228B8C14F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject1", "TestProject1\TestProject1.csproj", "{F98F8B9F-5505-4582-9337-1F97E289763F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTest", "TestProject1\UnitTest.csproj", "{F98F8B9F-5505-4582-9337-1F97E289763F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
