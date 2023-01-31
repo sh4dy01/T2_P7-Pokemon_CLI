@@ -89,7 +89,7 @@ namespace cs.project07.pokemon.game.states.list
 
         private void InitPlayer()
         {
-            Player = new Player(CurrentMap.PlayerSpawnPosition);
+            Player = new Player(CurrentMap.PlayerSpawnPosition, this);
             
             CurrentMap.Zoom = 4;
             Player.zoomPlayer(CurrentMap.Zoom);
@@ -97,7 +97,7 @@ namespace cs.project07.pokemon.game.states.list
 
         public override void HandleKeyEvent(ConsoleKey pressedKey)
         {
-            if(CurrentMap.Layers["WALL"].Data != null)
+            if(CurrentMap != null)
             {
                 switch (pressedKey)
                 {
@@ -158,6 +158,7 @@ namespace cs.project07.pokemon.game.states.list
                         break;
                 }
                 Player.collisionGrass(CurrentMap.Layers["GRASS"].ZoomedData, game);
+                Player.collisionTeleporter(CurrentMap._Teleporters);
             }
         }
 
@@ -181,9 +182,9 @@ namespace cs.project07.pokemon.game.states.list
             Player.drawPlayer(CurrentMap.Zoom);
         }
 
-        public void ChangeMap (string mapName, int posX, int posY)
+        public void ChangeMap (string mapName)
         {
-            
+            CurrentMap = Maps[mapName];
         }
 
         public Tuple<int,int> SetCameraOffset()
