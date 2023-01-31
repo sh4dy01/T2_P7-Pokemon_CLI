@@ -10,7 +10,7 @@ using System.Xml.Linq;
 
 namespace cs.project07.pokemon.game.states.gui
 {
-    internal class DialogBox : IRenderable<State>, IUpdatable
+    public class DialogBox : IRenderable<State>, IUpdatable
     {
         private int _width;
         private int _height;

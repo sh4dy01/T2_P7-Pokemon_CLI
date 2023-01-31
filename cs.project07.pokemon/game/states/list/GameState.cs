@@ -83,13 +83,12 @@ namespace cs.project07.pokemon.game.states.list
 
             Maps["map1"].ParseFileToLayers("game/map/list/Map1.txt");
             Maps["map2"].ParseFileToLayers("game/map/list/Map2.txt");
-
             CurrentMap = Maps["map1"];
         }
 
         private void InitPlayer()
         {
-            Player = new Player(CurrentMap.PlayerSpawnPosition);
+            Player = new Player(CurrentMap.PlayerSpawnPosition, this);
             
             CurrentMap.Zoom = 4;
             Player.zoomPlayer(CurrentMap.Zoom);
@@ -97,7 +96,7 @@ namespace cs.project07.pokemon.game.states.list
 
         public override void HandleKeyEvent(ConsoleKey pressedKey)
         {
-            if(CurrentMap.Layers["WALL"].Data != null)
+            if(CurrentMap != null)
             {
                 bool mouv = false;
                 switch (pressedKey)
@@ -163,6 +162,8 @@ namespace cs.project07.pokemon.game.states.list
                 }
                 if(mouv == true)
                     Player.collisionGrass(CurrentMap.Layers["GRASS"].ZoomedData, game);
+                Player.collisionGrass(CurrentMap.Layers["GRASS"].ZoomedData, game);
+                Player.collisionTeleporter(CurrentMap._Teleporters);
             }
         }
 
@@ -186,9 +187,10 @@ namespace cs.project07.pokemon.game.states.list
             Player.drawPlayer(CurrentMap.Zoom, SetCameraOffset());
         }
 
-        public void ChangeMap (string mapName, int posX, int posY)
+        public void ChangeMap (string mapName)
         {
-            
+            CurrentMap = Maps[mapName];
+            CurrentMap.Zoom = 4;
         }
 
         public Tuple<int,int> SetCameraOffset()

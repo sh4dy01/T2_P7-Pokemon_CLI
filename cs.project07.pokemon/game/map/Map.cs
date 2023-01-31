@@ -26,7 +26,7 @@ namespace cs.project07.pokemon.game.map
         public Vector2 PlayerSpawnPosition;
         public Dictionary<string, Layer>? Layers;
 
-        private List<Tuple<string, int, int, string, int, int>>? _Teleporters;
+        public List<Tuple<string, int, int, string, int, int>>? _Teleporters { get; private set; }
         private string _Name;
         private int _zoom;
         public int Zoom
@@ -299,9 +299,9 @@ namespace cs.project07.pokemon.game.map
 
                 if (Zoom == 4)
                 {
-                    for (int y = 0; y < Game.ConsoleSize.Y; y++)
-                    {
-                        for (int x = 0; x < Game.ConsoleSize.X; x++)
+                    for (int y = 0; y < rows-CameraOffset.Item1; y++)
+                    { 
+                        for (int x = 0; x < cols-CameraOffset.Item2; x++)
                         {
                             char element = _zoomedData[y + CameraOffset.Item1, x + CameraOffset.Item2];
                             if (element == '\0') continue;

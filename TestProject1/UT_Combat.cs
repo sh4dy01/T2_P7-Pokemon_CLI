@@ -22,7 +22,10 @@ namespace cs.project07.pokemon.tests.game.combat
         }
 
         [Test]
-        public void CheckIfPokemonHasCorrectLife()
+        [TestCase(10, 20)]
+        [TestCase(1000, 0)]
+        [TestCase(10, 20)]
+        public void CheckIfPokemonHasCorrectLife(int hp, int expected)
         {
             Pokemon pokemon = new(PokemonRegistry.GetRandomPokemon());
             Assert.That(pokemon.Currenthealth, Is.EqualTo(pokemon.MaxHealth));

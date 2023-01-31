@@ -1,4 +1,6 @@
-﻿using cs.project07.pokemon.game.states.list;
+﻿using cs.project07.pokemon.game.map;
+using cs.project07.pokemon.game.states;
+using cs.project07.pokemon.game.states.list;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +19,12 @@ namespace cs.project07.pokemon.game.entites
         public Vector2 playerPosition;
         private ConsoleColor BackgroundColor;
         private ConsoleColor ForegroundColor;
+        public State _parent { get; set; }
 
-        public Player(Vector2 playerSpawnPoint)
+        public Player(Vector2 playerSpawnPoint, State Parent)
         {
             Init(playerSpawnPoint);
+            _parent = Parent;
         }
 
         public void Init(Vector2 playerSpawnPosition)
@@ -112,6 +116,23 @@ namespace cs.project07.pokemon.game.entites
             }
         }
         public void drawPlayer(int zoom, Tuple<int, int> cameraOffset)
+
+        public void collisionTeleporter( List<Tuple<string,int,int,string, int, int>> teleporter)
+        {
+            foreach (var element in teleporter)
+            {
+                if (playerPosition.Y >= (element.Item3 * 4 - 4) && playerPosition.Y <= (element.Item3 * 4 - 1))
+                {
+                    if (playerPosition.X >= (element.Item2 * 4 - 4) && playerPosition.X <= (element.Item2 * 4 - 1))
+                    {
+                        playerPosition = new Vector2(element.Item5*4-2, element.Item6*4-2);
+                        ((GameState)_parent).ChangeMap(element.Item4);
+                    }
+                }
+            }
+        }
+
+        public void drawPlayer(int zoom)
         {
             Console.BackgroundColor = BackgroundColor;
             Console.ForegroundColor = ForegroundColor;

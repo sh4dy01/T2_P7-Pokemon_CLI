@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace cs.project07.pokemon.game.states.gui
 {
-    internal class CombatDialogBox : DialogBox
+    public class CombatDialogBox : DialogBox
     {
                
         public CombatDialogBox(CombatState state) : base(state)
