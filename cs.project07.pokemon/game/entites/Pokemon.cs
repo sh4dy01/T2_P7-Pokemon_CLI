@@ -8,7 +8,7 @@ namespace cs.project07.pokemon.game.entites
 {
     public class Pokemon
     {
-        const int LEVEL_UP_STEP = 20;
+        public const int LEVEL_UP_STEP = 20;
 
         PokedexEntry _dex;
 
@@ -23,6 +23,8 @@ namespace cs.project07.pokemon.game.entites
         public int Level { get => _level; }
         public float Currenthealth { get => _currentHealth; }
         public float Experience { get => _experience; }
+        public float RequiredExp { get => _requiredExperience; }
+
         public float MaxHealth { get => _dex.MaxHealth; }
         public Type Type { get => _dex.Type; }
         public Attack[] Attacks { get => _dex.Attacks; }
