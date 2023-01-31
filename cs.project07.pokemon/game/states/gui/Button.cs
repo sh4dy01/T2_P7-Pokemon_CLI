@@ -7,7 +7,7 @@ internal enum Status { IDLE, ACTIVE }
 
 namespace cs.project07.pokemon.game.states.gui
 {
-    internal class Button : IUpdatable, IRenderable<State>
+    internal class Button : IUpdatable, IRenderable<DialogBox>
     {
         private bool _selected;
         public bool Selected
@@ -25,7 +25,7 @@ namespace cs.project07.pokemon.game.states.gui
 
         public string Text { get; set; }
 
-        public State Parent { get; set; }
+        public DialogBox Parent { get; set; }
         public int Left { get; set; }
         public int Top { get; set; }
         public int Width { get; set; }
@@ -35,16 +35,18 @@ namespace cs.project07.pokemon.game.states.gui
 
         public ConsoleColor ActiveForegroundColor { get; set; }
         public ConsoleColor ActiveBackgroundColor { get; set; }
-        private ConsoleColor _currentBackgroundColor;
-        private ConsoleColor _currentForegroundColor;
+        public ConsoleColor _currentBackgroundColor { get; set; }
+        public ConsoleColor _currentForegroundColor { get; set; }
 
         public Vector2 Offsets;
 
-        public Button(State _Parent, string _Text)
+        public Button(DialogBox _Parent, string _Text)
         {
             InitDefaults();
             Parent = _Parent;
             Text = _Text;
+            Top = Parent.Top + Parent.Height/ 2;
+            Left = Parent.Left + Parent.Width / 2;
         }
 
         public void InitDefaults()
@@ -56,10 +58,10 @@ namespace cs.project07.pokemon.game.states.gui
             Top = 0;
             Width = 0;
             Height = 0;
-            BackgroundColor = ConsoleColor.Gray;
-            ForegroundColor = ConsoleColor.Black;
-            ActiveBackgroundColor = ConsoleColor.DarkGray;
-            ActiveForegroundColor = ConsoleColor.Black;
+            BackgroundColor = ConsoleColor.Black;
+            ForegroundColor = ConsoleColor.White;
+            ActiveBackgroundColor = ConsoleColor.Black;
+            ActiveForegroundColor = ConsoleColor.White;
             _currentBackgroundColor = BackgroundColor;
             _currentForegroundColor = ForegroundColor;
             Offsets.X = 0;
@@ -99,14 +101,16 @@ namespace cs.project07.pokemon.game.states.gui
 
         public void Render()
         {
+            Console.ForegroundColor = ActiveForegroundColor;
+            Console.BackgroundColor = ActiveBackgroundColor;
+            
             if (Selected && Left >= 0)
             {
+                Console.BackgroundColor = ActiveBackgroundColor;
+                Console.ForegroundColor = ActiveForegroundColor;
                 Console.SetCursorPosition(Left + (int)Offsets.X - 3, Top + (int)Offsets.Y);
                 Console.WriteLine(">> ");
             }
-
-            Console.BackgroundColor = _currentBackgroundColor;
-            Console.ForegroundColor = _currentForegroundColor;
 
             Console.SetCursorPosition(Left + (int)Offsets.X, Top + (int)Offsets.Y);
             Console.WriteLine(Text);

@@ -1,14 +1,28 @@
 ﻿using cs.project07.pokemon.game.map;
+using cs.project07.pokemon.game.save;
 using cs.project07.pokemon.game.entites;
+using cs.project07.pokemon.game.states.gui.managers;
+using cs.project07.pokemon.game.states.gui;
+using System.Numerics;
+using System.Runtime.CompilerServices;
 
 namespace cs.project07.pokemon.game.states.list
 {
     public class GameState : State
     {
-        public Map Map;
-        public Player Player;
-        public GameState(Game game) : base(game)
+        public Map CurrentMap;
+        private Dictionary<string, Map> Maps;
+
+        public Player Player { get; set; }
+        private CombatState Combat;
+        private Game game;
+
+        private ButtonManager _buttonManager;
+        private Dictionary<string, Button> _buttons;
+        private DialogBox _dialogBox;
+        public GameState(Game gameReceive) : base(gameReceive)
         {
+            game = gameReceive;
             Init();
         }
 
@@ -17,25 +31,73 @@ namespace cs.project07.pokemon.game.states.list
             Name = "Pokemon";
             InitMap();
             InitPlayer();
+            _dialogBox = new DialogBox(this);
+            InitMenu();
+        }
+
+        private void InitMenu()
+        {
+            _buttonManager = new ButtonManager();
+            _buttons = _buttonManager.Buttons;
+
+            _buttons["INVENTORY"] = new Button(_dialogBox, "Inventory")
+            {
+                Selected = true,
+                Action = () =>
+                {
+                    //Game.StatesList?.Push(new InventoryState(Parent));
+                }
+            };
+            _buttons["SAVE"] = new Button(_dialogBox, "Save")
+            {
+                Selected = true,
+                Action = () =>
+                {
+                    //TO DO SAVE THE GAME
+                }
+            };
+            _buttons["EXIT"] = new Button(_dialogBox, "Exit")
+            {
+                Selected = true,
+                Action = () =>
+                {
+                    Game.StatesList?.Pop();
+                }
+            };
+
+            _buttonManager.InitHandleKeyEvent();
+
+            for (int i = 0; i < _buttons.Count; i++)
+            {
+                _buttons.ElementAt(i).Value.Offsets += new Vector2(3, 1 + i);
+            }
         }
 
         private void InitMap()
         {
-            Map = new Map(this);
-            Map.ParseFileToLayers("game/Map/list/Outdoor.txt");
+            Maps = new Dictionary<string, Map>
+            {
+                { "map1", new Map(this,"map1") },
+                { "map2", new Map(this,"map2") }
+            };
+
+            Maps["map1"].ParseFileToLayers("game/map/list/Map1.txt");
+            Maps["map2"].ParseFileToLayers("game/map/list/Map2.txt");
+
+            CurrentMap = Maps["map1"];
         }
 
         private void InitPlayer()
         {
-            Player = new Player(Map.PlayerSpawnPosition);
-            Map.playerDraw = Player.playerPosition;
-            Map.Zoom = 4;
-            Player.zoomPlayer(Map.Zoom);
+            Player = new Player(CurrentMap.PlayerSpawnPosition);
+            
+            CurrentMap.Zoom = 4;
+            Player.zoomPlayer(CurrentMap.Zoom);
         }
 
         public override void HandleKeyEvent(ConsoleKey pressedKey)
         {
-            if(Map.Layers["WALL"].Data != null)
+            if(CurrentMap.Layers["WALL"].Data != null)
             {
                 switch (pressedKey)
                 {
@@ -49,43 +111,53 @@ namespace cs.project07.pokemon.game.states.list
                         break;
                     case ConsoleKey.UpArrow:
                         // TODO Player move up
-                        if (Player.collision(Map.Layers["WALL"].ZoomedData, 'N') == true && Map.Zoom == 4)
-                            Player.mouvPlayer('N', Map.Zoom);
+                        if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'N') == true && CurrentMap.Zoom == 4)
+                        {
+                            Player.mouvPlayer('N', CurrentMap.Zoom);
+                        }
                         break;
                     case ConsoleKey.DownArrow:
                         // TODO Player move down
-                        if (Player.collision(Map.Layers["WALL"].ZoomedData, 'S') == true && Map.Zoom == 4)
-                            Player.mouvPlayer('S', Map.Zoom);
+                        if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'S') == true && CurrentMap.Zoom == 4)
+                        {
+                            Player.mouvPlayer('S', CurrentMap.Zoom);
+                        }
                         break;
                     case ConsoleKey.LeftArrow:
                         // TODO Player move left
-                        if (Player.collision(Map.Layers["WALL"].ZoomedData, 'O') == true && Map.Zoom == 4)
-                            Player.mouvPlayer('O', Map.Zoom);
+                        if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'O') == true && CurrentMap.Zoom == 4)
+                        {
+                            Player.mouvPlayer('O', CurrentMap.Zoom);
+                        }
                         break;
                     case ConsoleKey.RightArrow:
                         // TODO Player move right
-                        if (Player.collision(Map.Layers["WALL"].ZoomedData, 'E') == true && Map.Zoom == 4)
-                            Player.mouvPlayer('E', Map.Zoom);
+                        if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'E') == true && CurrentMap.Zoom == 4)
+                        {
+                            Player.mouvPlayer('E', CurrentMap.Zoom);
+
+                        }
                         break;
                     case ConsoleKey.Enter:
                         // TODO Player use action
                         break;
                     case ConsoleKey.M:
-                        if (Map.Zoom == 4)
+                        if (CurrentMap.Zoom == 4)
                         {
-                            Map.Zoom = 1;
-                            Player.zoomPlayer(Map.Zoom);
+                            CurrentMap.Zoom = 1;
+                            Player.zoomPlayer(CurrentMap.Zoom);
                         }
-                        else if(Map.Zoom == 1)
+                        else if (CurrentMap.Zoom == 1)
                         {
-                            Map.Zoom = 4;
-                            Player.zoomPlayer(Map.Zoom);
+                            CurrentMap.Zoom = 4;
+                            Player.zoomPlayer(CurrentMap.Zoom);
                         }
                         break;
                     case ConsoleKey.PageDown:
-                        Map.Zoom--;
+                        CurrentMap.Zoom--;
                         break;
                 }
+                //Player.collisionGrass(CurrentMap.Layers["GRASS"].ZoomedData, game);
             }
         }
 
@@ -95,7 +167,7 @@ namespace cs.project07.pokemon.game.states.list
 
             // Update childs
             // ------ Map
-            Map?.Update();
+            CurrentMap?.Update();
         }
 
         public override void Render()
@@ -104,9 +176,37 @@ namespace cs.project07.pokemon.game.states.list
 
             // Render childs
             // ------ Map
-            Map?.Render();
+            CurrentMap?.Render();
             
-            Player.drawPlayer();
+            Player.drawPlayer(CurrentMap.Zoom);
+        }
+
+        public void ChangeMap (string mapName, int posX, int posY)
+        {
+            
+        }
+
+        public Tuple<int,int> SetCameraOffset()
+        {
+            int ConsoleWidth = Convert.ToInt32(Game.ConsoleSize.X);
+            int ConsoleHeight = Convert.ToInt32(Game.ConsoleSize.Y);
+
+            int cameraOffsetX;
+            int cameraOffsetY;
+
+            Tuple<int, int> result;
+
+            cameraOffsetX = Convert.ToInt32(Player.playerPosition.X) - ConsoleHeight / 2;
+            cameraOffsetY = Convert.ToInt32(Player.playerPosition.Y) - ConsoleWidth / 2;
+
+            if (cameraOffsetX < 0) cameraOffsetX = 0;
+            if (cameraOffsetY < 0) cameraOffsetY = 0;
+            if (cameraOffsetX > ConsoleWidth*4) cameraOffsetX = ConsoleWidth;
+            if (cameraOffsetY > ConsoleHeight*4) cameraOffsetY = ConsoleHeight;
+
+            result = new Tuple<int, int>(cameraOffsetX, cameraOffsetY);
+
+            return result;
         }
     }
 }

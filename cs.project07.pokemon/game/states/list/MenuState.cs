@@ -9,6 +9,7 @@ namespace cs.project07.pokemon.game.states.list
     {
         private ButtonManager _buttonManager;
         private Dictionary<string, Button> _buttons;
+        private DialogBox _dialogBox;
 
         public MenuState(Game game) : base(game)
         {
@@ -18,6 +19,7 @@ namespace cs.project07.pokemon.game.states.list
         protected override void Init()
         {
             Name = "Main Menu";
+            _dialogBox = new DialogBox(this);
             InitButtons();
         }
 
@@ -27,7 +29,7 @@ namespace cs.project07.pokemon.game.states.list
 
             _buttons = _buttonManager.Buttons;
 
-            _buttons["PLAY"] = new Button(this, "Play")
+            _buttons["PLAY"] = new Button(_dialogBox, "Play")
             {
                 Selected = true,
                 Action = () =>
@@ -35,14 +37,14 @@ namespace cs.project07.pokemon.game.states.list
                     Game.StatesList?.Push(new GameState(Parent));
                 }
             };
-            _buttons["CREDITS"] = new Button(this, "Credits")
+            _buttons["CREDITS"] = new Button(_dialogBox, "Credits")
             {
                 Action = () =>
                 {
 
                 }
             };
-            _buttons["QUIT"] = new Button(this, "Quit")
+            _buttons["QUIT"] = new Button(_dialogBox, "Quit")
             {
                 Offsets = new Vector2(0, 10),
                 Action = () =>
@@ -51,26 +53,12 @@ namespace cs.project07.pokemon.game.states.list
                 }
             };
 
+            _buttonManager.InitHandleKeyEvent();
+
             for (int i = 0; i < _buttons.Count; i++)
             {
                 _buttons.ElementAt(i).Value.Offsets += new Vector2(3, 1 + i);
             }
-
-            _buttonManager.HandleKeyEvent = (pressedKey) =>
-            {
-                switch (pressedKey)
-                {
-                    case ConsoleKey.UpArrow:
-                        Button.SelectPrevious(_buttons);
-                        break;
-                    case ConsoleKey.DownArrow:
-                        Button.SelectNext(_buttons);
-                        break;
-                    case ConsoleKey.Enter:
-                        Button.ExecuteAction(_buttons);
-                        break;
-                }
-            };
         }
 
         public override void HandleKeyEvent(ConsoleKey pressedKey)

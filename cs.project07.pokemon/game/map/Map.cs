@@ -6,13 +6,18 @@
  * |*| => Grass (spawnable)  *
  * | | => Ground             *
  * |@| => Player spawn       *
+ * |T| => Teleporter         *
  *                           *
  *****************************/
 
 using cs.project07.pokemon.game.states;
 using System.Collections;
 using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
 using System.Xml.Linq;
+using cs.project07.pokemon.game.save;
+using cs.project07.pokemon.game;
+using cs.project07.pokemon.game.states.list;
 
 namespace cs.project07.pokemon.game.map
 {
@@ -20,15 +25,16 @@ namespace cs.project07.pokemon.game.map
     {
         public Vector2 PlayerSpawnPosition;
         public Dictionary<string, Layer>? Layers;
-        public Vector2 playerDraw;
 
+        private List<Tuple<string, int, int, string, int, int>>? _Teleporters;
+        private string _Name;
         private int _zoom;
         public int Zoom
         {
             get => _zoom;
             set
             {
-                if (value is >= 1 and <= 4)
+                if (value is >= 1 and <= 6)
                 {
                     _zoom = value;
                     if (Layers == null || Layers.Count <= 0) return;
@@ -46,9 +52,10 @@ namespace cs.project07.pokemon.game.map
         public ConsoleColor ForegroundColor { get; set; }
         public ConsoleColor BackgroundColor { get; set; }
 
-        public Map(State parent)
+        public Map(State parent, string Name)
         {
             Parent = parent;
+            _Name = Name;
             Init();
         }
 
@@ -60,13 +67,14 @@ namespace cs.project07.pokemon.game.map
 
         public void InitDefaults()
         {
-            Zoom = 1;
+            Zoom = 4;
             Left = Parent.Left;
             Top = Parent.Top;
             Width = Parent.Width;
             Height = Parent.Height;
             BackgroundColor = ConsoleColor.Gray;
             ForegroundColor = ConsoleColor.Black;
+            _Teleporters = Save.LoadMeta(_Name);
         }
 
         private void InitLayers()
@@ -76,8 +84,8 @@ namespace cs.project07.pokemon.game.map
                 ["WALL"] = new Layer(this)
                 {
                     Collidable = true,
-                    BackgroundColor = ConsoleColor.DarkYellow,
-                    ForegroundColor = ConsoleColor.DarkYellow
+                    BackgroundColor = ConsoleColor.Black,
+                    ForegroundColor = ConsoleColor.Black
                 },
 
                 ["GROUND"] = new Layer(this)
@@ -90,15 +98,21 @@ namespace cs.project07.pokemon.game.map
                 {
                     Spawnable = true,
                     BackgroundColor = ConsoleColor.DarkGreen,
+                    ForegroundColor = ConsoleColor.Green
+                },
+
+                ["TELEPORTER"] = new Layer(this)
+                {
+                    BackgroundColor = ConsoleColor.DarkMagenta,
+                    ForegroundColor = ConsoleColor.DarkMagenta
+                },
+
+                ["PLAYER"] = new Layer(this)
+                {
+                    Spawnable = false,
+                    BackgroundColor = ConsoleColor.Black,
                     ForegroundColor = ConsoleColor.Black
                 }
-
-                //["PLAYER"] = new Layer(this)
-                //{
-                //    Spawnable = false,
-                //    BackgroundColor = ConsoleColor.Black,
-                //    ForegroundColor = ConsoleColor.Black
-                //}
             };
         }
 
@@ -107,12 +121,13 @@ namespace cs.project07.pokemon.game.map
         public char[,] grid;
         public void ParseFileToLayers(string filePath)
         {
-            char[] possibilities = { '#', '*', ' ', '@' };
+            char[] possibilities = { '#', '*', ' ', '@','T' };
 
             string[] lines = File.ReadAllLines(filePath);
             string firstLine = lines[0];
-            rows = lines.Length;
-            cols = firstLine.Length;
+            int rows = lines.Length;
+            int cols = firstLine.Length;
+
 
             foreach (char possibility in possibilities)
             {
@@ -141,9 +156,9 @@ namespace cs.project07.pokemon.game.map
                     case ' ':
                         Layers?["GROUND"].InitData(grid);
                         break;
-                    //case '@':
-                    //    Layers?["PLAYER"].InitData(grid);
-                    //    break;
+                    case 'T':
+                        Layers?["TELEPORTER"].InitData(grid);
+                        break;
                 }
                 //Zoom = 4;
             }
@@ -160,16 +175,6 @@ namespace cs.project07.pokemon.game.map
             if (Layers == null || Layers.Count <= 0) return;
             foreach (Layer layer in Layers.Values)
                 layer.Update();
-        }
-
-        private void updatePlayer()
-        {
-            char[,] grid = new char[rows, cols];
-            if (Layers?["WALL"].Zoom != null)
-            {
-                grid[Layers["PLAYER"].Zoom * (int)playerDraw.X, Layers["PLAYER"].Zoom * (int)playerDraw.Y] = 'P';
-                Layers?["PLAYER"]?.InitData(grid);
-            }
         }
 
         public void Render()
@@ -243,7 +248,7 @@ namespace cs.project07.pokemon.game.map
 
             public void InitDefaults()
             {
-                _zoom = 1;
+                _zoom = 4;
                 Visible = true;
                 Collidable = false;
                 Spawnable = false;
@@ -290,15 +295,34 @@ namespace cs.project07.pokemon.game.map
                 int rows = _zoomedData.GetLength(0);
                 int cols = _zoomedData.GetLength(1);
 
-                for (int y = 0; y < rows; y++)
+                Tuple<int,int> CameraOffset = ((GameState)Parent.Parent).SetCameraOffset();
+
+                if (Zoom == 4)
                 {
-                    for (int x = 0; x < cols; x++)
+                    for (int y = 0; y < Game.ConsoleSize.Y; y++)
                     {
-                        char element = _zoomedData[y, x];
-                        if (element == '\0') continue;
-                        if (Left + x >= Left + Width || Top + y >= Top + Height) continue;
-                        Console.SetCursorPosition(Left + x, Top + y);
-                        Console.Write(element);
+                        for (int x = 0; x < Game.ConsoleSize.X; x++)
+                        {
+                            char element = _zoomedData[y + CameraOffset.Item1, x + CameraOffset.Item2];
+                            if (element == '\0') continue;
+                            if (Left + x >= Left + Width || Top + y >= Top + Height) continue;
+                            Console.SetCursorPosition(Left + x, Top + y);
+                            Console.Write(element);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int y = 0; y < rows; y++)
+                    {
+                        for (int x = 0; x < cols; x++)
+                        {
+                            char element = _zoomedData[y, x];
+                            if (element == '\0') continue;
+                            if (Left + x >= Left + Width || Top + y >= Top + Height) continue;
+                            Console.SetCursorPosition(Left + x, Top + y);
+                            Console.Write(element);
+                        }
                     }
                 }
             }
