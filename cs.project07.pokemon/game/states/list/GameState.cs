@@ -83,13 +83,12 @@ namespace cs.project07.pokemon.game.states.list
 
             Maps["map1"].ParseFileToLayers("game/map/list/Map1.txt");
             Maps["map2"].ParseFileToLayers("game/map/list/Map2.txt");
-
             CurrentMap = Maps["map1"];
         }
 
         private void InitPlayer()
         {
-            Player = new Player(CurrentMap.PlayerSpawnPosition);
+            Player = new Player(CurrentMap.PlayerSpawnPosition, this);
             
             CurrentMap.Zoom = 4;
             Player.zoomPlayer(CurrentMap.Zoom);
@@ -97,8 +96,9 @@ namespace cs.project07.pokemon.game.states.list
 
         public override void HandleKeyEvent(ConsoleKey pressedKey)
         {
-            if(CurrentMap.Layers["WALL"].Data != null)
+            if(CurrentMap != null)
             {
+                bool mouv = false;
                 switch (pressedKey)
                 {
                     case ConsoleKey.Insert:
@@ -113,29 +113,32 @@ namespace cs.project07.pokemon.game.states.list
                         // TODO Player move up
                         if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'N') == true && CurrentMap.Zoom == 4)
                         {
-                            Player.mouvPlayer('N', CurrentMap.Zoom);
+                            Player.mouvPlayer('N');
+                            mouv = true;
                         }
                         break;
                     case ConsoleKey.DownArrow:
                         // TODO Player move down
                         if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'S') == true && CurrentMap.Zoom == 4)
                         {
-                            Player.mouvPlayer('S', CurrentMap.Zoom);
+                            Player.mouvPlayer('S');
+                            mouv = true;
                         }
                         break;
                     case ConsoleKey.LeftArrow:
                         // TODO Player move left
                         if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'O') == true && CurrentMap.Zoom == 4)
                         {
-                            Player.mouvPlayer('O', CurrentMap.Zoom);
+                            Player.mouvPlayer('O');
+                            mouv = true;
                         }
                         break;
                     case ConsoleKey.RightArrow:
                         // TODO Player move right
                         if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'E') == true && CurrentMap.Zoom == 4)
                         {
-                            Player.mouvPlayer('E', CurrentMap.Zoom);
-
+                            Player.mouvPlayer('E');
+                            mouv = true;
                         }
                         break;
                     case ConsoleKey.Enter:
@@ -157,7 +160,11 @@ namespace cs.project07.pokemon.game.states.list
                         CurrentMap.Zoom--;
                         break;
                 }
-                Player.collisionGrass(CurrentMap.Layers["GRASS"].ZoomedData, game);
+                if(mouv == true)
+                {
+                    Player.collisionGrass(CurrentMap.Layers["GRASS"].ZoomedData, game);
+                    Player.collisionTeleporter(CurrentMap._Teleporters);
+                }
             }
         }
 
@@ -178,12 +185,13 @@ namespace cs.project07.pokemon.game.states.list
             // ------ Map
             CurrentMap?.Render();
             
-            Player.drawPlayer(CurrentMap.Zoom);
+            Player.drawPlayer(CurrentMap.Zoom, SetCameraOffset());
         }
 
-        public void ChangeMap (string mapName, int posX, int posY)
+        public void ChangeMap (string mapName)
         {
-            
+            CurrentMap = Maps[mapName];
+            CurrentMap.Zoom = 4;
         }
 
         public Tuple<int,int> SetCameraOffset()

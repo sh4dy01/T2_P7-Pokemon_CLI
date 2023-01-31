@@ -7,7 +7,7 @@ internal enum Status { IDLE, ACTIVE }
 
 namespace cs.project07.pokemon.game.states.gui
 {
-    internal class Button : IUpdatable, IRenderable<DialogBox>
+    public class Button : IUpdatable, IRenderable<DialogBox>
     {
         private bool _selected;
         public bool Selected

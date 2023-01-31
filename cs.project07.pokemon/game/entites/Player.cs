@@ -1,4 +1,6 @@
-﻿using cs.project07.pokemon.game.states.list;
+﻿using cs.project07.pokemon.game.map;
+using cs.project07.pokemon.game.states;
+using cs.project07.pokemon.game.states.list;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,21 +14,24 @@ namespace cs.project07.pokemon.game.entites
     {
         private PokemonListManager _pokemonListManager;
 
-        const int incrementMouvement = 2;
+        const int incrementMouvement = 4;
+        const int sizePlayer = 4;
         public Vector2 playerPosition;
         private ConsoleColor BackgroundColor;
         private ConsoleColor ForegroundColor;
+        public State _parent { get; set; }
 
-        public Player(Vector2 playerSpawnPoint)
+        public Player(Vector2 playerSpawnPoint, State Parent)
         {
             Init(playerSpawnPoint);
+            _parent = Parent;
         }
 
         public void Init(Vector2 playerSpawnPosition)
         {
             playerPosition = playerSpawnPosition;
-            BackgroundColor = ConsoleColor.Black;
-            ForegroundColor = ConsoleColor.Black;
+            BackgroundColor = ConsoleColor.Red;
+            ForegroundColor = ConsoleColor.Red;
         }
 
         public void zoomPlayer(int zoom)
@@ -41,23 +46,30 @@ namespace cs.project07.pokemon.game.entites
             }
         }
 
-        public void mouvPlayer(char dir, int zoom)
+        public void mouvPlayer(char dir)
         {
+            float Xposition = 0;
+            float Yposition = 0;
             switch (dir)
             {
                 case 'N':
-                    playerPosition = new Vector2(playerPosition.X - incrementMouvement, playerPosition.Y);
+                    Xposition = playerPosition.X - incrementMouvement;
+                    Yposition = playerPosition.Y;
                     break;
                 case 'S':
-                    playerPosition = new Vector2(playerPosition.X + incrementMouvement, playerPosition.Y);
+                    Xposition = playerPosition.X + incrementMouvement;
+                    Yposition = playerPosition.Y;
                     break;
                 case 'O':
-                    playerPosition = new Vector2(playerPosition.X, playerPosition.Y - incrementMouvement);
+                    Xposition = playerPosition.X;
+                    Yposition = playerPosition.Y - incrementMouvement;                   
                     break;
                 case 'E':
-                    playerPosition = new Vector2(playerPosition.X, playerPosition.Y + incrementMouvement);
+                    Xposition = playerPosition.X;
+                    Yposition = playerPosition.Y + incrementMouvement;
                     break;
             }
+            playerPosition = new Vector2(Xposition, Yposition);
         }
         public bool collisionWall(char[,] grid, char dir)
         {
@@ -70,7 +82,7 @@ namespace cs.project07.pokemon.game.entites
                     }
                     break;
                 case 'S':
-                    if (grid[(int)playerPosition.X + incrementMouvement, (int)playerPosition.Y] == '#')
+                    if (grid[(int)playerPosition.X + incrementMouvement + 3, (int)playerPosition.Y] == '#')
                     {
                         return false;
                     }
@@ -82,7 +94,7 @@ namespace cs.project07.pokemon.game.entites
                     }
                     break;
                 case 'E':
-                    if (grid[(int)playerPosition.X, (int)playerPosition.Y + incrementMouvement] == '#')
+                    if (grid[(int)playerPosition.X, (int)playerPosition.Y + incrementMouvement + 3] == '#')
                     {
                         return false;
                     }
@@ -103,15 +115,52 @@ namespace cs.project07.pokemon.game.entites
                 }
             }
         }
-        public void drawPlayer(int zoom)
+
+        public void collisionTeleporter( List<Tuple<string,int,int,string, int, int>> teleporter)
         {
-            if(zoom == 1)
-                Console.SetCursorPosition((int)playerPosition.Y, (int)playerPosition.X);
-            else if(zoom == 4)
-                Console.SetCursorPosition((int)Game.ConsoleSize.X / 2, (int)Game.ConsoleSize.Y / 2);
+            foreach (var element in teleporter)
+            {
+                if (playerPosition.Y >= (element.Item3 * 4 - 4) && playerPosition.Y <= (element.Item3 * 4 - 1))
+                {
+                    if (playerPosition.X >= (element.Item2 * 4 - 4) && playerPosition.X <= (element.Item2 * 4 - 1))
+                    {
+                        playerPosition = new Vector2(element.Item5*4-2, element.Item6*4-2);
+                        ((GameState)_parent).ChangeMap(element.Item4);
+                    }
+                }
+            }
+        }
+
+        public void drawPlayer(int zoom, Tuple<int, int> cameraOffset)
+        {
             Console.BackgroundColor = BackgroundColor;
             Console.ForegroundColor = ForegroundColor;
-            Console.Write("P");
+            if(zoom == 1)
+            {
+                Console.SetCursorPosition((int)playerPosition.Y, (int)playerPosition.X);
+                Console.Write("P");
+            }
+            else if(zoom == 4)
+            {
+                Console.SetCursorPosition((int)Game.ConsoleSize.X / 2, (int)Game.ConsoleSize.Y / 2);
+                if (cameraOffset.Item2 == 0)
+                    Console.SetCursorPosition((int)playerPosition.Y, (int)Game.ConsoleSize.Y / 2);
+                else if(cameraOffset.Item1 == 0)
+                    Console.SetCursorPosition((int)Game.ConsoleSize.X / 2, (int)playerPosition.X);
+
+                int tempCursorL = Console.GetCursorPosition().Left;
+                int tempCursorT = Console.GetCursorPosition().Top;
+                for(int i = 0; i < sizePlayer; i++)
+                {
+                    int Ydraw = tempCursorL + i;
+                    for(int j = 0; j < sizePlayer; j++)
+                    {
+                        int Xdraw = tempCursorT + j;
+                        Console.SetCursorPosition(Ydraw, Xdraw);
+                        Console.Write("P");
+                    }
+                }
+            }
         }
     }
 }
