@@ -10,7 +10,7 @@ namespace cs.project07.pokemon.game.entites
 {
     public class Player
     {
-        private PokemonListManager _pokemonsCaptured;
+        private PokemonListManager _pokemonListManager;
 
         const int incrementMouvement = 2;
         public Vector2 playerPosition;
