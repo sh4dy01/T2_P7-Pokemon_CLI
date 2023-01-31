@@ -26,7 +26,7 @@ namespace cs.project07.pokemon.game.map
         public Vector2 PlayerSpawnPosition;
         public Dictionary<string, Layer>? Layers;
 
-        private List<Tuple<string, int, int, string, int, int>>? _Teleporters;
+        public List<Tuple<string, int, int, string, int, int>>? _Teleporters { get; private set; }
         private string _Name;
         private int _zoom;
         public int Zoom
