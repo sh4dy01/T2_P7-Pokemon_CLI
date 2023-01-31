@@ -12,7 +12,7 @@ namespace cs.project07.pokemon.game.entites
     {
         private PokemonListManager _pokemonsCaptured;
 
-        const int incrementMouvement = 3;
+        const int incrementMouvement = 2;
         public Vector2 playerPosition;
         private ConsoleColor BackgroundColor;
         private ConsoleColor ForegroundColor;
