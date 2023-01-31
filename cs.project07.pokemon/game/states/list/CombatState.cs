@@ -80,6 +80,11 @@ namespace cs.project07.pokemon.game.states.list
                     _attackInfoUi.Show(_playerPokemon.Attacks[0]);
                     break;
                 case CombatView.EFFECTIVE:
+                    if (_effectivenessMessage == "")
+                    {
+                        SwitchView(CombatView.END_TURN);
+                        break;
+                    }
                     _dialogBox.UpdateText(_effectivenessMessage);
                     break;
                 case CombatView.ACTION_USE:
@@ -133,9 +138,9 @@ namespace cs.project07.pokemon.game.states.list
         public void DealEnemyDamage(Attack attack)
         {
             _attackInfoUi.Hide();
-            _dialogBox.UpdateText("You'r " + _playerPokemon.Name + " used " + attack.Name + " !");
+            _dialogBox.UpdateText("Your " + _playerPokemon.Name + " used " + attack.Name + " !");
             _enemyPokemon.TakeDamage(DamageWithMultiplier(attack, _enemyPokemon.Type));
-            _enemyPokemonUi.UpdateUI(_enemyPokemon);
+            _enemyPokemonUi.UpdateHealth(_enemyPokemon);
             _isPlayerTurn = false;
             _dialogBox.ResetButtons();
         }
@@ -145,7 +150,7 @@ namespace cs.project07.pokemon.game.states.list
             Attack attack = _enemyPokemon.ChooseRandomAttack();
             _dialogBox.UpdateText("The enemy " + _enemyPokemon.Name + " used " + attack.Name + " !");
             _playerPokemon.TakeDamage(DamageWithMultiplier(attack, _playerPokemon.Type));
-            _playerPokemonUi.UpdateUI(_playerPokemon);
+            _playerPokemonUi.UpdateHealth(_playerPokemon);
             _isPlayerTurn = true;
         }
 
@@ -168,7 +173,7 @@ namespace cs.project07.pokemon.game.states.list
                     _effectivenessMessage = INEFFECTIVE_MSG;
                     break;
                 default:
-                    _effectivenessMessage = "Ok...";
+                    _effectivenessMessage = "";
                     break;
             }
         }
