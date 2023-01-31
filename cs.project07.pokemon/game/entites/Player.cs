@@ -25,8 +25,8 @@ namespace cs.project07.pokemon.game.entites
         public void Init(Vector2 playerSpawnPosition)
         {
             playerPosition = playerSpawnPosition;
-            BackgroundColor = ConsoleColor.Black;
-            ForegroundColor = ConsoleColor.Black;
+            BackgroundColor = ConsoleColor.Red;
+            ForegroundColor = ConsoleColor.Red;
         }
 
         public void zoomPlayer(int zoom)
@@ -103,12 +103,18 @@ namespace cs.project07.pokemon.game.entites
                 }
             }
         }
-        public void drawPlayer(int zoom)
+        public void drawPlayer(int zoom, Tuple<int, int> cameraOffset)
         {
             if(zoom == 1)
                 Console.SetCursorPosition((int)playerPosition.Y, (int)playerPosition.X);
             else if(zoom == 4)
+            {
                 Console.SetCursorPosition((int)Game.ConsoleSize.X / 2, (int)Game.ConsoleSize.Y / 2);
+                if (cameraOffset.Item2 == 0)
+                    Console.SetCursorPosition((int)playerPosition.Y, (int)Game.ConsoleSize.Y / 2);
+                else if(cameraOffset.Item1 == 0)
+                    Console.SetCursorPosition((int)Game.ConsoleSize.X / 2, (int)playerPosition.X);
+            }
             Console.BackgroundColor = BackgroundColor;
             Console.ForegroundColor = ForegroundColor;
             Console.Write("P");
