@@ -73,5 +73,28 @@ namespace cs.project07.pokemon
             }
             else return false;
         }
+        
+        public void Use()
+        {
+            _currentUsage--;
+        }
+
+        public bool IsSpecialMove()
+        {
+            if (Type is (Type.DARK or Type.ELECTRIC or Type.FIRE or Type.WATER or Type.GRASS or Type.PSYCHIC))
+            {
+                return true;
+            }
+            else return false;
+        }
+
+        public bool IsPhysicalMove()
+        {
+            if (Type is (Type.NORMAL or Type.STEEL or Type.FIGHTING or Type.FLYING or Type.GROUND or Type.ROCK or Type.POISON or Type.GHOST or Type.BUG))
+            {
+                return true;
+            }
+            else return false;
+        }
     }
 }
