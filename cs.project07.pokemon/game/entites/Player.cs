@@ -16,6 +16,13 @@ namespace cs.project07.pokemon.game.entites
 
         const int incrementMouvement = 4;
         const int sizePlayer = 4;
+
+        string[,] spriteNormal =  { { " ", "(", ")", " " },
+                                    { "/", "|", "|", "\\" }, 
+                                    { " ", "|", "|", " " }, 
+                                    { "/", " ", " ", "\\" }  };
+
+        private string [,] spritePlayer;
         public Vector2 playerPosition;
         private ConsoleColor BackgroundColor;
         private ConsoleColor ForegroundColor;
@@ -30,8 +37,9 @@ namespace cs.project07.pokemon.game.entites
         public void Init(Vector2 playerSpawnPosition)
         {
             playerPosition = playerSpawnPosition;
-            BackgroundColor = ConsoleColor.Red;
-            ForegroundColor = ConsoleColor.Red;
+            BackgroundColor = ConsoleColor.Green;
+            ForegroundColor = ConsoleColor.Black;
+            spritePlayer = spriteNormal;
         }
 
         public void zoomPlayer(int zoom)
@@ -124,7 +132,7 @@ namespace cs.project07.pokemon.game.entites
                 {
                     if (playerPosition.X >= (element.Item2 * 4 - 4) && playerPosition.X <= (element.Item2 * 4 - 1))
                     {
-                        playerPosition = new Vector2(element.Item5*4-2, element.Item6*4-2);
+                        playerPosition = new Vector2(element.Item5*4, element.Item6*4);
                         ((GameState)_parent).ChangeMap(element.Item4);
                     }
                 }
@@ -145,20 +153,26 @@ namespace cs.project07.pokemon.game.entites
                 Console.SetCursorPosition((int)Game.ConsoleSize.X / 2, (int)Game.ConsoleSize.Y / 2);
                 if (cameraOffset.Item2 == 0)
                     Console.SetCursorPosition((int)playerPosition.Y, (int)Game.ConsoleSize.Y / 2);
-                else if(cameraOffset.Item1 == 0)
+                else if (cameraOffset.Item1 == 0)
                     Console.SetCursorPosition((int)Game.ConsoleSize.X / 2, (int)playerPosition.X);
 
-                int tempCursorL = Console.GetCursorPosition().Left;
-                int tempCursorT = Console.GetCursorPosition().Top;
-                for(int i = 0; i < sizePlayer; i++)
+                DrawZoomedPlayer();
+            }
+        }
+
+        private void DrawZoomedPlayer()
+        {
+            int tempCursorL = Console.GetCursorPosition().Left;
+            int tempCursorT = Console.GetCursorPosition().Top;
+            for (int i = 0; i < sizePlayer; i++)
+            {
+                int Ydraw = tempCursorL + i;
+                for (int j = 0; j < sizePlayer; j++)
                 {
-                    int Ydraw = tempCursorL + i;
-                    for(int j = 0; j < sizePlayer; j++)
-                    {
-                        int Xdraw = tempCursorT + j;
-                        Console.SetCursorPosition(Ydraw, Xdraw);
-                        Console.Write("P");
-                    }
+                    int Xdraw = tempCursorT + j;
+                    Console.SetCursorPosition(Ydraw, Xdraw);
+                    string caraToPrint = spritePlayer[j,i];
+                    Console.Write(caraToPrint);
                 }
             }
         }
