@@ -178,7 +178,7 @@ namespace cs.project07.pokemon.game.states.list
             // ------ Map
             CurrentMap?.Render();
             
-            Player.drawPlayer(CurrentMap.Zoom);
+            Player.drawPlayer(CurrentMap.Zoom, SetCameraOffset());
         }
 
         public void ChangeMap (string mapName)
