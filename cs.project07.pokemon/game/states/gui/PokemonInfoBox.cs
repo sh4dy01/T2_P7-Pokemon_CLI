@@ -13,10 +13,14 @@ namespace cs.project07.pokemon.game.states.gui
     {        
         private Pokemon _pokemon;
         private bool _isEnemy;
+        
         private float _healthPercentage;
-        private float _expPercentage;
         private float _oldLifePercentage;
+        private float _oldExpPercentage;
+        private float _expPercentage;
+
         private Vector2 currentLifePos;
+        private Vector2 currentExpPos;
 
 
         public PokemonInfoBox(State state, Pokemon pokemon, bool isEnemy) 
@@ -52,24 +56,26 @@ namespace cs.project07.pokemon.game.states.gui
             
             _healthPercentage = (_pokemon.Currenthealth / _pokemon.MaxHealth) * 100;
             _oldLifePercentage = (_pokemon.Currenthealth / _pokemon.MaxHealth) * 100;
+            _oldExpPercentage = (_pokemon.Experience / _pokemon.RequiredExp) * 100;
             _expPercentage = (_pokemon.Experience / _pokemon.RequiredExp) * 100;
 
             currentLifePos.X = Left + 3 + _healthPercentage / 5;
             currentLifePos.Y = Top + 3;
+            currentExpPos.X = Left + Width + 3 - _expPercentage / 5;
+            currentExpPos.Y = Top + 5;
 
             BackgroundColor = ConsoleColor.Black;
             ForegroundColor = ConsoleColor.White;
         }
 
-        public void UpdateHealth(Pokemon pokemon)
+        public void UpdateHealth(Pokemon pokemon) //TODO: Clean this
         {
             _pokemon = pokemon;
             _healthPercentage = (_pokemon.Currenthealth / _pokemon.MaxHealth) * 100;
-            _expPercentage = (_pokemon.Experience / _pokemon.RequiredExp) * 100;
 
             int startIndex = (int)(_oldLifePercentage / 5);
             int endIndex = (int)((_oldLifePercentage - _healthPercentage) / 5);
-            
+
             if (_healthPercentage <= 0)
                 endIndex = 0;
 
@@ -81,8 +87,13 @@ namespace cs.project07.pokemon.game.states.gui
                 currentLifePos.X--;
                 Thread.Sleep(100);
             }
-            
+
             _oldLifePercentage = _healthPercentage;
+        }
+
+        public void UpdateExperience(int experience)
+        {
+            //TODO
         }
 
         public void Render()

@@ -8,7 +8,7 @@ namespace cs.project07.pokemon.game.entites
 {
     public class Pokemon
     {
-        const int LEVEL_UP_STEP = 20;
+        public const int LEVEL_UP_STEP = 20;
 
         PokedexEntry _dex;
 

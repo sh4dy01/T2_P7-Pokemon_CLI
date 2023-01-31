@@ -16,7 +16,6 @@ namespace cs.project07.pokemon.game.states.list
             SELECT_ATTACK,
             EFFECTIVE,
             ACTION_USE,
-            ACTION_PET,
             ENEMY_ATTACK,
             END_TURN,
             END_COMBAT
@@ -90,9 +89,6 @@ namespace cs.project07.pokemon.game.states.list
                 case CombatView.ACTION_USE:
                     //TODO
                     break;
-                case CombatView.ACTION_PET:
-                    //TODO
-                    break;
                 case CombatView.ENEMY_ATTACK:
                     DealPlayerDamage();
                     break;
@@ -120,7 +116,9 @@ namespace cs.project07.pokemon.game.states.list
             }
             else if (_enemyPokemon.IsDead)
             {
-                _playerPokemon.GainExperience(50 * _enemyPokemon.Level);
+                int experience = 50 * _enemyPokemon.Level;
+                _playerPokemon.GainExperience(experience);
+                _playerPokemonUi.UpdateExperience(experience);
                 _dialogBox.UpdateText("You won, GG !");
                 SwitchView(CombatView.END_COMBAT);
             }
