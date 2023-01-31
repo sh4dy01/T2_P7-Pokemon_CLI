@@ -12,6 +12,7 @@ namespace cs.project07.pokemon.game.states.list
         public enum CombatView
         {
             INTRO,
+            SELECT_POKEMON,
             SELECT_ACTION,
             SELECT_ATTACK,
             EFFECTIVE,
@@ -26,22 +27,23 @@ namespace cs.project07.pokemon.game.states.list
         private float _runChance = 50;
         
         private CombatView _currentView;
+        
         private readonly CombatDialogBox _dialogBox;
-        private readonly Pokemon _playerPokemon;
         private readonly Pokemon _enemyPokemon;
-        private readonly AttackInfoBox _attackInfoUi;
-        private readonly PokemonInfoBox _playerPokemonUi;
         private readonly PokemonInfoBox _enemyPokemonUi;
+        
+        private Pokemon? _playerPokemon;
+        private AttackInfoBox? _attackInfoUi;
+        private PokemonInfoBox? _playerPokemonUi;
 
-        public CombatState(Game game, PokedexEntry? playerPokemon = null, PokedexEntry? enemyPokemon = null) : base(game)
+        private readonly PokemonListManager _pokemonListManager; //TODO : REMOVE
+
+        public CombatState(Game game) : base(game)
         {
-            _playerPokemon = new Pokemon(PokemonRegistry.GetRandomPokemon()); //TODO : Get selected Pokemon
             _enemyPokemon = new Pokemon(PokemonRegistry.GetRandomPokemon()); //TODO : Get the random pokemon
-
+            _pokemonListManager = new PokemonListManager(); //TODO : REMOVE
             _dialogBox = new CombatDialogBox(this);
-            _playerPokemonUi = new PokemonInfoBox(this, _playerPokemon, false);
             _enemyPokemonUi = new PokemonInfoBox(this, _enemyPokemon, true);
-            _attackInfoUi = new AttackInfoBox(this);
 
             Init();
         }
@@ -49,11 +51,6 @@ namespace cs.project07.pokemon.game.states.list
         protected override void Init()
         {
             Name = "Combat";
-            if (_enemyPokemon.Level > _playerPokemon.Level)
-                _runChance *= 0.5f;
-            else if (_enemyPokemon.Level < _playerPokemon.Level)
-                _runChance *= 1.5f;
-            
             _isPlayerTurn = true;
             _currentView = CombatView.INTRO;
             SwitchView(_currentView);
@@ -68,6 +65,10 @@ namespace cs.project07.pokemon.game.states.list
             {
                 case CombatView.INTRO:
                     _dialogBox.UpdateText("A wild " + _enemyPokemon.Name + " appeared !");
+                    break;
+                case CombatView.SELECT_POKEMON:
+                    _dialogBox.ResetText();
+                    _dialogBox.InitSelectPokemonsButtons();
                     break;
                 case CombatView.SELECT_ACTION:
                     _dialogBox.ResetText();
@@ -101,10 +102,17 @@ namespace cs.project07.pokemon.game.states.list
             }
         }
 
-        /*public void SwitchPlayerPokemon(PokemonCaptured pokemon)
+        public void SwapPlayerPokemon(Pokemon pokemon)
         {
             _playerPokemon = pokemon;
-        }*/ //TODO
+            _playerPokemonUi = new PokemonInfoBox(this, _playerPokemon, false);
+            _attackInfoUi = new AttackInfoBox(this);
+            if (_enemyPokemon.Level > _playerPokemon.Level)
+                _runChance *= 0.5f;
+            else if (_enemyPokemon.Level < _playerPokemon.Level)
+                _runChance *= 1.5f;
+            SwitchView(CombatView.SELECT_ACTION);
+        }
 
         private void CheckIfCombatEnd()
         {
@@ -137,7 +145,7 @@ namespace cs.project07.pokemon.game.states.list
         {
             _attackInfoUi.Hide();
             _dialogBox.UpdateText("Your " + _playerPokemon.Name + " used " + attack.Name + " !");
-            _enemyPokemon.TakeDamage(DamageWithMultiplier(attack, _enemyPokemon.Type));
+            _enemyPokemon.TakeDamage(DamageWithMultiplier(attack, _playerPokemon, _enemyPokemon));
             _enemyPokemonUi.UpdateHealth(_enemyPokemon);
             _isPlayerTurn = false;
             _dialogBox.ResetButtons();
@@ -145,19 +153,39 @@ namespace cs.project07.pokemon.game.states.list
         
         private void DealPlayerDamage()
         {
-            Attack attack = _enemyPokemon.ChooseRandomAttack();
+            Attack attack = _enemyPokemon.ChooseBestAttack(_playerPokemon.Type);
             _dialogBox.UpdateText("The enemy " + _enemyPokemon.Name + " used " + attack.Name + " !");
-            _playerPokemon.TakeDamage(DamageWithMultiplier(attack, _playerPokemon.Type));
+            _playerPokemon.TakeDamage(DamageWithMultiplier(attack, _enemyPokemon, _playerPokemon));
             _playerPokemonUi.UpdateHealth(_playerPokemon);
             _isPlayerTurn = true;
         }
 
-        private float DamageWithMultiplier(Attack attack, Type defenderType)
+        private float DamageWithMultiplier(Attack attack, Pokemon attacker, Pokemon defender)
         {
-            float damageMultiplier = TypeChart.GetDamageMultiplier(attack.Type, defenderType);
+            float damageMultiplier = TypeChart.GetDamageMultiplier(attack.Type, defender.Type);
             UpdateEffectivenessMessage(damageMultiplier);
+
+            float A, D;
+            if (attack.IsPhysicalMove())
+            {
+                A = attacker.Attack;
+                D = defender.Defense;
+            } else
+            {
+                A = attacker.SPAttack;
+                D = defender.SPDefense;
+            }
+
+            float STAB = 1;
+            if (attack.Type == attacker.Type)
+                STAB = 1.5f;
+
+            Random rnd = new Random();
+            float random = rnd.Next(217, 256) / 255.0f;
+
+            float damage = ((2 * attacker.Level / 5 + 2) * attack.Power * A/D / 50 + 2) * STAB * damageMultiplier * random;
             
-            return attack.Power * damageMultiplier;
+            return damage;
         }
 
         private void UpdateEffectivenessMessage(float damageMultiplier)
@@ -241,9 +269,13 @@ namespace cs.project07.pokemon.game.states.list
             base.Render();
             
             _dialogBox.Render();
-            _playerPokemonUi.Render();
+            if (_playerPokemon is not null)
+            {
+                _playerPokemonUi.Render();
+                _attackInfoUi.Render();
+            }
+
             _enemyPokemonUi.Render();
-            _attackInfoUi.Render();
             // Render childs
             // ------ Map
 

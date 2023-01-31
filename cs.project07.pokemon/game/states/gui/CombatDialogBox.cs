@@ -1,13 +1,7 @@
 ﻿using cs.project07.pokemon.game.combat;
-using cs.project07.pokemon.game.states.gui.managers;
+using cs.project07.pokemon.game.entites;
 using cs.project07.pokemon.game.states.list;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace cs.project07.pokemon.game.states.gui
 {
@@ -38,14 +32,7 @@ namespace cs.project07.pokemon.game.states.gui
 
             for (int i = 0; i < attacks.Length; i++)
             {
-                if (i > 0) selected = false;
-                if (i == 2)
-                {
-                    offsetX = 10;
-                    offsetY = -1;
-                }
-
-                if (i%2 == 1) { offsetY = -offsetY; }
+                SetOffset(ref offsetX, ref offsetY, ref selected, i);
 
                 var attack = attacks[i];
                 _buttons[attack.Name] = new Button(this, attack.Name)
@@ -102,6 +89,44 @@ namespace cs.project07.pokemon.game.states.gui
                     ((CombatState)Parent).TryToRun();
                 }
             };
+        }
+        public void InitSelectPokemonsButtons()
+        {
+            var pokemons = PokemonListManager.BattleTeam;
+            
+            int offsetX = -10;
+            int offsetY = -1;
+            bool selected = true;
+
+            for (int i = 0; i < pokemons.Length; i++)
+            {
+                if (pokemons[i] == null) continue;
+
+                SetOffset(ref offsetX, ref offsetY, ref selected, i);
+
+                var pokemon = pokemons[i];
+                _buttons[pokemon.Name] = new Button(this, pokemon.Name)
+                {
+                    Offsets = new Vector2(offsetX, offsetY),
+                    Selected = true,
+                    Action = () =>
+                    {
+                        ((CombatState)Parent).SwapPlayerPokemon(pokemon);
+                    }
+                };
+            }
+        }
+
+        private static void SetOffset(ref int offsetX, ref int offsetY, ref bool selected, int i)
+        {
+            if (i > 0) selected = false;
+            if (i == 2)
+            {
+                offsetX = 10;
+                offsetY = -1;
+            }
+
+            if (i % 2 == 1) { offsetY = -offsetY; }
         }
 
         public override void Render()
