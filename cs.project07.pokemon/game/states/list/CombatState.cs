@@ -162,33 +162,62 @@ namespace cs.project07.pokemon.game.states.list
 
         private float DamageWithMultiplier(Attack attack, Pokemon attacker, Pokemon defender)
         {
-            float damageMultiplier = TypeChart.GetDamageMultiplier(attack.Type, defender.Type);
-            UpdateEffectivenessMessage(damageMultiplier);
+            Random rnd = new Random();
 
-            float A, D;
+            float damageMultiplier = TypeChart.GetDamageMultiplier(attack.Type, defender.Type);
+
+            GetAttAndDefStat(attack, attacker, defender, out float A, out float D);
+            
+            float STAB = GetSTAB(attack, attacker);
+            int critical = IsCritical(attacker);
+            float random = rnd.Next(217, 256) / 255.0f;
+
+            float damage = ((2 * attacker.Level * critical / 5 + 2) * attack.Power * A / D / 50 + 2) * STAB * damageMultiplier * random;
+            
+            UpdateEffectivenessMessage(damageMultiplier, critical > 1);
+
+            return damage;
+        }
+
+        private static float GetSTAB(Attack attack, Pokemon attacker)
+        {
+            float STAB = 1;
+            if (attack.Type == attacker.Type)
+                STAB = 1.5f;
+            
+            return STAB;
+        }
+
+        private static void GetAttAndDefStat(Attack attack, Pokemon attacker, Pokemon defender, out float A, out float D)
+        {
             if (attack.IsPhysicalMove())
             {
                 A = attacker.Attack;
                 D = defender.Defense;
-            } else
+            }
+            else
             {
                 A = attacker.SPAttack;
                 D = defender.SPDefense;
             }
-
-            float STAB = 1;
-            if (attack.Type == attacker.Type)
-                STAB = 1.5f;
-
-            Random rnd = new Random();
-            float random = rnd.Next(217, 256) / 255.0f;
-
-            float damage = ((2 * attacker.Level / 5 + 2) * attack.Power * A/D / 50 + 2) * STAB * damageMultiplier * random;
-            
-            return damage;
         }
 
-        private void UpdateEffectivenessMessage(float damageMultiplier)
+        private static int IsCritical(Pokemon attacker)
+        {
+            Random rnd = new();
+            
+            int critical = 1;
+            
+            int chance = rnd.Next(256);
+            int threshold = (int)attacker.Speed / 2;
+            
+            if (chance <= threshold)
+                critical = 2;
+
+            return critical;
+        }
+
+        private void UpdateEffectivenessMessage(float damageMultiplier, bool isCritical)
         {
             switch (damageMultiplier)
             {
@@ -201,6 +230,11 @@ namespace cs.project07.pokemon.game.states.list
                 default:
                     _effectivenessMessage = "";
                     break;
+            }
+
+            if (isCritical)
+            {
+                _effectivenessMessage += "Critical Hit !";
             }
         }
 

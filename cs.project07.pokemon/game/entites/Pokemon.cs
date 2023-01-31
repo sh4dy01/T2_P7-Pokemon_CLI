@@ -33,6 +33,7 @@ namespace cs.project07.pokemon.game.entites
         public float SPAttack { get => _dex.SPAttack; }
         public float Defense { get => _dex.Defense; }
         public float SPDefense { get => _dex.SPDefense; }
+        public float Speed { get => _dex.Speed; }
 
         public Type Type { get => _dex.Type; }
         public Attack[] Attacks { get => _dex.Attacks; }
@@ -96,10 +97,20 @@ namespace cs.project07.pokemon.game.entites
         {
             Attack? attack = null;
             float maxDamage = 0;
+            bool isAttackSuperEffective = false;
 
             foreach (Attack a in Attacks)
             {
-                if (TypeChart.IsEffective(a.Type, defenderType))
+                if (TypeChart.IsSuperEffective(a.Type, defenderType))
+                {
+                    if (a.Power > maxDamage)
+                    {
+                        isAttackSuperEffective = true;
+                        attack = a;
+                        maxDamage = a.Power;
+                    }
+                }
+                else if (TypeChart.IsEffective(a.Type, defenderType) && !isAttackSuperEffective)
                 {
                     if (a.Power > maxDamage)
                     {
@@ -111,7 +122,6 @@ namespace cs.project07.pokemon.game.entites
                 {
                     continue;
                 }
-                else attack = a;
             }
             
             attack ??= ChooseRandomAttack();
