@@ -160,10 +160,11 @@ namespace cs.project07.pokemon.game.states.list
                         CurrentMap.Zoom--;
                         break;
                 }
-                Player.collisionGrass(CurrentMap.Layers["GRASS"].ZoomedData, game);
-                Player.collisionTeleporter(CurrentMap._Teleporters);
                 if(mouv == true)
+                {
                     Player.collisionGrass(CurrentMap.Layers["GRASS"].ZoomedData, game);
+                    Player.collisionTeleporter(CurrentMap._Teleporters);
+                }
             }
         }
 
