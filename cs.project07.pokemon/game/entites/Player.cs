@@ -112,18 +112,18 @@ namespace cs.project07.pokemon.game.entites
         {
             foreach (var element in teleporter)
             {
-                if (playerPosition.X >= element.Item2*4 && playerPosition.X <= element.Item2 * 4 + 4)
+                if (playerPosition.Y >= (element.Item3 * 4 - 4) && playerPosition.Y <= (element.Item3 * 4 - 1))
                 {
-                    if (playerPosition.Y >= element.Item3 * 4 && playerPosition.Y <= element.Item3 * 4 + 4)
+                    if (playerPosition.X >= (element.Item2 * 4 - 4) && playerPosition.X <= (element.Item2 * 4 - 1))
                     {
-                        playerPosition = new Vector2(element.Item5*4, element.Item6*4);
+                        playerPosition = new Vector2(element.Item5*4-2, element.Item6*4-2);
                         ((GameState)_parent).ChangeMap(element.Item4);
                     }
                 }
             }
         }
 
-        public void drawPlayer()
+        public void drawPlayer(int zoom)
         {
             if(zoom == 1)
                 Console.SetCursorPosition((int)playerPosition.Y, (int)playerPosition.X);

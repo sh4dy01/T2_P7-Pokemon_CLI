@@ -1,7 +1,7 @@
 ﻿#pragma warning disable CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
 namespace cs.project07.pokemon.game.states.gui.managers
 {
-    internal class ButtonManager
+    public class ButtonManager
     {
         public int _selectedButtonIndex;
         public Dictionary<string, Button>? Buttons;

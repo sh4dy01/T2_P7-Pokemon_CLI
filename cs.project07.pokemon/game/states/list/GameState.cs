@@ -83,7 +83,6 @@ namespace cs.project07.pokemon.game.states.list
 
             Maps["map1"].ParseFileToLayers("game/map/list/Map1.txt");
             Maps["map2"].ParseFileToLayers("game/map/list/Map2.txt");
-
             CurrentMap = Maps["map1"];
         }
 
@@ -185,6 +184,7 @@ namespace cs.project07.pokemon.game.states.list
         public void ChangeMap (string mapName)
         {
             CurrentMap = Maps[mapName];
+            CurrentMap.Zoom = 4;
         }
 
         public Tuple<int,int> SetCameraOffset()
