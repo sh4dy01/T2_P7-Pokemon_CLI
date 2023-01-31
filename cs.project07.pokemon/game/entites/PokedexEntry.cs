@@ -31,21 +31,38 @@ namespace cs.project07.pokemon
 		private readonly int _pokedexID;
         private readonly string _name;
         private readonly float _maxHealth;
+        private readonly float _attack;
+        private readonly float _spAttack;
+        private readonly float _defense;
+        private readonly float _spDefense;
+        private readonly float _speed;
+
         private readonly Type _type;
         private readonly Attack[] _attacks;
 
 		public int PokedexID => _pokedexID;
         public string Name => _name;
         public float MaxHealth => _maxHealth;
+        public float Attack => _attack;
+        public float SPAttack => _spAttack;
+        public float Defense => _defense;
+        public float SPDefense => _spDefense;
+        public float Speed => _speed;
+
         public Type Type => _type;
         public Attack[] Attacks => _attacks;
 
-        public PokedexEntry(int pokedexId, string name, Type type, float maxHealth, Attack[] attacks)
+        public PokedexEntry(int pokedexId, string name, Type type, float maxHealth, float attack, float defense, float spAttack, float spDefense, float speed, Attack[] attacks)
         {
 			_pokedexID = pokedexId;
 			_name = name;
 			_maxHealth = maxHealth;
-			_type = type;
+            _attack = attack;
+			_spAttack = spAttack;
+            _defense = defense;
+            _spDefense = spDefense;
+            _speed = speed;
+            _type = type;
 			_attacks = attacks;
         }
     }
