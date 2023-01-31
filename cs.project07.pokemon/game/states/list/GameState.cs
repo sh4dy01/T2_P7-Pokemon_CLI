@@ -157,7 +157,7 @@ namespace cs.project07.pokemon.game.states.list
                         CurrentMap.Zoom--;
                         break;
                 }
-                //Player.collisionGrass(CurrentMap.Layers["GRASS"].ZoomedData, game);
+                Player.collisionGrass(CurrentMap.Layers["GRASS"].ZoomedData, game);
             }
         }
 
@@ -201,8 +201,8 @@ namespace cs.project07.pokemon.game.states.list
 
             if (cameraOffsetX < 0) cameraOffsetX = 0;
             if (cameraOffsetY < 0) cameraOffsetY = 0;
-            if (cameraOffsetX > ConsoleWidth*4) cameraOffsetX = ConsoleWidth;
-            if (cameraOffsetY > ConsoleHeight*4) cameraOffsetY = ConsoleHeight;
+            if (cameraOffsetY > ConsoleWidth*4) cameraOffsetY = ConsoleWidth * 4;
+            if (cameraOffsetX > ConsoleHeight*4) cameraOffsetX = ConsoleHeight * 4;
 
             result = new Tuple<int, int>(cameraOffsetX, cameraOffsetY);
 
