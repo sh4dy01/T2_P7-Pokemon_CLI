@@ -118,7 +118,7 @@ namespace cs.project07.pokemon.game.states.list
             {
                 int experience = 50 * _enemyPokemon.Level;
                 _playerPokemon.GainExperience(experience);
-                _playerPokemonUi.UpdateExperience(experience);
+                //_playerPokemonUi.UpdateExperience(experience);
                 _dialogBox.UpdateText("You won, GG !");
                 SwitchView(CombatView.END_COMBAT);
             }
