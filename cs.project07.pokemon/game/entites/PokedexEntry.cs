@@ -48,7 +48,6 @@ namespace cs.project07.pokemon
         public float Defense => _defense;
         public float SPDefense => _spDefense;
         public float Speed => _speed;
-
         public Type Type => _type;
         public Attack[] Attacks => _attacks;
 
