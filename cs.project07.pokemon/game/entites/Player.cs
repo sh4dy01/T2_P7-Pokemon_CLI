@@ -115,7 +115,6 @@ namespace cs.project07.pokemon.game.entites
                 }
             }
         }
-        public void drawPlayer(int zoom, Tuple<int, int> cameraOffset)
 
         public void collisionTeleporter( List<Tuple<string,int,int,string, int, int>> teleporter)
         {
@@ -132,7 +131,7 @@ namespace cs.project07.pokemon.game.entites
             }
         }
 
-        public void drawPlayer(int zoom)
+        public void drawPlayer(int zoom, Tuple<int, int> cameraOffset)
         {
             Console.BackgroundColor = BackgroundColor;
             Console.ForegroundColor = ForegroundColor;
