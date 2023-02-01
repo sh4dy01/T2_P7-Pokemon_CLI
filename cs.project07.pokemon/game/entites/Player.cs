@@ -142,6 +142,17 @@ namespace cs.project07.pokemon.game.entites
             }
         }
 
+        public void collisionItems(char[,] grid)
+        {
+            char[] ItemsPossibilities = { 'p', 'P', 'h', 'H', 'b', 'B', 'c', 'C', 'S' };
+            foreach (var element in ItemsPossibilities)
+            {
+                if (grid[(int)playerPosition.X, (int)playerPosition.Y] == element)
+                { 
+                }
+            }
+        }
+
         public void drawPlayer(int zoom, Tuple<int, int> cameraOffset)
         {
             Console.BackgroundColor = BackgroundColor;

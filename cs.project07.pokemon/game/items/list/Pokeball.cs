@@ -76,19 +76,19 @@ namespace cs.project07.pokemon.game.items.list
             switch (_pokeballLevel)
             {
                 case 0:
-                    //to-do  |  1  |
+                    //to-do  | multuplicator :  1  |
                     break;
 
                 case 1:
-                    //to-do  | 1.5 |
+                    //to-do  | multuplicator : 1.5 |
                     break;
 
                 case 2:
-                    //to-do  |  2  |
+                    //to-do  | multuplicator :  2  |
                     break;
 
                 case 3:
-                    //to-do  | 255 |
+                    //to-do  | multuplicator : 255 |
                     break;
             }
         }

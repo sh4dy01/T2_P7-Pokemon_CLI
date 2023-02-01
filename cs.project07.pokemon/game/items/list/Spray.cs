@@ -13,13 +13,14 @@ namespace cs.project07.pokemon.game.items.list
         {
             _quantity = 0;
             _name = "Spray";
+            _id = 'S';
         }
 
         public Spray(int quantity)
         {
             _quantity = quantity;
             _name = "Spray";
-
+            _id = 'S';
         }
 
         override public void Use(Player player)

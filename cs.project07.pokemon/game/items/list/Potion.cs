@@ -90,7 +90,7 @@ namespace cs.project07.pokemon.game.items.list
                     break;
 
                 case 3:
-                    pokemon.Heal(2000);
+                    pokemon.HealMax();
                     break;
             }
         }

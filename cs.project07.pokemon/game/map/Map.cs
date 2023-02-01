@@ -112,6 +112,11 @@ namespace cs.project07.pokemon.game.map
                     Spawnable = false,
                     BackgroundColor = ConsoleColor.Black,
                     ForegroundColor = ConsoleColor.Black
+                },
+                ["ITEMS"] = new Layer(this)
+                {
+                    BackgroundColor = ConsoleColor.Yellow,
+                    ForegroundColor = ConsoleColor.Yellow
                 }
             };
         }
@@ -125,8 +130,8 @@ namespace cs.project07.pokemon.game.map
 
             string[] lines = File.ReadAllLines(filePath);
             string firstLine = lines[0];
-            int rows = lines.Length;
-            int cols = firstLine.Length;
+            rows = lines.Length;
+            cols = firstLine.Length;
 
 
             foreach (char possibility in possibilities)
@@ -162,6 +167,27 @@ namespace cs.project07.pokemon.game.map
                 }
                 //Zoom = 4;
             }
+            char[] ItemsPossibilities = { 'p', 'P', 'h', 'H', 'b','B','c','C','S' };
+            grid = new char[rows, cols];
+
+            foreach (char possibility in ItemsPossibilities)
+            {
+                
+                for (int y = 0; y < rows; y++)
+                {
+                    string line = lines[y];
+                    for (int x = 0; x < cols; x++)
+                    {
+                        char currentChar = line[x];
+                        if (currentChar == possibility) grid[y, x] = currentChar;
+                        else if (possibility == ' ' && currentChar == '@') grid[y, x] = ' ';
+                        else if (currentChar == '@') PlayerSpawnPosition = new Vector2(y, x);
+                    }
+                }
+
+                Layers?["ITEMS"].InitData(grid);
+            }
+
         }
 
         public void Update()
