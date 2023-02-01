@@ -14,6 +14,7 @@ namespace cs.project07.pokemon.game.states.list
         private Dictionary<string, Map> Maps;
 
         public Player Player { get; set; }
+        private CombatState Combat;
         private Game game;
 
         private ButtonManager _buttonManager;
@@ -248,6 +249,16 @@ namespace cs.project07.pokemon.game.states.list
             }
 
             //CurrentMap?.Load();
+        }
+
+        public override void Save()
+        {
+            Player.Save();
+        }
+
+        public override void Load()
+        {
+            Player.Load();
         }
 
         public void ChangeMap (string mapName)
