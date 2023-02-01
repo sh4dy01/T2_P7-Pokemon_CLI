@@ -64,7 +64,7 @@ namespace cs.project07.pokemon.game.states.list
                 Offsets = new Vector2(150, 0),
                 Action = () =>
                 {
-                    foreach(var count in Game.StatesList)
+                    while(Game.StatesList?.Count > 0) 
                     {
                         Game.StatesList?.Pop();
                     }
