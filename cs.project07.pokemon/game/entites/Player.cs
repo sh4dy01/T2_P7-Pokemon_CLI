@@ -70,7 +70,7 @@ namespace cs.project07.pokemon.game.entites
         public void Load()
         {
             var data = SaveManager.LoadData();
-            if (data["PlayerPosX"]!= null && data["PlayerPosY"] != null)
+            if (data.Count != 0)
             {
                 playerPosition = new Vector2(data["PlayerPosX"], data["PlayerPosY"]);
             }
