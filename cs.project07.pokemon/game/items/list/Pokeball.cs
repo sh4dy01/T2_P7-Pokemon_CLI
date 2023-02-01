@@ -8,22 +8,89 @@ using System.Threading.Tasks;
 
 namespace cs.project07.pokemon.game.items.list
 {
-    internal class Pokeball : Item
+    public class Pokeball : Item
     {
-        public Pokeball()
+        private int _pokeballLevel;
+        public Pokeball(int pokeballLevel)
         {
+            _pokeballLevel = pokeballLevel;
             _quantity = 0;
-            _id = 'B';
+
+            switch (_pokeballLevel)
+            {
+                case 0:
+                    _id = 'b';
+                    _name = "Poke Ball";
+                    break;
+
+                case 1:
+                    _id = 'B';
+                    _name = "Super Ball";
+                    break;
+
+                case 2:
+                    _id = 'c';
+                    _name = "Hyper Ball";
+                    break;
+
+                case 3:
+                    _id = 'C';
+                    _name = "Master Ball";
+                    break;
+            }
         }
-        public Pokeball(int quantity)
+        public Pokeball(int quantity, int pokeballLevel)
         {
+            _pokeballLevel = pokeballLevel;
             _quantity = quantity;
-            _id = 'B';
+
+            switch (_pokeballLevel)
+            {
+                case 0:
+                    _id = 'b';
+                    _name = "Poke Ball";
+                    break;
+
+                case 1:
+                    _id = 'B';
+                    _name = "Super Ball";
+                    break;
+
+                case 2:
+                    _id = 'c';
+                    _name = "Hyper Ball";
+                    break;
+
+                case 3:
+                    _id = 'C';
+                    _name = "Master Ball";
+                    break;
+            }
         }
 
         override public void Use(Pokemon pokemon)
         {
-            
+            if (_quantity <= 0) throw new ArgumentException("not enougth " + _name );
+            _quantity--;
+
+            switch (_pokeballLevel)
+            {
+                case 0:
+                    //to-do  |  1  |
+                    break;
+
+                case 1:
+                    //to-do  | 1.5 |
+                    break;
+
+                case 2:
+                    //to-do  |  2  |
+                    break;
+
+                case 3:
+                    //to-do  | 255 |
+                    break;
+            }
         }
     }
 }
