@@ -10,7 +10,7 @@ namespace cs.project07.pokemon
         public enum StarterPokemon { Bulbasaur, Charmander, Squirtle }
 
         // Stats (HP, Attack, Defense, Sp Attack, Sp Defense, Speed)
-        private static readonly Dictionary<int, PokedexEntry> _pokemons = new()
+        private static readonly Dictionary<int, PokedexEntry> Pokemons = new()
         {
             {1, new PokedexEntry(1, "BULBASAUR", Type.GRASS, 45, 49, 49, 65, 65, 45, new Attack[]
                 {
@@ -91,7 +91,7 @@ namespace cs.project07.pokemon
 
         public static PokedexEntry GetPokemonByPokedexId(int pokedexID)
         {
-            if(_pokemons.TryGetValue(pokedexID, out var pkmn))
+            if(Pokemons.TryGetValue(pokedexID, out var pkmn))
             {
                 return pkmn;
             }
@@ -103,7 +103,7 @@ namespace cs.project07.pokemon
         
         public static PokedexEntry GetRandomPokemon()
         {
-            return _pokemons.ElementAt(new Random().Next(0, _pokemons.Count)).Value;
+            return Pokemons.ElementAt(new Random().Next(0, Pokemons.Count)).Value;
         }
     }
 }
