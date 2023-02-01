@@ -251,15 +251,6 @@ namespace cs.project07.pokemon.game.states.list
             //CurrentMap?.Load();
         }
 
-        public override void Save()
-        {
-            Player.Save();
-        }
-
-        public override void Load()
-        {
-            Player.Load();
-        }
 
         public void ChangeMap (string mapName)
         {
