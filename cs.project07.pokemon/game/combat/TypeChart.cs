@@ -36,9 +36,14 @@ namespace cs.project07.pokemon.game.combat
             }
         }
 
-        public static bool IsEffective(Type attack, Type defense)
+        public static bool IsSuperEffective(Type attack, Type defense)
         {
             return Chart[attack.ToString().ToLower()][defense.ToString().ToLower()] > 1;
+        }
+
+        public static bool IsEffective(Type attack, Type defense)
+        {
+            return Chart[attack.ToString().ToLower()][defense.ToString().ToLower()] == 1;
         }
 
         public static bool IsNotEffective(Type attack, Type defense)
