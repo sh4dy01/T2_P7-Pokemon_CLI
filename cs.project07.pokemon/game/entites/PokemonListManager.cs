@@ -14,9 +14,14 @@
             SetStarter();
         }
 
-        private void SetStarter()
+        private static void SetStarter()
         {
             _battleTeam[0] = new Pokemon(PokemonRegistry.GetRandomStarter());
+            _battleTeam[1] = new Pokemon(PokemonRegistry.GetRandomStarter());
+            _battleTeam[2] = new Pokemon(PokemonRegistry.GetPokemonByPokedexId(493));
+            _battleTeam[3] = new Pokemon(PokemonRegistry.GetRandomStarter());
+            _battleTeam[4] = new Pokemon(PokemonRegistry.GetRandomStarter());
+            _battleTeam[5] = new Pokemon(PokemonRegistry.GetRandomStarter());
         }
 
         public void AddPokemon(Pokemon pokemon)
@@ -25,7 +30,25 @@
             SetPokemonInBattleTeam(pokemon);
         }
 
-        public void SetPokemonInBattleTeam(Pokemon pokemonToAdd)
+        public static int GetAverageLevel()
+        {
+            float avgLevel = 0;
+            int pokemonInTeam = 0;
+
+            foreach (var pokemon in BattleTeam)
+            {
+                if (pokemon != null)
+                {
+                    pokemonInTeam++;
+                    avgLevel += pokemon.Level;
+                }
+            }
+            avgLevel /= pokemonInTeam;
+
+            return (int)avgLevel;
+        }
+
+        public static void SetPokemonInBattleTeam(Pokemon pokemonToAdd)
         {
             if (_battleTeam.Last() != null) return;
             
