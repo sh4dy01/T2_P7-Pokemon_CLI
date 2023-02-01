@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace cs.project07.pokemon.game.combat
 {
-    internal class DamageCalculator
+    public class DamageCalculator
     {
-        public float DamageWithMultiplier(Attack attack, Pokemon attacker, Pokemon defender, out float damageMultiplier, out int critical)
+        public static float DamageWithMultiplier(Attack attack, Pokemon attacker, Pokemon defender, out float damageMultiplier, out int critical)
         {
             Random rnd = new();
 
@@ -18,7 +18,7 @@ namespace cs.project07.pokemon.game.combat
             GetAttAndDefStat(attack, attacker, defender, out float a, out float d);
 
             float STAB = GetSTAB(attack, attacker);
-            critical = IsCritical(attacker);
+            critical = IsCritical(attacker.Speed, null, -1);
             float random = rnd.Next(217, 256) / 255.0f;
 
             float damage = ((2 * attacker.Level * critical / 5 + 2) * attack.Power * a / d / 50 + 2) * STAB * damageMultiplier * random;
@@ -26,7 +26,7 @@ namespace cs.project07.pokemon.game.combat
             return damage;
         }
 
-        private float GetSTAB(Attack attack, Pokemon attacker)
+        public static float GetSTAB(Attack attack, Pokemon attacker)
         {
             float STAB = 1;
             if (attack.Type == attacker.Type)
@@ -35,7 +35,7 @@ namespace cs.project07.pokemon.game.combat
             return STAB;
         }
 
-        private void GetAttAndDefStat(Attack attack, Pokemon attacker, Pokemon defender, out float a, out float d)
+        public static void GetAttAndDefStat(Attack attack, Pokemon attacker, Pokemon defender, out float a, out float d)
         {
             if (attack.IsPhysicalMove())
             {
@@ -49,14 +49,16 @@ namespace cs.project07.pokemon.game.combat
             }
         }
 
-        private int IsCritical(Pokemon attacker)
+        public static int IsCritical(float attackerSpeed, Random? isUT, int chanceUT)
         {
-            Random rnd = new();
+            Random rnd = isUT ?? new Random();
 
+            int chance = isUT != null ? chanceUT : rnd.Next(0, 256);
             int critical = 1;
 
-            int chance = rnd.Next(256);
-            float threshold = attacker.Speed / 2;
+            int threshold = (int)attackerSpeed / 2;
+            if (threshold > 255) threshold = 255;
+            else if (threshold < 0) threshold = 0;
 
             if (chance <= threshold)
                 critical = 2;

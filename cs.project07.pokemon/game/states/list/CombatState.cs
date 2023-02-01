@@ -166,7 +166,7 @@ namespace cs.project07.pokemon.game.states.list
 
         private int GetDamageWithMultiplier(Attack attack, Pokemon attacker, Pokemon defender)
         {
-            float damage = _damageCalculator.DamageWithMultiplier(attack, attacker, defender, out float damageMultiplier, out int critical);
+            float damage = DamageCalculator.DamageWithMultiplier(attack, attacker, defender, out float damageMultiplier, out int critical);
 
             UpdateEffectivenessMessage(damageMultiplier, critical > 1);
 
