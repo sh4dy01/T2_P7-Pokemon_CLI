@@ -20,6 +20,9 @@ namespace cs.project07.pokemon.game.states.list
         {
             Name = "Main Menu";
             _dialogBox = new DialogBox(this);
+            _dialogBox.Top = Console.WindowHeight / 2 + 5;
+            _dialogBox.Left = Console.WindowWidth / 2 - 5;
+
             InitButtons();
         }
 

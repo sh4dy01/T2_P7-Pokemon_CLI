@@ -40,8 +40,6 @@ namespace cs.project07.pokemon.game.states.list
         private ButtonManager _buttonManager;
         private Dictionary<string, Button> _buttons;
         private DialogBox _dialogBox;
-
-        private PokemonListManager _pokemonListManager;
         public Pokemon[] _pokemonInInventory { get; private set; }
 
         public List<Item> _itemList { get; private set; }
@@ -57,7 +55,6 @@ namespace cs.project07.pokemon.game.states.list
             Name = "Inventory";
             _currentView = InventoryView.MENU;
             _dialogBox = new DialogBox(this);
-            _pokemonListManager = new PokemonListManager();
             InitItem();
             InitMenu();
             Pokemon rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
@@ -183,7 +180,7 @@ namespace cs.project07.pokemon.game.states.list
             //{
             //    _pokemonInInventory.Add(pokemonToADD);
             //}
-            _pokemonListManager.AddPokemon(pokemonToADD);
+            PokemonListManager.AddPokemon(pokemonToADD);
         }
 
         public void showInventoryPokemon()

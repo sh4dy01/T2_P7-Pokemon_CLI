@@ -105,7 +105,7 @@ namespace cs.project07.pokemon.game.states.gui
                 SetOffset(ref offsetX, ref offsetY, ref selected, i);
 
                 var pokemon = pokemons[i];
-                _buttons[pokemon.Name+i] = new Button(this, "Lv:" + pokemon.Level + " " + pokemon.Name)
+                _buttons[pokemon.Name + i] = new Button(this, "Lv:" + pokemon.Level + " " + pokemon.Name)
                 {
                     Offsets = new Vector2(offsetX, offsetY),
                     Selected = selected,

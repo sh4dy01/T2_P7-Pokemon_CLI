@@ -1,13 +1,13 @@
 ﻿namespace cs.project07.pokemon.game.entites
 {
-    internal class PokemonListManager
+    internal static class PokemonListManager
     {
-        static private List<Pokemon> _pokemonCaptured;
-        static private Pokemon[] _battleTeam;
-        static public Pokemon[] BattleTeam { get => _battleTeam; }
-        static public List<Pokemon> PokemonCaptured { get => _pokemonCaptured; }
+        private static List<Pokemon> _pokemonCaptured;
+        private static Pokemon[] _battleTeam;
+        public static Pokemon[] BattleTeam { get => _battleTeam; }
+        public static List<Pokemon> PokemonCaptured { get => _pokemonCaptured; }
 
-        public PokemonListManager()
+        public static void Init()
         {
             _battleTeam = new Pokemon[6];
             _pokemonCaptured = new List<Pokemon>();
@@ -24,7 +24,7 @@
             _battleTeam[5] = new Pokemon(PokemonRegistry.GetRandomStarter());
         }
 
-        public void AddPokemon(Pokemon pokemon)
+        public static void AddPokemon(Pokemon pokemon)
         {
             _pokemonCaptured.Add(pokemon);
             SetPokemonInBattleTeam(pokemon);

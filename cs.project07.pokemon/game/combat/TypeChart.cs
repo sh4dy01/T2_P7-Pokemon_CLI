@@ -2,7 +2,7 @@
 
 namespace cs.project07.pokemon.game.combat
 {
-    public class TypeChart
+    public static class TypeChart
     {
         public static readonly Dictionary<ElementType, ConsoleColor> TypeColor = new()
         {

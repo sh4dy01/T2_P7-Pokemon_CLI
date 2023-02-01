@@ -12,8 +12,6 @@ namespace cs.project07.pokemon.game.entites
 {
     public class Player
     {
-        private PokemonListManager _pokemonListManager;
-
         const int incrementMouvement = 4;
         const int sizePlayer = 4;
 

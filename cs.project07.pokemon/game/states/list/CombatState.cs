@@ -40,15 +40,13 @@ namespace cs.project07.pokemon.game.states.list
         private AttackInfoBox? _attackInfoUi;
         private PokemonInfoBox? _playerPokemonUi;
 
-        private readonly PokemonListManager _pokemonListManager; //TODO : REMOVE
-
         public CombatState(Game game) : base(game)
         {
             _enemyPokemon = new Pokemon(PokemonRegistry.GetPokemonByPokedexId(493)); //TODO : Get the random pokemon
-            _pokemonListManager = new PokemonListManager(); //TODO : REMOVE
             _dialogBox = new CombatDialogBox(this);
             _enemyPokemonUi = new PokemonInfoBox(this, _enemyPokemon, true);
             _damageCalculator = new DamageCalculator();
+            _attackInfoUi = new AttackInfoBox(this);
 
             Init();
         }
@@ -112,7 +110,6 @@ namespace cs.project07.pokemon.game.states.list
         {
             _playerPokemon = pokemon;
             _playerPokemonUi = new PokemonInfoBox(this, _playerPokemon, false);
-            _attackInfoUi = new AttackInfoBox(this);
             
             if (_enemyPokemon.Level > _playerPokemon.Level)
                 _runChance *= 0.5f;
@@ -160,14 +157,14 @@ namespace cs.project07.pokemon.game.states.list
                 }
             }
             else switch (_isPlayerTurn)
-                {
-                    case true:
-                        SwitchView(CombatView.SELECT_ACTION);
-                        break;
-                    case false:
-                        SwitchView(CombatView.ENEMY_ATTACK);
-                        break;
-                }
+            {
+                case true:
+                    SwitchView(CombatView.SELECT_ACTION);
+                    break;
+                case false:
+                    SwitchView(CombatView.ENEMY_ATTACK);
+                    break;
+            }
         }
 
         public void DealEnemyDamage(Attack attack)

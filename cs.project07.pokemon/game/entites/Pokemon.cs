@@ -13,16 +13,14 @@ namespace cs.project07.pokemon.game.entites
         public const int LEVEL_UP_GAINED = 50;
 
 
-        PokedexEntry _dex;
-        Stat _stat;
+        private readonly PokedexEntry _dex;
+        private readonly Stat _stat;
 
         private bool _isDead = false;
         private float _currentHealth;
         private int _level;
         private float _experience;
         private float _requiredExperience;
-
-        //TODO: Create a stat object to store all stats -> pokedex not settable / pokemon yes
 
         public PokedexEntry Dex => _dex;
         public Stat Stat => _stat;

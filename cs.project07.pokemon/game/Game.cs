@@ -42,6 +42,7 @@ namespace cs.project07.pokemon.game
             ForegroundColor = ConsoleColor.Black;
             StatesList = new Stack<State>();
             TypeChart.Init();
+            PokemonListManager.Init();
         }
 
         private void InitStates()
