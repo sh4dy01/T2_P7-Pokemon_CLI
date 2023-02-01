@@ -1,5 +1,7 @@
 ﻿using cs.project07.pokemon.game.states.gui.managers;
 using cs.project07.pokemon.game.states.gui;
+using cs.project07.pokemon.game.entites;
+using System.Numerics;
 
 namespace cs.project07.pokemon.game.states.list
 {
@@ -15,12 +17,18 @@ namespace cs.project07.pokemon.game.states.list
             SPRAY
         }
 
+        private const int IncrementX = 30;
+
         public Game game;
         private InventoryView _currentView;
 
         private ButtonManager _buttonManager;
         private Dictionary<string, Button> _buttons;
         private DialogBox _dialogBox;
+
+        public Pokemon[] _pokemonInInventory { get; private set; }
+
+        private PokemonListManager _pokemonListManager;
 
         public InventoryState(Game gameReceive) : base(gameReceive) 
         { 
@@ -32,25 +40,96 @@ namespace cs.project07.pokemon.game.states.list
         {
             Name = "Inventory";
             _currentView = InventoryView.MENU;
-            InitInventory();
+            _dialogBox = new DialogBox(this);
+            _pokemonListManager = new PokemonListManager();
+            InitMenu();
+            Pokemon rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
+            addPokemon(rdpoke);
+            rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
+            addPokemon(rdpoke);
+            rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
+            addPokemon(rdpoke);
+            rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
+            addPokemon(rdpoke);
+            rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
+            addPokemon(rdpoke);
+            rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
+            addPokemon(rdpoke);
         }
 
-        private void InitInventory()
+        private void InitMenu()
         {
-            SwitchView(_currentView);
+            _buttonManager = new ButtonManager();
+            _buttons = _buttonManager.Buttons;
+
+            ShowMenu();
+
+            _buttonManager.InitHandleKeyEvent();
+
+
+            for (int i = 0; i < _buttons.Count; i++)
+            {
+                _buttons.ElementAt(i).Value.Offsets += new Vector2(3, 1 + i);
+            }
+        }
+
+        private void ShowMenu()
+        {
+            _dialogBox.Left = 0;
+            _dialogBox.Top = 0;
+            _buttons["POKEMON_INV"] = new Button(_dialogBox, "Pokemon Inventory")
+            {
+                Selected = true,
+                //Offsets = new Vector2(150, 0),
+                Action = () =>
+                {
+                    SwitchView(InventoryView.POKEMON);
+                }
+            };
+            _buttons["SAVE"] = new Button(_dialogBox, "Save")
+            {
+                Selected = false,
+                //Offsets = new Vector2(150, 0),
+                Action = () =>
+                {
+                    //TO DO SAVE THE GAME
+                }
+            };
+            _buttons["EXIT"] = new Button(_dialogBox, "Exit")
+            {
+                Selected = false,
+                //Offsets = new Vector2(150, 0),
+                Action = () =>
+                {
+                    Game.StatesList?.Pop();
+                }
+            };
+        }
+
+        public override void HandleKeyEvent(ConsoleKey pressedKey)
+        {
+            HandleKeyEventButtons(pressedKey);
+        }
+
+        private void HandleKeyEventButtons(ConsoleKey pressedKey)
+        {
+            _buttonManager.HandleKeyEvent(pressedKey);
         }
 
         private void SwitchView(InventoryView view)
         {
             _currentView = view;
-
+            foreach (var button in _buttons)
+            {
+                _buttons.Remove(button.Key);
+            }
             switch (view)
             {
                 case InventoryView.MENU:
-                    //_dialogBox.UpdateText("A wild " + _enemyPokemon.Name + " appeared !");
+                    ShowMenu();
                     break;
                 case InventoryView.POKEMON:
-                    //_dialogBox.SwitchState(CombatDialogBox.CombatButtonState.SELECT_ACTION);
+                    showInventoryPokemon();
                     break;
                 case InventoryView.POKEDEX:
                     //_dialogBox.SwitchState(CombatDialogBox.CombatButtonState.SELECT_ATTACK);
@@ -65,14 +144,60 @@ namespace cs.project07.pokemon.game.states.list
                     break;
             }
         }
+
+
+        public void addPokemon(Pokemon pokemonToADD)
+        {
+            //if(_pokemonInInventory.Count <= 6)
+            //{
+            //    _pokemonInInventory.Add(pokemonToADD);
+            //}
+            _pokemonListManager.AddPokemon(pokemonToADD);
+        }
+
+        public void showInventoryPokemon()
+        {
+            int count = 0;
+            bool first = false;
+            _pokemonInInventory = PokemonListManager.BattleTeam;
+            foreach (Pokemon pokemon in _pokemonInInventory) 
+            {
+                count++;
+                if(count == 1)
+                    first = true;
+                else
+                    first = false;
+                _buttons[pokemon.Name + count] = new Button(_dialogBox, pokemon.Name)
+                {
+                    Offsets = new Vector2(IncrementX, 1*count),
+                    Selected = first,
+                    Action = () =>
+                    {
+                        //TO DO: SHOW Pokemon interface
+                    }
+                };
+            }
+            count++;
+            _buttons["RETURN"] = new Button(_dialogBox, "Return")
+            {
+                Selected = false,
+                Offsets = new Vector2(IncrementX, 1 * count),
+                Action = () =>
+                {
+                    SwitchView(InventoryView.MENU);
+                }
+            };
+        }
+
+
         public override void Update()
         {
-            base.Update();
+            _buttonManager.Update();
         }
 
         public override void Render()
         {
-            base.Render();
+            _buttonManager.Render();
         }
     }
 }
