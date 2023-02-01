@@ -205,6 +205,7 @@ namespace cs.project07.pokemon.game.states.list
 
             // Render childs
             // ------ Map
+
             if (showMenu == true)
                 _buttonManager?.Render();
             else

@@ -32,7 +32,7 @@ namespace cs.project07.pokemon.game.states.list
             SPRAY
         }
 
-        private const int IncrementX = 30;
+        private const int IncrementX = 3;
 
         public Game game;
         private InventoryView _currentView;
@@ -43,6 +43,7 @@ namespace cs.project07.pokemon.game.states.list
 
         private PokemonListManager _pokemonListManager;
         public Pokemon[] _pokemonInInventory { get; private set; }
+        bool drawInventory = false;
 
         public List<Item> _itemList { get; private set; }
 
@@ -60,18 +61,6 @@ namespace cs.project07.pokemon.game.states.list
             _pokemonListManager = new PokemonListManager();
             InitItem();
             InitMenu();
-            Pokemon rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
-            addPokemon(rdpoke);
-            //rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
-            //addPokemon(rdpoke);
-            //rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
-            //addPokemon(rdpoke);
-            //rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
-            //addPokemon(rdpoke);
-            //rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
-            //addPokemon(rdpoke);
-            //rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
-            //addPokemon(rdpoke);
         }
 
         private void InitItem()
@@ -139,13 +128,13 @@ namespace cs.project07.pokemon.game.states.list
 
         public override void HandleKeyEvent(ConsoleKey pressedKey)
         {
-            HandleKeyEventButtons(pressedKey);
-        }
-
-        private void HandleKeyEventButtons(ConsoleKey pressedKey)
-        {
             _buttonManager.HandleKeyEvent(pressedKey);
         }
+
+        //private void HandleKeyEventButtons(ConsoleKey pressedKey)
+        //{
+        //    _buttonManager.HandleKeyEvent(pressedKey);
+        //}
 
         private void SwitchView(InventoryView view)
         {
@@ -177,6 +166,7 @@ namespace cs.project07.pokemon.game.states.list
         }
 
 
+
         public void addPokemon(Pokemon pokemonToADD)
         {
             //if(_pokemonInInventory.Count <= 6)
@@ -189,37 +179,118 @@ namespace cs.project07.pokemon.game.states.list
         public void showInventoryPokemon()
         {
             int count = 0;
+            int inlineX = 0;
+            int inlineY = 1;
             bool first = false;
+            _dialogBox.Left = 0;
+            _dialogBox.Top = 0;
             _pokemonInInventory = PokemonListManager.BattleTeam;
             foreach (Pokemon pokemon in _pokemonInInventory) 
             {
+
                 count++;
-                if(count == 1)
+                inlineX++;
+                if(count == 1) //Why first show is 3 ????
                     first = true;
                 else
                     first = false;
+                if(count == 4)
+                {
+                    inlineX=1;
+                    inlineY = 3;
+                }
+                float Xpos = Console.WindowWidth / 6 * inlineX * 1.5f;
+                float Ypos = Console.WindowHeight / 5 * inlineY;
                 _buttons[pokemon.Name + count] = new Button(_dialogBox, pokemon.Name)
                 {
-                    Offsets = new Vector2(IncrementX, 1*count),
+                    Offsets = new Vector2(Xpos, Ypos),
                     Selected = first,
                     Action = () =>
                     {
                         //TO DO: SHOW Pokemon interface
                     }
                 };
+
+
             }
             count++;
-            _buttons["RETURN"] = new Button(_dialogBox, "Return")
-            {
-                Selected = false,
-                Offsets = new Vector2(IncrementX, 1 * count),
-                Action = () =>
-                {
-                    SwitchView(InventoryView.MENU);
-                }
-            };
+            drawInventory = true;
+            //_buttons["RETURN"] = new Button(_dialogBox, "Return")
+            //{
+            //    Selected = false,
+            //    Offsets = new Vector2(0, 0),
+            //    Action = () =>
+            //    {
+            //        SwitchView(InventoryView.MENU);
+            //    }
+            //};
+            //for (int i = 0; i < _buttons.Count; i++)
+            //{
+            //    _buttons.ElementAt(i).Value.Offsets += new Vector2(3, 1 + i);
+            //}
         }
 
+        private void drawStatPokemon()
+        {
+            int count = 0;
+            int inlineX = 0;
+            int inlineY = 1;
+            foreach (Pokemon pokemon in _pokemonInInventory)
+            {
+
+                count++;
+                inlineX++;
+                if (count == 4)
+                {
+                    inlineX = 1;
+                    inlineY = 3;
+                }
+                float Xpos = Console.WindowWidth / 6 * inlineX * 1.5f;
+                float Ypos = Console.WindowHeight / 5 * inlineY;
+                const int increX = 15;
+                const int increY = 2;
+                Console.BackgroundColor = ConsoleColor.Gray;
+                Console.ForegroundColor = ConsoleColor.Black;
+                for(int i = 0; i <= 6;i++)
+                {
+                    for(int j = 0; j <= 40; j++)
+                    {
+                        Console.SetCursorPosition((int)Xpos - increX - 1 + j, (int)Ypos - 1 + 1 * i);
+                        Console.WriteLine(" ");
+                    }
+                }
+                //HP
+                Console.SetCursorPosition((int)Xpos - increX, (int)Ypos + increY);
+                Console.WriteLine("HP : " + pokemon.Currenthealth + "/" + pokemon.MaxHealth);
+                //Lvl
+                Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY);
+                Console.WriteLine("Lvl : " + pokemon.Level);
+                //Element
+                Console.SetCursorPosition((int)Xpos - increX, (int)Ypos + increY*2);
+                Console.WriteLine("Type : " + pokemon.Element);
+                //Xp
+                Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY*2);
+                Console.WriteLine("XP : " + pokemon.Experience + "/" + pokemon.RequiredExp);
+                ////STAT//
+                //Console.SetCursorPosition((int)Xpos + 2, (int)Ypos + increY*4);
+                //Console.WriteLine("STATS");
+                ////Attack
+                //Console.SetCursorPosition((int)Xpos - increX, (int)Ypos + increY*5);
+                //Console.WriteLine("Attack : " + pokemon.Attack);
+                ////Defense
+                //Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY * 5);
+                //Console.WriteLine("Defense : " + pokemon.Defense);
+                ////SPAttack
+                //Console.SetCursorPosition((int)Xpos - increX, (int)Ypos + increY * 6);
+                //Console.WriteLine("SPAttack : " + pokemon.SPAttack);
+                ////SPDefense
+                //Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY * 6);
+                //Console.WriteLine("SPDefense : " + pokemon.SPDefense);
+                ////Speed
+                //Console.SetCursorPosition((int)Xpos, (int)Ypos + increY * 7);
+                //Console.WriteLine("Speed : " + pokemon.Speed);
+            }
+        }
 
         public override void Update()
         {
@@ -228,6 +299,11 @@ namespace cs.project07.pokemon.game.states.list
 
         public override void Render()
         {
+            PaintBackground();
+            if (drawInventory)
+            {
+                drawStatPokemon();
+            }
             _buttonManager.Render();
         }
     }

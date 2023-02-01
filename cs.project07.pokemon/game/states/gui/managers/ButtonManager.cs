@@ -49,6 +49,7 @@ namespace cs.project07.pokemon.game.states.gui.managers
             if (Buttons?.Count == 0) return;
             foreach (Button button in Buttons.Values)
                 button.Render();
+            Console.SetCursorPosition(0, 0);
         }
     }
 }
