@@ -18,6 +18,8 @@ namespace cs.project07.pokemon.game.entites
         public Vector2 playerPosition;
         private ConsoleColor BackgroundColor;
         private ConsoleColor ForegroundColor;
+        private int _SprayMovementLeft { get; set; }
+        public void SetSprayMovementLeft (int sprayMovementLeft) { _SprayMovementLeft = sprayMovementLeft;  }
         public State _parent { get; set; }
 
         public Player(Vector2 playerSpawnPoint, State Parent)
@@ -62,6 +64,7 @@ namespace cs.project07.pokemon.game.entites
                     playerPosition = new Vector2(playerPosition.X, playerPosition.Y + incrementMouvement);
                     break;
             }
+            _SprayMovementLeft--;
         }
         public bool collisionWall(char[,] grid, char dir)
         {
@@ -97,7 +100,7 @@ namespace cs.project07.pokemon.game.entites
 
         public void collisionGrass(char[,] grid, Game game)
         {
-            if (grid[(int)playerPosition.X, (int)playerPosition.Y] == '*')
+            if (grid[(int)playerPosition.X, (int)playerPosition.Y] == '*' && _SprayMovementLeft <= 0)
             {
                 const int maxPercentage = 15;
                 int percentage = new Random().Next(1, 100);
