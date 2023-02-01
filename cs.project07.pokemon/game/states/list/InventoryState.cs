@@ -19,6 +19,19 @@ namespace cs.project07.pokemon.game.states.list
             SPRAY
         }
 
+        enum AllItemList
+        {
+            POKEBALL,
+            SUPERBALL,
+            HYPERBALL,
+            MASTERBALL,
+            POTION,
+            SUPERPOTION,
+            HYPERPOTION,
+            POTIONMAX,
+            SPRAY
+        }
+
         private const int IncrementX = 30;
 
         public Game game;
@@ -45,6 +58,7 @@ namespace cs.project07.pokemon.game.states.list
             _currentView = InventoryView.MENU;
             _dialogBox = new DialogBox(this);
             _pokemonListManager = new PokemonListManager();
+            InitItem();
             InitMenu();
             Pokemon rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
             addPokemon(rdpoke);
@@ -58,6 +72,20 @@ namespace cs.project07.pokemon.game.states.list
             //addPokemon(rdpoke);
             //rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
             //addPokemon(rdpoke);
+        }
+
+        private void InitItem()
+        {
+            _itemList = new List<Item>();
+            for(int i = 0; i < 4; i++)
+            {
+                _itemList.Add(new Pokeball(i));
+            }
+            for (int i = 0; i < 4; i++)
+            {
+                _itemList.Add(new Potion(i));
+            }
+            _itemList.Add(new Spray());
         }
 
         private void InitMenu()
