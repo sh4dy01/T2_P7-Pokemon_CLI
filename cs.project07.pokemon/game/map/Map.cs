@@ -74,7 +74,7 @@ namespace cs.project07.pokemon.game.map
             Height = Parent.Height;
             BackgroundColor = ConsoleColor.Gray;
             ForegroundColor = ConsoleColor.Black;
-            _Teleporters = Save.LoadMeta(_Name);
+            _Teleporters = SaveManager.LoadMeta(_Name);
         }
 
         private void InitLayers()
