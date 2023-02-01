@@ -5,7 +5,7 @@ using System.Numerics;
 
 namespace cs.project07.pokemon.game.states
 {
-    public abstract class State : IUpdatable, IRenderable<Game>
+    public abstract class State : IUpdatable, IRenderable<Game>, ISavable
     {
         string _name;
         public string Name { get => _name; set => _name = value; }
@@ -56,6 +56,9 @@ namespace cs.project07.pokemon.game.states
             Console.ForegroundColor = ForegroundColor;
             //PaintBackground();
         }
+
+        public virtual void Save() { }
+        public virtual void Load() { }
 
         protected void PaintBackground()
         {

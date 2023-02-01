@@ -7,10 +7,11 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using cs.project07.pokemon.game.save;
 
 namespace cs.project07.pokemon.game.entites
 {
-    public class Player
+    public class Player : ISavable
     {
         const int incrementMouvement = 4;
         const int sizePlayer = 4;
@@ -51,6 +52,23 @@ namespace cs.project07.pokemon.game.entites
             else if(zoom == 1) 
             {
                 playerPosition = new Vector2(playerPosition.X / 4, playerPosition.Y / 4);
+            }
+        }
+
+        public void Save()
+        {
+            SaveManager.SaveData(
+                new Tuple<string, int>( "PlayerPosX" , ((int)playerPosition.X) ),
+                new Tuple<string, int>( "PlayerPosY" , ((int)playerPosition.Y) )
+                );
+        }
+
+        public void Load()
+        {
+            var data = SaveManager.LoadData();
+            if (data["PlayerPosX"]!= null && data["PlayerPosY"] != null)
+            {
+                playerPosition = new Vector2(data["PlayerPosX"], data["PlayerPosY"]);
             }
         }
 

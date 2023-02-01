@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 namespace cs.project07.pokemon.game.save
 {
 
-    static class Save
+    static class SaveManager
     {
         private const string SAVEPATH = "../../../game/save/Save.txt";
         private const string METAPATH = "../../../game/save/Meta.txt";
-        static void SaveData(params Tuple<string, int>[] data)
+        static public void SaveData(params Tuple<string, int>[] data)
         {
             StreamWriter writer = new StreamWriter(File.OpenRead(SAVEPATH));
 
@@ -27,7 +27,7 @@ namespace cs.project07.pokemon.game.save
             writer.Close();
         }
 
-        static Dictionary<string,int>? LoadData() 
+        static public Dictionary<string,int>? LoadData() 
         {
             string? line = "";
             string? key;
