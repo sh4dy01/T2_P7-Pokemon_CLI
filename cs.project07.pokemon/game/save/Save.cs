@@ -40,14 +40,14 @@ namespace cs.project07.pokemon.game.save
             writer.Close();
         }
 
-        static public int? LoadData(string element) 
+        static public Dictionary<string,int>? LoadData() 
         {
             string? line = "";
             string? key;
             string? value;
             bool onKey = true;
 
-            int? data = null;
+            Dictionary<string, int> data = new Dictionary<string, int>();
 
             StreamReader reader = new StreamReader(File.OpenRead(SAVEPATH));
 
@@ -57,7 +57,6 @@ namespace cs.project07.pokemon.game.save
                 value = null;
                 onKey= true;
 
-                if(line == null) break;
                 foreach(var c in line)
                 {
                     if (c is not ' ' && onKey)
@@ -70,10 +69,9 @@ namespace cs.project07.pokemon.game.save
                         value += c;
                 }
 
-                if (key == element && value != null )
+                if (key != null && value != null)
                 {
-                    reader.Close();
-                    return Convert.ToInt32(value);
+                    data.Add(key, Convert.ToInt32(value));
                 }
 
                 line = reader.ReadLine();

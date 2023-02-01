@@ -69,13 +69,12 @@ namespace cs.project07.pokemon.game.entites
                 );
         }
 
-        public void Load()
+      public void Load()
         {
-            var PlayerPosX = SaveManager.LoadData("PlayerPosX");
-            var PlayerPosY = SaveManager.LoadData("PlayerPosY");
-            if (PlayerPosX != null && PlayerPosY != null)
+            var data = SaveManager.LoadData();
+            if (data["PlayerPosX"]!= null && data["PlayerPosY"] != null)
             {
-                playerPosition = new Vector2((float)PlayerPosX, (float)PlayerPosY);
+                playerPosition = new Vector2(data["PlayerPosX"], data["PlayerPosY"]);
             }
         }
 
