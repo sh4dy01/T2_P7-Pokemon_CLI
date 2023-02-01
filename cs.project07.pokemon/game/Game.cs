@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace cs.project07.pokemon.game
 {
-    public class Game : IUpdatable, IRenderable<Game>
+    public class Game : IUpdatable, IRenderable<Game>, ISavable
     {
         public static Vector2 ConsoleSize = new(237,60);
 
@@ -65,6 +65,7 @@ namespace cs.project07.pokemon.game
         {
             Update();
             Render();
+            Load();
             do
             {
                 HandleEvent();
@@ -123,10 +124,26 @@ namespace cs.project07.pokemon.game
                 StatesList.First().Render();
         }
 
+        public void Save()
+        {
+            // Save the state instance
+            if (StatesList?.Count > 0)
+                StatesList.First().Save();
+        }
+
+        public void Load()
+        {
+            // Load the state instance
+            if (StatesList?.Count > 0)
+                StatesList.First().Load();
+        }
+
         private void End()
         {
             Running = false;
+            Save();
             Console.ResetColor();
+            
             //Console.Clear();
         }
 

@@ -26,4 +26,10 @@ namespace cs.project07.pokemon
         ConsoleColor BackgroundColor { get; set; }
         void Render();
     }
+
+    internal interface ISavable
+    {
+        void Save();
+        void Load();
+    }
 }
