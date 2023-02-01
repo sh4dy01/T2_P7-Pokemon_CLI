@@ -9,27 +9,31 @@ namespace cs.project07.pokemon.game.combat
 {
     public class DamageCalculator
     {
-        public static float DamageWithMultiplier(Attack attack, Pokemon attacker, Pokemon defender, out float damageMultiplier, out int critical)
+        public static int DamageWithMultiplier(Attack attack, Pokemon attacker, Pokemon defender, out float damageMultiplier, out int critical)
         {
+            damageMultiplier = 1;
+            critical = 1;
+            if (attack.Power == 0) { return 0; }
+            
             Random rnd = new();
-
-            damageMultiplier = TypeChart.GetDamageMultiplier(attack.ElementType, defender.Type);
+            
+            damageMultiplier = TypeChart.GetDamageMultiplier(attack.Element, defender.Element);
 
             GetAttAndDefStat(attack, attacker, defender, out float a, out float d);
 
-            float STAB = GetSTAB(attack, attacker);
+            float STAB = GetSTAB(attack.Element, attacker.Element);
             critical = IsCritical(attacker.Speed, null, -1);
             float random = rnd.Next(217, 256) / 255.0f;
+            
+            double damage = ((((2 * attacker.Level * critical) / 5.0f + 2) * attack.Power * (a / d)) / 50 + 2) * STAB * damageMultiplier * random;
 
-            float damage = ((2 * attacker.Level * critical / 5 + 2) * attack.Power * a / d / 50 + 2) * STAB * damageMultiplier * random;
-
-            return damage;
+            return (int)Math.Ceiling(damage);
         }
 
-        public static float GetSTAB(Attack attack, Pokemon attacker)
+        public static float GetSTAB(ElementType attackType, ElementType attackerType)
         {
             float STAB = 1;
-            if (attack.ElementType == attacker.Type)
+            if (attackType == attackerType)
                 STAB = 1.5f;
 
             return STAB;
