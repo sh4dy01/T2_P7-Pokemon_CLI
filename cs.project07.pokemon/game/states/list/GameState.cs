@@ -20,6 +20,7 @@ namespace cs.project07.pokemon.game.states.list
         private ButtonManager _buttonManager;
         private Dictionary<string, Button> _buttons;
         private DialogBox _dialogBox;
+        bool showMenu = false;
         public GameState(Game gameReceive) : base(gameReceive)
         {
             game = gameReceive;
@@ -39,10 +40,10 @@ namespace cs.project07.pokemon.game.states.list
         {
             _buttonManager = new ButtonManager();
             _buttons = _buttonManager.Buttons;
-
             _buttons["INVENTORY"] = new Button(_dialogBox, "Inventory")
             {
                 Selected = true,
+                Offsets = new Vector2(150, 0),
                 Action = () =>
                 {
                     //Game.StatesList?.Push(new InventoryState(Parent));
@@ -50,7 +51,8 @@ namespace cs.project07.pokemon.game.states.list
             };
             _buttons["SAVE"] = new Button(_dialogBox, "Save")
             {
-                Selected = true,
+                Selected = false,
+                Offsets = new Vector2(150, 0),
                 Action = () =>
                 {
                     //TO DO SAVE THE GAME
@@ -58,7 +60,8 @@ namespace cs.project07.pokemon.game.states.list
             };
             _buttons["EXIT"] = new Button(_dialogBox, "Exit")
             {
-                Selected = true,
+                Selected = false,
+                Offsets = new Vector2(150, 0),
                 Action = () =>
                 {
                     Game.StatesList?.Pop();
@@ -106,9 +109,6 @@ namespace cs.project07.pokemon.game.states.list
                         // Back to previous menu
                         Game.StatesList?.Pop();
                         break;
-                    case ConsoleKey.Escape:
-                        // TODO Pause menu
-                        break;
                     case ConsoleKey.UpArrow:
                         // TODO Player move up
                         if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'N') == true && CurrentMap.Zoom == 4)
@@ -116,6 +116,8 @@ namespace cs.project07.pokemon.game.states.list
                             Player.mouvPlayer('N');
                             mouv = true;
                         }
+                        if(showMenu) 
+                            Button.SelectPrevious(_buttonManager.Buttons); 
                         break;
                     case ConsoleKey.DownArrow:
                         // TODO Player move down
@@ -124,6 +126,8 @@ namespace cs.project07.pokemon.game.states.list
                             Player.mouvPlayer('S');
                             mouv = true;
                         }
+                        if(showMenu)
+                            Button.SelectNext(_buttonManager.Buttons);
                         break;
                     case ConsoleKey.LeftArrow:
                         // TODO Player move left
@@ -143,6 +147,8 @@ namespace cs.project07.pokemon.game.states.list
                         break;
                     case ConsoleKey.Enter:
                         // TODO Player use action
+                        if(showMenu)
+                            Button.ExecuteAction(_buttonManager.Buttons);
                         break;
                     case ConsoleKey.M:
                         if (CurrentMap.Zoom == 4)
@@ -165,6 +171,12 @@ namespace cs.project07.pokemon.game.states.list
                 Player.collisionGrass(CurrentMap.Layers["GRASS"].ZoomedData, game);
                 Player.collisionTeleporter(CurrentMap._Teleporters);
             }
+        }
+
+        private void HandleKeyEventButtons(ConsoleKey pressedKey)
+        {
+            showMenu = !showMenu;
+            _buttonManager.HandleKeyEvent(pressedKey);
         }
 
         public override void Update()
