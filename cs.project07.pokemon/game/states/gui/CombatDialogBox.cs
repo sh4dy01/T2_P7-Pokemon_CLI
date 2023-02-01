@@ -100,7 +100,7 @@ namespace cs.project07.pokemon.game.states.gui
 
             for (int i = 0; i < pokemons.Length; i++)
             {
-                if (pokemons[i] == null) continue;
+                if (pokemons[i] == null || pokemons[i].IsDead) continue;
 
                 SetOffset(ref offsetX, ref offsetY, ref selected, i);
 

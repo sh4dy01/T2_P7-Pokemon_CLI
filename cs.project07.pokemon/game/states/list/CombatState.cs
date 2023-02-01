@@ -1,6 +1,7 @@
 ﻿using cs.project07.pokemon.game.entites;
 using cs.project07.pokemon.game.states.gui;
 using cs.project07.pokemon.game.combat;
+using System.Text;
 
 namespace cs.project07.pokemon.game.states.list
 {
@@ -10,7 +11,7 @@ namespace cs.project07.pokemon.game.states.list
         
         const string EFFECTIVE_MSG = "It's super effective!";
         const string INEFFECTIVE_MSG = "It's not very effective...";
-        
+
         public enum CombatView
         {
             INTRO,
@@ -43,7 +44,7 @@ namespace cs.project07.pokemon.game.states.list
 
         public CombatState(Game game) : base(game)
         {
-            _enemyPokemon = new Pokemon(PokemonRegistry.GetRandomPokemon()); //TODO : Get the random pokemon
+            _enemyPokemon = new Pokemon(PokemonRegistry.GetPokemonByPokedexId(493)); //TODO : Get the random pokemon
             _pokemonListManager = new PokemonListManager(); //TODO : REMOVE
             _dialogBox = new CombatDialogBox(this);
             _enemyPokemonUi = new PokemonInfoBox(this, _enemyPokemon, true);
@@ -125,27 +126,48 @@ namespace cs.project07.pokemon.game.states.list
         {
             if (_playerPokemon.IsDead)
             {
-                _dialogBox.UpdateText("You lost !");
-                //Switch Pokemon
-                SwitchView(CombatView.END_COMBAT);
+                _playerPokemon = null;
+                
+                if (!PokemonListManager.IsAllPokemonDead())
+                {
+                    SwitchView(CombatView.SELECT_POKEMON);
+                }
+                else
+                {
+                    _dialogBox.UpdateText("You have no more pokemon ! You lost !");
+                }
             }
             else if (_enemyPokemon.IsDead)
             {
-                int experience = 50 * _enemyPokemon.Level;
+
+                int oldLevel = _playerPokemon.Level;
+                int experience = Pokemon.LEVEL_UP_GAINED * _enemyPokemon.Level;
+
                 _playerPokemon.GainExperience(experience);
-                //_playerPokemonUi.UpdateExperience(experience);
-                _dialogBox.UpdateText("You won, GG !");
-                SwitchView(CombatView.END_COMBAT);
+                _playerPokemonUi.UpdateExperience(experience);
+
+                if (oldLevel < _playerPokemon.Level)
+                {
+                    StringBuilder sb = new();
+
+                    sb.Append("Your ");
+                    sb.Append(_playerPokemon.Name);
+                    sb.Append(" gained ");
+                    sb.Append(_playerPokemon.Level - oldLevel);
+                    sb.Append(" level !");
+
+                    _dialogBox.UpdateText(sb.ToString());
+                }
             }
             else switch (_isPlayerTurn)
-            {
-                case true:
-                    SwitchView(CombatView.SELECT_ACTION);
-                    break;
-                case false:
-                    SwitchView(CombatView.ENEMY_ATTACK);
-                    break;
-            }
+                {
+                    case true:
+                        SwitchView(CombatView.SELECT_ACTION);
+                        break;
+                    case false:
+                        SwitchView(CombatView.ENEMY_ATTACK);
+                        break;
+                }
         }
 
         public void DealEnemyDamage(Attack attack)
@@ -220,6 +242,9 @@ namespace cs.project07.pokemon.game.states.list
                                 break;
                             case CombatView.EFFECTIVE:
                                 SwitchView(CombatView.END_TURN);
+                                break;
+                            case CombatView.END_TURN:
+                                SwitchView(CombatView.END_COMBAT);
                                 break;
                             default:
                                 var NextState = _currentView + 1;
