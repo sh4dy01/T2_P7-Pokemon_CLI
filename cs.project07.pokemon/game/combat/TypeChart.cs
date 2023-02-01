@@ -4,25 +4,25 @@ namespace cs.project07.pokemon.game.combat
 {
     public class TypeChart
     {
-        public static readonly Dictionary<Type, ConsoleColor> TypeColor = new()
+        public static readonly Dictionary<ElementType, ConsoleColor> TypeColor = new()
         {
-            {Type.NORMAL, ConsoleColor.White},
-            {Type.FIRE, ConsoleColor.Red},
-            {Type.WATER, ConsoleColor.Blue},
-            {Type.ELECTRIC, ConsoleColor.Yellow},
-            {Type.GRASS, ConsoleColor.Green},
-            {Type.ICE, ConsoleColor.Cyan},
-            {Type.FIGHTING, ConsoleColor.DarkRed},
-            {Type.POISON, ConsoleColor.DarkMagenta},
-            {Type.GROUND, ConsoleColor.DarkYellow},
-            {Type.FLYING, ConsoleColor.DarkGray},
-            {Type.PSYCHIC, ConsoleColor.Magenta},
-            {Type.BUG, ConsoleColor.DarkGreen},
-            {Type.ROCK, ConsoleColor.DarkGray},
-            {Type.GHOST, ConsoleColor.DarkGray},
-            {Type.DRAGON, ConsoleColor.DarkGray},
-            {Type.DARK, ConsoleColor.DarkGray},
-            {Type.STEEL, ConsoleColor.DarkGray},
+            {ElementType.NORMAL, ConsoleColor.White},
+            {ElementType.FIRE, ConsoleColor.Red},
+            {ElementType.WATER, ConsoleColor.Blue},
+            {ElementType.ELECTRIC, ConsoleColor.Yellow},
+            {ElementType.GRASS, ConsoleColor.Green},
+            {ElementType.ICE, ConsoleColor.Cyan},
+            {ElementType.FIGHTING, ConsoleColor.DarkRed},
+            {ElementType.POISON, ConsoleColor.DarkMagenta},
+            {ElementType.GROUND, ConsoleColor.DarkYellow},
+            {ElementType.FLYING, ConsoleColor.DarkGray},
+            {ElementType.PSYCHIC, ConsoleColor.Magenta},
+            {ElementType.BUG, ConsoleColor.DarkGreen},
+            {ElementType.ROCK, ConsoleColor.DarkGray},
+            {ElementType.GHOST, ConsoleColor.DarkGray},
+            {ElementType.DRAGON, ConsoleColor.DarkGray},
+            {ElementType.DARK, ConsoleColor.DarkGray},
+            {ElementType.STEEL, ConsoleColor.DarkGray},
         };
         
         private static dynamic Chart { get; set; }
@@ -36,22 +36,22 @@ namespace cs.project07.pokemon.game.combat
             }
         }
 
-        public static bool IsSuperEffective(Type attack, Type defense)
+        public static bool IsSuperEffective(ElementType attack, ElementType defense)
         {
             return Chart[attack.ToString().ToLower()][defense.ToString().ToLower()] > 1;
         }
 
-        public static bool IsEffective(Type attack, Type defense)
+        public static bool IsEffective(ElementType attack, ElementType defense)
         {
             return Chart[attack.ToString().ToLower()][defense.ToString().ToLower()] == 1;
         }
 
-        public static bool IsNotEffective(Type attack, Type defense)
+        public static bool IsNotEffective(ElementType attack, ElementType defense)
         {
             return Chart[attack.ToString().ToLower()][defense.ToString().ToLower()] < 1;
         }
 
-        public static float GetDamageMultiplier(Type attack, Type defense)
+        public static float GetDamageMultiplier(ElementType attack, ElementType defense)
         {
             return Chart[attack.ToString().ToLower()][defense.ToString().ToLower()];
         }

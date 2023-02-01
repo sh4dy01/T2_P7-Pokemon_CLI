@@ -5,7 +5,7 @@ using System.Text;
 
 namespace cs.project07.pokemon
 {
-	public enum Type
+	public enum ElementType
 	{
 		NORMAL,
 		FIRE,
@@ -37,7 +37,7 @@ namespace cs.project07.pokemon
         private readonly float _spDefense;
         private readonly float _speed;
 
-        private readonly Type _type;
+        private readonly ElementType _type;
         private readonly Attack[] _attacks;
 
 		public int PokedexID => _pokedexID;
@@ -48,10 +48,10 @@ namespace cs.project07.pokemon
         public float Defense => _defense;
         public float SPDefense => _spDefense;
         public float Speed => _speed;
-        public Type Type => _type;
+        public ElementType Type => _type;
         public Attack[] Attacks => _attacks;
 
-        public PokedexEntry(int pokedexId, string name, Type type, float maxHealth, float attack, float defense, float spAttack, float spDefense, float speed, Attack[] attacks)
+        public PokedexEntry(int pokedexId, string name, ElementType type, float maxHealth, float attack, float defense, float spAttack, float spDefense, float speed, Attack[] attacks)
         {
 			_pokedexID = pokedexId;
 			_name = name;

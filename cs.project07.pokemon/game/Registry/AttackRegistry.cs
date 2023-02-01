@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿
 
 namespace cs.project07.pokemon
 {
@@ -12,20 +9,20 @@ namespace cs.project07.pokemon
 
         private static Attack[] _attacks =
         {
-            new Attack("Tackle", 10, Type.NORMAL),
-            new Attack("Scratch", 10, Type.NORMAL),
-            new Attack("Growl", 10, Type.NORMAL),
-            new Attack("Quick attack", 10, Type.NORMAL),
-            new Attack("Splash", 0, Type.NORMAL),
+            new Attack("Tackle", 10, ElementType.NORMAL),
+            new Attack("Scratch", 10, ElementType.NORMAL),
+            new Attack("Growl", 10, ElementType.NORMAL),
+            new Attack("Quick attack", 10, ElementType.NORMAL),
+            new Attack("Splash", 0, ElementType.NORMAL),
 
-            new Attack("Vine whip", 20, Type.GRASS, TYPE_PP),
-            new Attack("Ember", 20, Type.FIRE, TYPE_PP),
-            new Attack("Water gun", 20, Type.WATER, TYPE_PP),
-            new Attack("Thunder shock", 20, Type.ELECTRIC, TYPE_PP),
-            new Attack("Rollout", 20, Type.GROUND, TYPE_PP),
-            new Attack("Confusion", 30, Type.PSYCHIC, TYPE_PP),
-            new Attack("Judgment", 100, Type.NORMAL, SPECIAL_PP),
-            new Attack("Hyper beam", 100, Type.NORMAL, SPECIAL_PP),
+            new Attack("Vine whip", 20, ElementType.GRASS, TYPE_PP),
+            new Attack("Ember", 20, ElementType.FIRE, TYPE_PP),
+            new Attack("Water gun", 20, ElementType.WATER, TYPE_PP),
+            new Attack("Thunder shock", 20, ElementType.ELECTRIC, TYPE_PP),
+            new Attack("Rollout", 20, ElementType.GROUND, TYPE_PP),
+            new Attack("Confusion", 30, ElementType.PSYCHIC, TYPE_PP),
+            new Attack("Judgment", 100, ElementType.NORMAL, SPECIAL_PP),
+            new Attack("Hyper beam", 100, ElementType.NORMAL, SPECIAL_PP),
         };
 
         static public Attack TACKLE = _attacks[0];

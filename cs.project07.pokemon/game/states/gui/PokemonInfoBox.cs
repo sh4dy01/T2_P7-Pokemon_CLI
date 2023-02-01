@@ -71,8 +71,9 @@ namespace cs.project07.pokemon.game.states.gui
         {
             if (!_isEnemy)
             {
+                string health = (int)_pokemon.Currenthealth + "/ " + (int)_pokemon.MaxHealth;
                 Console.SetCursorPosition(Left + Width - 2, Top + 4);
-                Console.WriteLine((int)_pokemon.Currenthealth + "/ " + (int)_pokemon.MaxHealth);
+                Console.WriteLine(health);
             }
 
             _pokemon = pokemon;

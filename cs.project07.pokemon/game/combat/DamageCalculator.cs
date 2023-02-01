@@ -13,7 +13,7 @@ namespace cs.project07.pokemon.game.combat
         {
             Random rnd = new();
 
-            damageMultiplier = TypeChart.GetDamageMultiplier(attack.Type, defender.Type);
+            damageMultiplier = TypeChart.GetDamageMultiplier(attack.ElementType, defender.Type);
 
             GetAttAndDefStat(attack, attacker, defender, out float a, out float d);
 
@@ -29,7 +29,7 @@ namespace cs.project07.pokemon.game.combat
         public static float GetSTAB(Attack attack, Pokemon attacker)
         {
             float STAB = 1;
-            if (attack.Type == attacker.Type)
+            if (attack.ElementType == attacker.Type)
                 STAB = 1.5f;
 
             return STAB;

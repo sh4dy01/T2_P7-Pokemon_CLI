@@ -49,7 +49,7 @@ namespace cs.project07.pokemon.game.states.gui
                         else
                             UpdateText("No more uses left");
                     },
-                    ActiveForegroundColor = TypeChart.TypeColor[attack.Type]
+                    ActiveForegroundColor = TypeChart.TypeColor[attack.ElementType]
                 };
             }
         }

@@ -37,7 +37,7 @@ namespace cs.project07.pokemon.game.entites
         public float SPDefense { get => _dex.SPDefense; }
         public float Speed { get => _dex.Speed; }
 
-        public Type Type { get => _dex.Type; }
+        public ElementType Type { get => _dex.Type; }
         public Attack[] Attacks { get => _dex.Attacks; }
 
 
@@ -86,7 +86,12 @@ namespace cs.project07.pokemon.game.entites
             if (_currentHealth <= 0) return;
 
             _currentHealth += amount;
-            if (_currentHealth >= _dex.MaxHealth) _currentHealth = _dex.MaxHealth;
+            if (_currentHealth >= _maxHealth) _currentHealth = _maxHealth;
+        }
+
+        public void HealMax()
+        {
+            _currentHealth = _maxHealth;
         }
 
         public void GainExperience(int experience)
@@ -108,7 +113,7 @@ namespace cs.project07.pokemon.game.entites
             return Attacks[index];
         }
         
-        public Attack ChooseBestAttack(Type defenderType)
+        public Attack ChooseBestAttack(ElementType defenderType)
         {
             Attack? attack = null;
             float maxDamage = 0;
@@ -116,7 +121,7 @@ namespace cs.project07.pokemon.game.entites
 
             foreach (Attack a in Attacks)
             {
-                if (TypeChart.IsSuperEffective(a.Type, defenderType))
+                if (TypeChart.IsSuperEffective(a.ElementType, defenderType))
                 {
                     if (a.Power > maxDamage)
                     {
@@ -125,7 +130,7 @@ namespace cs.project07.pokemon.game.entites
                         maxDamage = a.Power;
                     }
                 }
-                else if (TypeChart.IsEffective(a.Type, defenderType) && !isAttackSuperEffective)
+                else if (TypeChart.IsEffective(a.ElementType, defenderType) && !isAttackSuperEffective)
                 {
                     if (a.Power > maxDamage)
                     {
@@ -133,7 +138,7 @@ namespace cs.project07.pokemon.game.entites
                         maxDamage = a.Power;
                     }
                 }
-                else if (TypeChart.IsNotEffective(a.Type, defenderType))
+                else if (TypeChart.IsNotEffective(a.ElementType, defenderType))
                 {
                     continue;
                 }
