@@ -2,6 +2,8 @@
 using cs.project07.pokemon.game.states.gui;
 using cs.project07.pokemon.game.entites;
 using System.Numerics;
+using cs.project07.pokemon.game.items.list;
+using cs.project07.pokemon.game.items;
 
 namespace cs.project07.pokemon.game.states.list
 {
@@ -26,9 +28,10 @@ namespace cs.project07.pokemon.game.states.list
         private Dictionary<string, Button> _buttons;
         private DialogBox _dialogBox;
 
+        private PokemonListManager _pokemonListManager;
         public Pokemon[] _pokemonInInventory { get; private set; }
 
-        private PokemonListManager _pokemonListManager;
+        public List<Item> _itemList { get; private set; }
 
         public InventoryState(Game gameReceive) : base(gameReceive) 
         { 
@@ -45,16 +48,16 @@ namespace cs.project07.pokemon.game.states.list
             InitMenu();
             Pokemon rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
             addPokemon(rdpoke);
-            rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
-            addPokemon(rdpoke);
-            rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
-            addPokemon(rdpoke);
-            rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
-            addPokemon(rdpoke);
-            rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
-            addPokemon(rdpoke);
-            rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
-            addPokemon(rdpoke);
+            //rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
+            //addPokemon(rdpoke);
+            //rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
+            //addPokemon(rdpoke);
+            //rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
+            //addPokemon(rdpoke);
+            //rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
+            //addPokemon(rdpoke);
+            //rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
+            //addPokemon(rdpoke);
         }
 
         private void InitMenu()
