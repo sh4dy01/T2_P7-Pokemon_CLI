@@ -169,10 +169,10 @@ namespace cs.project07.pokemon.game.states.list
                         }
                         break;
                 }
-                if(mouvThisTurn == true)
-                {
-                    Player.collisionGrass(Map.Layers["GRASS"].ZoomedData, game);
-                }
+
+                if (mouv != true) return;
+                Player.collisionGrass(CurrentMap.Layers["GRASS"].ZoomedData, game);
+                Player.collisionTeleporter(CurrentMap._Teleporters);
             }
         }
 
