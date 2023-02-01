@@ -34,6 +34,7 @@ namespace cs.project07.pokemon.game.states.list
             InitPlayer();
             _dialogBox = new DialogBox(this);
             InitMenu();
+            Load();
         }
 
         private void InitMenu()
@@ -64,6 +65,7 @@ namespace cs.project07.pokemon.game.states.list
                 Offsets = new Vector2(150, 0),
                 Action = () =>
                 {
+                    Parent.Save();
                     while(Game.StatesList?.Count > 0) 
                     {
                         Game.StatesList?.Pop();
