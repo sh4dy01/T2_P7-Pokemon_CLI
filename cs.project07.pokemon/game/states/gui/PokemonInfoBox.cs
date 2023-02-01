@@ -22,7 +22,6 @@ namespace cs.project07.pokemon.game.states.gui
         private Vector2 currentLifePos;
         private Vector2 currentExpPos;
 
-
         public PokemonInfoBox(State state, Pokemon pokemon, bool isEnemy) 
         {
             Parent = state;
@@ -70,6 +69,12 @@ namespace cs.project07.pokemon.game.states.gui
 
         public void UpdateHealth(Pokemon pokemon) //TODO: Clean this
         {
+            if (!_isEnemy)
+            {
+                Console.SetCursorPosition(Left + Width - 2, Top + 4);
+                Console.WriteLine((int)_pokemon.Currenthealth + "/ " + (int)_pokemon.MaxHealth);
+            }
+
             _pokemon = pokemon;
             _healthPercentage = (_pokemon.Currenthealth / _pokemon.MaxHealth) * 100;
 
@@ -125,14 +130,13 @@ namespace cs.project07.pokemon.game.states.gui
         private void RenderPlayerPokemonInfo()
         {
             Console.SetCursorPosition(Left + Width - 2, Top + 4);
-            Console.WriteLine(_pokemon.Currenthealth + "/ " + _pokemon.MaxHealth);
+            Console.WriteLine((int)_pokemon.Currenthealth + "/ " + (int)_pokemon.MaxHealth);
             Console.SetCursorPosition(Left, Top + 5);
             Console.WriteLine("Exp:");
             for (int i = 0; i < 20; i++)
             {
                 Console.SetCursorPosition(Left + Width + 3 - i, Top + 5);
-                if (_expPercentage > i * 5) Console.BackgroundColor = ConsoleColor.Cyan;
-                else Console.BackgroundColor = BackgroundColor;
+                Console.BackgroundColor = _expPercentage > i * 5 ? ConsoleColor.Cyan : BackgroundColor;
                 Console.WriteLine(' ');
             }
         }
