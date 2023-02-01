@@ -13,10 +13,12 @@ namespace cs.project07.pokemon.game.save
     static class SaveManager
     {
         private const string SAVEPATH = "../../../game/save/Save.txt";
-        private const string METAPATH = "../../../game/save/Meta.txt";
+        private const string METAPATH = "game/save/Meta.txt";
         static public void SaveData(params Tuple<string, int>[] data)
         {
-            StreamWriter writer = new StreamWriter(File.OpenRead(SAVEPATH));
+            //var writer =File.Open(SAVEPATH, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+            
+            StreamWriter writer = new StreamWriter(File.OpenWrite(SAVEPATH));
 
             foreach (var element in data)
             {
@@ -44,6 +46,7 @@ namespace cs.project07.pokemon.game.save
                 value = null;
                 onKey= true;
 
+                if(line == null) break;
                 foreach(var c in line)
                 {
                     if (c is not ' ' && onKey)
