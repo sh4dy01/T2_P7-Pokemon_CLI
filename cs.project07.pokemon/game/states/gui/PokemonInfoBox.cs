@@ -41,8 +41,8 @@ namespace cs.project07.pokemon.game.states.gui
 
         public void InitDefaults()
         {
-            Width = 20;
-            Height = 8;
+            Width = 24;
+            Height = 5;
 
             if (_isEnemy) {
                 Left = 65;
@@ -61,7 +61,7 @@ namespace cs.project07.pokemon.game.states.gui
             currentLifePos.X = Left + 3 + _healthPercentage / 5;
             currentLifePos.Y = Top + 3;
             currentExpPos.X = Left + Width + 3 - _expPercentage / 5;
-            currentExpPos.Y = Top + 5;
+            currentExpPos.Y = Top + 4;
 
             BackgroundColor = ConsoleColor.Black;
             ForegroundColor = ConsoleColor.White;
@@ -71,9 +71,11 @@ namespace cs.project07.pokemon.game.states.gui
         {
             if (!_isEnemy)
             {
-                string health = (int)_pokemon.Currenthealth + "/ " + (int)_pokemon.Stat.MaxHP;
-                Console.SetCursorPosition(Left + Width - 2, Top + 4);
-                Console.WriteLine(health);
+                StringBuilder sb = new StringBuilder();
+                sb.Append((int)_pokemon.Currenthealth).Append("/ ").Append((int)_pokemon.Stat.MaxHP);
+                
+                Console.SetCursorPosition(Left + Width - 8, Top + 4);
+                Console.WriteLine(sb.ToString());
             }
 
             _pokemon = pokemon;
@@ -135,41 +137,27 @@ namespace cs.project07.pokemon.game.states.gui
             }
         }
 
-        public void Render()
-        {
-            Console.BackgroundColor = BackgroundColor;
-            Console.ForegroundColor = ForegroundColor;
-            
-            RenderBasicInfo();
-            RenderLifeBar();
-
-            if (!_isEnemy)
-            {
-                RenderPlayerPokemonInfo();
-            }
-        }
-
         private void RenderBasicInfo()
         {
-            Console.SetCursorPosition(Left, Top);
+            Console.SetCursorPosition(Left + Width/2 - _pokemon.Name.Length/2, Top);
             Console.ForegroundColor = TypeChart.TypeColor[_pokemon.Element];
             Console.WriteLine(_pokemon.Name);
             Console.ForegroundColor = ConsoleColor.White;
             Console.SetCursorPosition(Left + Width - 6, Top + 1);
-            Console.WriteLine("L: " + _pokemon.Level);
+            Console.WriteLine("Lv: " + _pokemon.Level);
             Console.SetCursorPosition(Left, Top + 3);
             Console.Write("HP: ");
         }
 
         private void RenderPlayerPokemonInfo()
         {
-            Console.SetCursorPosition(Left + Width - 2, Top + 4);
+            Console.SetCursorPosition(Left + Width - 8, Top + 4);
             Console.WriteLine((int)_pokemon.Currenthealth + "/ " + (int)_pokemon.Stat.MaxHP);
             Console.SetCursorPosition(Left, Top + 5);
             Console.WriteLine("Exp:");
             for (int i = 0; i < 20; i++)
             {
-                Console.SetCursorPosition(Left + Width + 3 - i, Top + 5);
+                Console.SetCursorPosition(Left + Width - 1 - i, Top + 5);
                 Console.BackgroundColor = _expPercentage > i * 5 ? ConsoleColor.Cyan : BackgroundColor;
                 Console.WriteLine(' ');
             }
@@ -191,6 +179,43 @@ namespace cs.project07.pokemon.game.states.gui
             else if (i * 5 <= _healthPercentage) Console.BackgroundColor = ConsoleColor.DarkGreen;
             else Console.BackgroundColor = ConsoleColor.DarkRed;
             Console.WriteLine(' ');
+        }
+
+        public void Clear()
+        {
+            Console.BackgroundColor = ConsoleColor.DarkGray;
+            
+            for (int i = 0; i < Height; i++)
+            {
+                Console.SetCursorPosition(Left, Top + i);
+                Console.WriteLine(new string(' ', Width));
+            }
+        }
+
+        public void Render()
+        {
+            Console.BackgroundColor = BackgroundColor;
+            Console.ForegroundColor = ForegroundColor;
+
+            PaintBackground();
+            RenderBasicInfo();
+            RenderLifeBar();
+
+            if (!_isEnemy)
+            {
+                RenderPlayerPokemonInfo();
+            }
+        }
+
+        private void PaintBackground()
+        {
+            Console.BackgroundColor = BackgroundColor;
+            
+            for (int y = 0; y < Height; y++)
+            {
+                Console.SetCursorPosition(Left, Top + y);
+                Console.WriteLine(new string(' ', Width));
+            }
         }
     }
 }

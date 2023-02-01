@@ -101,21 +101,18 @@ namespace cs.project07.pokemon.game.states.gui
 
         public void Render()
         {
-            Console.ForegroundColor = ActiveForegroundColor;
-            Console.BackgroundColor = ActiveBackgroundColor;
-            
+            Console.SetCursorPosition(Left + (int)Offsets.X - 3, Top + (int)Offsets.Y);
+
             if (Selected && Left >= 0)
             {
                 Console.BackgroundColor = ActiveBackgroundColor;
                 Console.ForegroundColor = ActiveForegroundColor;
-                Console.SetCursorPosition(Left + (int)Offsets.X - 3, Top + (int)Offsets.Y);
                 Console.WriteLine(">> ");
             }
             else if (Left >= 0)
             {
                 Console.BackgroundColor = BackgroundColor;
                 Console.ForegroundColor = ForegroundColor;
-                Console.SetCursorPosition(Left + (int)Offsets.X - 3, Top + (int)Offsets.Y);
                 Console.WriteLine("   ");
             }
 

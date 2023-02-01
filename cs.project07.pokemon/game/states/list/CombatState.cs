@@ -25,7 +25,7 @@ namespace cs.project07.pokemon.game.states.list
             END_COMBAT
         };
 
-        private bool _isPlayerTurn;
+        private bool _isPlayerTurn = true;
         private string _effectivenessMessage = "";
         private float _runChance = 50;
         
@@ -54,7 +54,6 @@ namespace cs.project07.pokemon.game.states.list
         protected override void Init()
         {
             Name = "Combat";
-            _isPlayerTurn = true;
             _currentView = CombatView.INTRO;
             _enemyPokemon.InitEnemyStats();
             SwitchView(_currentView);
@@ -106,17 +105,32 @@ namespace cs.project07.pokemon.game.states.list
             }
         }
 
+        public void SwitchPokemonFromAction()
+        {
+            SwitchView(CombatView.SELECT_POKEMON);
+            _isPlayerTurn = false;
+        }
+
         public void SwapPlayerPokemon(Pokemon pokemon)
         {
+            if (_playerPokemon is not null)
+            {
+                PokemonListManager.UpdatePokemon(_playerPokemon);
+            }
+
+            PokemonListManager.SetActivePokemon(pokemon);
+            
             _playerPokemon = pokemon;
+
             _playerPokemonUi = new PokemonInfoBox(this, _playerPokemon, false);
+            _playerPokemonUi.Render();
             
             if (_enemyPokemon.Level > _playerPokemon.Level)
                 _runChance *= 0.5f;
             else if (_enemyPokemon.Level < _playerPokemon.Level)
                 _runChance *= 1.5f;
-            
-            SwitchView(CombatView.SELECT_ACTION);
+
+            SwitchView(_isPlayerTurn ? CombatView.SELECT_ACTION : CombatView.ENEMY_ATTACK);
         }
 
         private void CheckIfCombatEnd()
@@ -124,10 +138,11 @@ namespace cs.project07.pokemon.game.states.list
             if (_playerPokemon.IsDead)
             {
                 _playerPokemon = null;
-                
+                _playerPokemonUi.Clear();
+
                 if (!PokemonListManager.IsAllPokemonDead())
                 {
-                    SwitchView(CombatView.SELECT_POKEMON);
+                    SwitchPokemonFromAction();
                 }
                 else
                 {
@@ -266,6 +281,12 @@ namespace cs.project07.pokemon.game.states.list
                             _attackInfoUi.Hide();
                             SwitchView(CombatView.SELECT_ACTION);
                             break;
+                        case CombatView.SELECT_POKEMON:
+                            if (_playerPokemon is not null)
+                            {
+                                SwitchView(CombatView.SELECT_ACTION);
+                            }
+                            break;
                     }
                     break;
             }
@@ -283,13 +304,15 @@ namespace cs.project07.pokemon.game.states.list
         public override void Render()
         {
             base.Render();
+
+            _dialogBox.Render();
+
             if (!_isInit)
             {
                 PaintBackground();
                 _isInit = true;
             }
             
-            _dialogBox.Render();
             if (_playerPokemon is not null)
             {
                 _playerPokemonUi.Render();

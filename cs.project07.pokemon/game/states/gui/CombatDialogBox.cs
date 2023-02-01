@@ -2,6 +2,7 @@
 using cs.project07.pokemon.game.entites;
 using cs.project07.pokemon.game.states.list;
 using System.Numerics;
+using System.Text;
 
 namespace cs.project07.pokemon.game.states.gui
 {
@@ -32,7 +33,7 @@ namespace cs.project07.pokemon.game.states.gui
 
             for (int i = 0; i < attacks.Length; i++)
             {
-                SetOffset(ref offsetX, ref offsetY, ref selected, i);
+                SetOffset(ref offsetX, ref offsetY, ref selected, i, 20);
 
                 var attack = attacks[i];
                 _buttons[attack.Name] = new Button(this, attack.Name)
@@ -49,6 +50,7 @@ namespace cs.project07.pokemon.game.states.gui
                         else
                             UpdateText("No more uses left");
                     },
+                    ForegroundColor = TypeChart.TypeColor[attack.Element],
                     ActiveForegroundColor = TypeChart.TypeColor[attack.Element]
                 };
             }
@@ -78,7 +80,7 @@ namespace cs.project07.pokemon.game.states.gui
                 Offsets = new Vector2(10, -1),
                 Action = () =>
                 {
-                    //Switch to select pokemon state
+                    ((CombatState)Parent).SwitchPokemonFromAction();
                 }
             };
             _buttons["RUN"] = new Button(this, "RUN")
@@ -94,35 +96,66 @@ namespace cs.project07.pokemon.game.states.gui
         {
             var pokemons = PokemonListManager.BattleTeam;
             
-            int offsetX = -45;
+            int offsetX = -60;
             int offsetY = -1;
-            bool selected = true;
+            bool selectedDone = false;
+            bool selected = false;
 
             for (int i = 0; i < pokemons.Length; i++)
             {
-                if (pokemons[i] == null || pokemons[i].IsDead) continue;
-
-                SetOffset(ref offsetX, ref offsetY, ref selected, i);
+                if (pokemons[i] == null) continue;
+                
+                SetOffset(ref offsetX, ref offsetY, ref selected, i, 25);
 
                 var pokemon = pokemons[i];
-                _buttons[pokemon.Name + i] = new Button(this, "Lv:" + pokemon.Level + " " + pokemon.Name)
+                var aFgColor = TypeChart.TypeColor[pokemon.Element];
+                var fgColor = TypeChart.TypeColor[pokemon.Element];
+
+                switch (pokemon.IsDead)
+                {
+                    case true:
+                        aFgColor = ConsoleColor.DarkGray;
+                        fgColor = aFgColor;
+                        break;
+                    case false when !selectedDone:
+                        selected = true;
+                        selectedDone = true;
+                        break;
+                }
+
+                if (!pokemon.IsDead && PokemonListManager.ActivePokemonIndex >= 0 && pokemon == PokemonListManager.ActivePokemon)
+                {
+                    fgColor = ConsoleColor.Yellow;
+                    aFgColor = ConsoleColor.Yellow;
+                }
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append("Lv:").Append(pokemon.Level).Append(' ').Append(pokemon.Name).Append(' ').Append(Math.Round((int)pokemon.Currenthealth / pokemon.Stat.MaxHP * 100)).Append('%');
+                _buttons[pokemon.Name + i] = new Button(this, sb.ToString())
                 {
                     Offsets = new Vector2(offsetX, offsetY),
                     Selected = selected,
                     Action = () =>
                     {
-                        ((CombatState)Parent).SwapPlayerPokemon(pokemon);
-                    }
+                        if (!pokemon.IsDead && (PokemonListManager.ActivePokemonIndex == -1 || pokemon != PokemonListManager.ActivePokemon))
+                        {
+                            ((CombatState)Parent).SwapPlayerPokemon(pokemon);
+                        }
+                    },
+                    ForegroundColor = fgColor,
+                    ActiveForegroundColor = aFgColor
                 };
+                
+                selected = false;
             }
         }
 
-        private static void SetOffset(ref int offsetX, ref int offsetY, ref bool selected, int i)
+        private static void SetOffset(ref int offsetX, ref int offsetY, ref bool selected, int i, int offsetXIncrement)
         {
             if (i > 0) selected = false;
             if (i %2 == 0)
             {
-                offsetX += 20;
+                offsetX += offsetXIncrement;
                 offsetY = -1;
             }
 

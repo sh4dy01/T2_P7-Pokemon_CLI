@@ -12,11 +12,10 @@ namespace cs.project07.pokemon.game.entites
         public const int LEVEL_UP_STEP = 20;
         public const int LEVEL_UP_GAINED = 50;
 
-
         private readonly PokedexEntry _dex;
         private readonly Stat _stat;
 
-        private bool _isDead = false;
+        private bool _isDead;
         private float _currentHealth;
         private int _level;
         private float _experience;
@@ -47,6 +46,7 @@ namespace cs.project07.pokemon.game.entites
             _level = 1;
             _experience = 0;
             _requiredExperience = LEVEL_UP_STEP;
+            _isDead = false;
         }
 
         public void InitEnemyStats()

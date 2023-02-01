@@ -59,6 +59,8 @@ namespace cs.project07.pokemon.game.states
 
         protected void PaintBackground()
         {
+            Console.BackgroundColor = BackgroundColor;
+            
             for (var y = 0; y < Height; y++)
             {
                 Console.SetCursorPosition(Left, Top + y);

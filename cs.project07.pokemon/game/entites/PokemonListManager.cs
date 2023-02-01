@@ -2,16 +2,22 @@
 {
     internal static class PokemonListManager
     {
+        private static int _activePokemon;
+
         private static List<Pokemon> _pokemonCaptured;
         private static Pokemon[] _battleTeam;
         public static Pokemon[] BattleTeam { get => _battleTeam; }
         public static List<Pokemon> PokemonCaptured { get => _pokemonCaptured; }
+        public static Pokemon ActivePokemon { get => _battleTeam[_activePokemon]; private set => _battleTeam[_activePokemon] = value; }
+        public static int ActivePokemonIndex { get => _activePokemon; }
+
 
         public static void Init()
         {
             _battleTeam = new Pokemon[6];
             _pokemonCaptured = new List<Pokemon>();
             SetStarter();
+            _activePokemon = -1;
         }
 
         private static void SetStarter()
@@ -28,6 +34,19 @@
         {
             _pokemonCaptured.Add(pokemon);
             SetPokemonInBattleTeam(pokemon);
+        }
+
+        public static void UpdatePokemon(Pokemon pokemonToUpdate)
+        {
+            if (_activePokemon is < 0 or > 5)
+                return;
+
+            ActivePokemon = pokemonToUpdate;
+        }
+
+        public static void SetActivePokemon(Pokemon pokemon)
+        {
+            _activePokemon = Array.IndexOf(_battleTeam, pokemon);
         }
 
         public static int GetAverageLevel()
