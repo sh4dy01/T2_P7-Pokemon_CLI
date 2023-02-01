@@ -49,8 +49,6 @@ namespace cs.project07.pokemon
         public float SPDefense => _spDefense;
         public float Speed => _speed;
         public ElementType Type => _type;
-        public Type Type => _type;
-        public Type Type => _type;
         public Attack[] Attacks => _attacks;
 
         public PokedexEntry(int pokedexId, string name, ElementType type, float maxHealth, float attack, float defense, float spAttack, float spDefense, float speed, Attack[] attacks)
