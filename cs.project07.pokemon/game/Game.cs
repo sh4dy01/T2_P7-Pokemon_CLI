@@ -66,7 +66,6 @@ namespace cs.project07.pokemon.game
         {
             Update();
             Render();
-            Load();
             do
             {
                 HandleEvent();
