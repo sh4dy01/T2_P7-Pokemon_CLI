@@ -2,10 +2,10 @@
 {
     internal class PokemonListManager
     {
-        private List<Pokemon> _pokemonCaptured;
-        
+        static private List<Pokemon> _pokemonCaptured;
         static private Pokemon[] _battleTeam;
         static public Pokemon[] BattleTeam { get => _battleTeam; }
+        static public List<Pokemon> PokemonCaptured { get => _pokemonCaptured; }
 
         public PokemonListManager()
         {
@@ -46,6 +46,19 @@
             avgLevel /= pokemonInTeam;
 
             return (int)avgLevel;
+        }
+
+        public static bool IsAllPokemonDead()
+        {
+            foreach (var pokemon in BattleTeam)
+            {
+                if (!pokemon.IsDead)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public static void SetPokemonInBattleTeam(Pokemon pokemonToAdd)

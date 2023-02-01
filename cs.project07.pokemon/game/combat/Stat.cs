@@ -18,11 +18,11 @@ namespace cs.project07.pokemon.game.combat
         private float _speed;
 
         public float MaxHP { get => _maxHP; }
-        public float Attack { get => _attack; set => _attack = value; }
-        public float Defense { get => _defense; set => _defense *= value; }
-        public float SPAttack { get => _spAttack; set => _spAttack *= value; }
-        public float SPDefense { get => _spDefense; set => _spDefense *= value; }
-        public float Speed { get => _speed; set => _defense *= value; }
+        public float Attack { get => _attack; }
+        public float Defense { get => _defense; }
+        public float SPAttack { get => _spAttack; }
+        public float SPDefense { get => _spDefense; }
+        public float Speed { get => _speed; }
 
         public Stat((float, float, float, float, float, float) stat)
         {
@@ -31,12 +31,12 @@ namespace cs.project07.pokemon.game.combat
 
         public void LevelUpStat(Stat stat)
         {
-            _maxHP *= stat.MaxHP * LEVEL_UP_STEP; 
-            _attack *= stat.Attack * LEVEL_UP_STEP;
-            _defense *= stat.Defense * LEVEL_UP_STEP;
-            _spAttack *= stat.SPAttack * LEVEL_UP_STEP;
-            _spDefense *= stat.SPDefense * LEVEL_UP_STEP;
-            _speed *= stat.Speed * LEVEL_UP_STEP;
+            _maxHP += (int)(stat.MaxHP * LEVEL_UP_STEP); 
+            _attack += (int)(stat.Attack * LEVEL_UP_STEP);
+            _defense += (int)(stat.Defense * LEVEL_UP_STEP);
+            _spAttack += (int)(stat.SPAttack * LEVEL_UP_STEP);
+            _spDefense += (int)(stat.SPDefense * LEVEL_UP_STEP);
+            _speed += (int)(stat.Speed * LEVEL_UP_STEP);
         }
     }
 }

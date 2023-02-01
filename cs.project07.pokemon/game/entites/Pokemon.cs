@@ -10,6 +10,8 @@ namespace cs.project07.pokemon.game.entites
     public class Pokemon
     {
         public const int LEVEL_UP_STEP = 20;
+        public const int LEVEL_UP_GAINED = 50;
+
 
         PokedexEntry _dex;
         Stat _stat;
@@ -30,12 +32,6 @@ namespace cs.project07.pokemon.game.entites
         public float Currenthealth { get => _currentHealth; }
         public float Experience { get => _experience; }
         public float RequiredExp { get => _requiredExperience; }
-        public float MaxHealth { get => Stat.MaxHP; }
-        public virtual float Attack { get => Stat.Attack; }
-        public virtual float SPAttack { get => Stat.SPAttack; }
-        public virtual float Defense { get => Stat.Defense; }
-        public virtual float SPDefense { get => Stat.SPDefense; }
-        public float Speed { get => Stat.Speed; }
 
         public virtual ElementType Element { get => _dex.Element; }
         public Attack[] Attacks { get => _dex.Attacks; }
@@ -59,7 +55,7 @@ namespace cs.project07.pokemon.game.entites
         {
             _level = PokemonListManager.GetAverageLevel();
             
-            for (int i = 0; i < _level; i++)
+            for (int i = 1; i < _level; i++)
             {
                 _stat.LevelUpStat(_dex.Stat);
             }

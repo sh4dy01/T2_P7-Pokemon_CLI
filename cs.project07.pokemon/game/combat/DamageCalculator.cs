@@ -22,7 +22,7 @@ namespace cs.project07.pokemon.game.combat
             GetAttAndDefStat(attack, attacker, defender, out float a, out float d);
 
             float STAB = GetSTAB(attack.Element, attacker.Element);
-            critical = IsCritical(attacker.Speed, null, -1);
+            critical = IsCritical(attacker.Stat.Speed, null, -1);
             float random = rnd.Next(217, 256) / 255.0f;
             
             double damage = ((((2 * attacker.Level * critical) / 5.0f + 2) * attack.Power * (a / d)) / 50 + 2) * STAB * damageMultiplier * random;
@@ -43,13 +43,13 @@ namespace cs.project07.pokemon.game.combat
         {
             if (attack.IsPhysicalMove())
             {
-                a = attacker.Attack;
-                d = defender.Defense;
+                a = attacker.Stat.Attack;
+                d = defender.Stat.Defense;
             }
             else
             {
-                a = attacker.SPAttack;
-                d = defender.SPDefense;
+                a = attacker.Stat.SPAttack;
+                d = defender.Stat.SPDefense;
             }
         }
 

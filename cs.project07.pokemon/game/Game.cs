@@ -116,7 +116,7 @@ namespace cs.project07.pokemon.game
             if (!Running) return;
 
             // Draw the window borders
-            //DrawWindowBorder();
+            // DrawWindowBorder();
 
             // Render the state instance
             if (StatesList?.Count > 0)
