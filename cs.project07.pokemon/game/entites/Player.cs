@@ -1,4 +1,5 @@
-﻿using System;
+﻿using cs.project07.pokemon.game.states.list;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -45,23 +46,19 @@ namespace cs.project07.pokemon.game.entites
             {
                 case 'N':
                     playerPosition = new Vector2(playerPosition.X - 1, playerPosition.Y);
-                    //drawPlayer();
                     break;
                 case 'S':
                     playerPosition = new Vector2(playerPosition.X + 1, playerPosition.Y);
-                    //drawPlayer();
                     break;
                 case 'O':
                     playerPosition = new Vector2(playerPosition.X, playerPosition.Y - 1);
-                    //drawPlayer();
                     break;
                 case 'E':
                     playerPosition = new Vector2(playerPosition.X, playerPosition.Y + 1);
-                    //drawPlayer();
                     break;
             }
         }
-        public bool collision(char[,] grid, char dir)
+        public bool collisionWall(char[,] grid, char dir)
         {
             switch (dir)
             {
@@ -92,12 +89,26 @@ namespace cs.project07.pokemon.game.entites
             }
             return true;
         }
+
+        public void collisionGrass(char[,] grid, Game game)
+        {
+            if (grid[(int)playerPosition.X, (int)playerPosition.Y] == '*')
+            {
+                const int maxPercentage = 15;
+                int percentage = new Random().Next(1, 100);
+                if (percentage > 0 && percentage <= maxPercentage)
+                {
+                    Game.StatesList?.Push(new CombatState(game));
+                }
+            }
+        }
         public void drawPlayer()
         {
             Console.SetCursorPosition((int)playerPosition.Y, (int)playerPosition.X);
             Console.BackgroundColor = BackgroundColor;
             Console.ForegroundColor = ForegroundColor;
             Console.Write("P");
+            Console.SetCursorPosition(0,0);
         }
     }
 }

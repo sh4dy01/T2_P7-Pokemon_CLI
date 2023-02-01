@@ -1,4 +1,5 @@
-﻿using cs.project07.pokemon.game.states.gui.managers;
+﻿using cs.project07.pokemon.game.combat;
+using cs.project07.pokemon.game.states.gui.managers;
 using cs.project07.pokemon.game.states.list;
 using System;
 using System.Collections;
@@ -44,10 +45,7 @@ namespace cs.project07.pokemon.game.states.gui
                     offsetY = -1;
                 }
 
-                if (i%2 == 1)
-                {
-                    offsetY = -offsetY;
-                }
+                if (i%2 == 1) { offsetY = -offsetY; }
 
                 var attack = attacks[i];
                 _buttons[attack.Name] = new Button(this, attack.Name)
@@ -56,8 +54,15 @@ namespace cs.project07.pokemon.game.states.gui
                     Selected = selected,
                     Action = () =>
                     {
-                        ((CombatState)Parent).DealEnemyDamage(attack);
-                    }
+                        if (attack.Usage > 0)
+                        {
+                            ((CombatState)Parent).DealEnemyDamage(attack);
+                            attack.Use();
+                        }
+                        else
+                            UpdateText("No more uses left");
+                    },
+                    ActiveForegroundColor = TypeChart.TypeColor[attack.Type]
                 };
             }
         }
@@ -94,7 +99,7 @@ namespace cs.project07.pokemon.game.states.gui
                 Offsets = new Vector2(10, 2),
                 Action = () =>
                 {
-                    //Run action depending the lv and health of enemy
+                    ((CombatState)Parent).TryToRun();
                 }
             };
         }

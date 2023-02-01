@@ -3,6 +3,7 @@ namespace cs.project07.pokemon.game.states.gui.managers
 {
     internal class ButtonManager
     {
+        public int _selectedButtonIndex;
         public Dictionary<string, Button>? Buttons;
         
         public ButtonManager()
@@ -30,7 +31,12 @@ namespace cs.project07.pokemon.game.states.gui.managers
                 }
             };
         }
-        
+
+        public int GetSelectedButtonIndex()
+        {
+            return (int)(Buttons?.Values.ToList().FindIndex(button => button.Selected));
+        }
+
         public void Update()
         {
             if (Buttons?.Count == 0) return;

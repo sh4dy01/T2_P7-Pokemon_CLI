@@ -8,6 +8,8 @@ namespace cs.project07.pokemon.game.entites
 {
     public class Pokemon
     {
+        public const int LEVEL_UP_STEP = 20;
+
         PokedexEntry _dex;
 
         private bool _isDead = false;
@@ -20,6 +22,9 @@ namespace cs.project07.pokemon.game.entites
         public string Name { get => _dex.Name; }
         public int Level { get => _level; }
         public float Currenthealth { get => _currentHealth; }
+        public float Experience { get => _experience; }
+        public float RequiredExp { get => _requiredExperience; }
+
         public float MaxHealth { get => _dex.MaxHealth; }
         public Type Type { get => _dex.Type; }
         public Attack[] Attacks { get => _dex.Attacks; }
@@ -31,6 +36,7 @@ namespace cs.project07.pokemon.game.entites
             _currentHealth = _dex.MaxHealth;
             _level = 1;
             _experience = 0;
+            _requiredExperience = LEVEL_UP_STEP;
         }
 
         public void TakeDamage(float damage)
@@ -53,11 +59,11 @@ namespace cs.project07.pokemon.game.entites
         {
             _experience += experience;
 
-            if (_experience >= _requiredExperience)
+            while (_experience >= _requiredExperience)
             {
-                _experience = 0;
-                _requiredExperience += 20;
                 _level++;
+                _requiredExperience += LEVEL_UP_STEP;
+                _experience -= _requiredExperience;
             }
         }
 

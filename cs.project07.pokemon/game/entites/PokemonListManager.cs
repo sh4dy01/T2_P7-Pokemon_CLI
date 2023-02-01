@@ -8,11 +8,18 @@ namespace cs.project07.pokemon.game.entites
 {
     internal class PokemonListManager
     {
-        private readonly List<Pokemon> _pokemonCaptured;
+        private List<Pokemon> _pokemonCaptured;
+        private Pokemon[] _battleTeam;
 
         PokemonListManager()
         {
-            _pokemonCaptured= new List<Pokemon>();
+            _battleTeam = new Pokemon[6];
+            _pokemonCaptured = new List<Pokemon>();
+        }
+
+        public void AddPokemon(Pokemon pokemon)
+        {
+            _pokemonCaptured.Add(pokemon);
         }
     }
 }

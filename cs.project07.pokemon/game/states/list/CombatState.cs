@@ -16,19 +16,20 @@ namespace cs.project07.pokemon.game.states.list
             SELECT_ATTACK,
             EFFECTIVE,
             ACTION_USE,
-            ACTION_PET,
             ENEMY_ATTACK,
-            ENEMY_EFFECTIVE,
+            END_TURN,
             END_COMBAT
         };
 
         private bool _isPlayerTurn;
         private string _effectivenessMessage = "";
-
+        private float _runChance = 50;
+        
         private CombatView _currentView;
         private readonly CombatDialogBox _dialogBox;
         private readonly Pokemon _playerPokemon;
         private readonly Pokemon _enemyPokemon;
+        private readonly AttackInfoBox _attackInfoUi;
         private readonly PokemonInfoBox _playerPokemonUi;
         private readonly PokemonInfoBox _enemyPokemonUi;
 
@@ -40,6 +41,7 @@ namespace cs.project07.pokemon.game.states.list
             _dialogBox = new CombatDialogBox(this);
             _playerPokemonUi = new PokemonInfoBox(this, _playerPokemon, false);
             _enemyPokemonUi = new PokemonInfoBox(this, _enemyPokemon, true);
+            _attackInfoUi = new AttackInfoBox(this);
 
             Init();
         }
@@ -47,6 +49,11 @@ namespace cs.project07.pokemon.game.states.list
         protected override void Init()
         {
             Name = "Combat";
+            if (_enemyPokemon.Level > _playerPokemon.Level)
+                _runChance *= 0.5f;
+            else if (_enemyPokemon.Level < _playerPokemon.Level)
+                _runChance *= 1.5f;
+            
             _isPlayerTurn = true;
             _currentView = CombatView.INTRO;
             SwitchView(_currentView);
@@ -69,22 +76,23 @@ namespace cs.project07.pokemon.game.states.list
                 case CombatView.SELECT_ATTACK:
                     _currentView = CombatView.SELECT_ATTACK;
                     _dialogBox.InitSelectAttackButtons(_playerPokemon.Attacks);
+                    _attackInfoUi.Show(_playerPokemon.Attacks[0]);
                     break;
                 case CombatView.EFFECTIVE:
+                    if (_effectivenessMessage == "")
+                    {
+                        SwitchView(CombatView.END_TURN);
+                        break;
+                    }
                     _dialogBox.UpdateText(_effectivenessMessage);
-                    CheckIfCombatEnd();
                     break;
                 case CombatView.ACTION_USE:
-                    //TODO
-                    break;
-                case CombatView.ACTION_PET:
                     //TODO
                     break;
                 case CombatView.ENEMY_ATTACK:
                     DealPlayerDamage();
                     break;
-                case CombatView.ENEMY_EFFECTIVE:
-                    _dialogBox.UpdateText(_effectivenessMessage);
+                case CombatView.END_TURN:
                     CheckIfCombatEnd();
                     break;
                 case CombatView.END_COMBAT:
@@ -108,6 +116,9 @@ namespace cs.project07.pokemon.game.states.list
             }
             else if (_enemyPokemon.IsDead)
             {
+                int experience = 50 * _enemyPokemon.Level;
+                _playerPokemon.GainExperience(experience);
+                _playerPokemonUi.UpdateExperience(experience);
                 _dialogBox.UpdateText("You won, GG !");
                 SwitchView(CombatView.END_COMBAT);
             }
@@ -124,9 +135,10 @@ namespace cs.project07.pokemon.game.states.list
 
         public void DealEnemyDamage(Attack attack)
         {
-            _dialogBox.UpdateText("You'r " + _playerPokemon.Name + " used " + attack.Name + " !");
-            _enemyPokemon.TakeDamage(DamageWithMultiplier(attack, _playerPokemon, _enemyPokemon));
-            _enemyPokemonUi.UpdateUI(_enemyPokemon);
+            _attackInfoUi.Hide();
+            _dialogBox.UpdateText("Your " + _playerPokemon.Name + " used " + attack.Name + " !");
+            _enemyPokemon.TakeDamage(DamageWithMultiplier(attack, _enemyPokemon.Type));
+            _enemyPokemonUi.UpdateHealth(_enemyPokemon);
             _isPlayerTurn = false;
             _dialogBox.ResetButtons();
         }
@@ -135,17 +147,17 @@ namespace cs.project07.pokemon.game.states.list
         {
             Attack attack = _enemyPokemon.ChooseRandomAttack();
             _dialogBox.UpdateText("The enemy " + _enemyPokemon.Name + " used " + attack.Name + " !");
-            _playerPokemon.TakeDamage(DamageWithMultiplier(attack, _enemyPokemon, _playerPokemon));
-            _playerPokemonUi.UpdateUI(_playerPokemon);
+            _playerPokemon.TakeDamage(DamageWithMultiplier(attack, _playerPokemon.Type));
+            _playerPokemonUi.UpdateHealth(_playerPokemon);
             _isPlayerTurn = true;
         }
 
-        private float DamageWithMultiplier(Attack attack, Pokemon attacker, Pokemon defender)
+        private float DamageWithMultiplier(Attack attack, Type defenderType)
         {
-            float damageMultiplier = TypeChart.GetDamageMultiplier(attacker.Type, defender.Type);
+            float damageMultiplier = TypeChart.GetDamageMultiplier(attack.Type, defenderType);
             UpdateEffectivenessMessage(damageMultiplier);
             
-            return attack.Damage * damageMultiplier;
+            return attack.Power * damageMultiplier;
         }
 
         private void UpdateEffectivenessMessage(float damageMultiplier)
@@ -159,8 +171,16 @@ namespace cs.project07.pokemon.game.states.list
                     _effectivenessMessage = INEFFECTIVE_MSG;
                     break;
                 default:
-                    _effectivenessMessage = "Ok...";
+                    _effectivenessMessage = "";
                     break;
+            }
+        }
+
+        private void UpdateAttackInfoUi()
+        {
+            if (_currentView == CombatView.SELECT_ATTACK)
+            {
+                _attackInfoUi.Show(_playerPokemon.Attacks[_dialogBox.ButtonManager.GetSelectedButtonIndex()]);
             }
         }
 
@@ -171,22 +191,35 @@ namespace cs.project07.pokemon.game.states.list
                 case ConsoleKey.Enter:
                     if (_dialogBox.ButtonManager.Buttons.Count <= 0)
                     {
-                        var NextState = _currentView + 1;
-                        SwitchView(NextState);
-                        break;
+                        switch (_currentView)
+                        {
+                            case CombatView.ENEMY_ATTACK:
+                                SwitchView(CombatView.EFFECTIVE);
+                                break;
+                            case CombatView.EFFECTIVE:
+                                SwitchView(CombatView.END_TURN);
+                                break;
+                            default:
+                                var NextState = _currentView + 1;
+                                SwitchView(NextState);
+                                break;
+                        }
                     }
-                    Button.ExecuteAction(_dialogBox.ButtonManager.Buttons);
+                    else Button.ExecuteAction(_dialogBox.ButtonManager.Buttons);
                     break;
                 case ConsoleKey.UpArrow:
                     Button.SelectPrevious(_dialogBox.ButtonManager.Buttons);
+                    UpdateAttackInfoUi();
                     break;
                 case ConsoleKey.DownArrow:
                     Button.SelectNext(_dialogBox.ButtonManager.Buttons);
+                    UpdateAttackInfoUi();
                     break;
                 case ConsoleKey.Backspace:
                     switch (_currentView)
                     {
                         case CombatView.SELECT_ATTACK:
+                            _attackInfoUi.Hide();
                             SwitchView(CombatView.SELECT_ACTION);
                             break;
                     }
@@ -210,9 +243,26 @@ namespace cs.project07.pokemon.game.states.list
             _dialogBox.Render();
             _playerPokemonUi.Render();
             _enemyPokemonUi.Render();
+            _attackInfoUi.Render();
             // Render childs
             // ------ Map
 
+        }
+
+        public void TryToRun()
+        {
+            Random rnd = new();
+            if (rnd.Next(0, 100) <= _runChance)
+            {
+                _dialogBox.UpdateText("You ran away !");
+                SwitchView(CombatView.END_COMBAT);
+            }
+            else
+            {
+                _dialogBox.UpdateText("You failed to run away !");
+                _isPlayerTurn = false;
+                SwitchView(CombatView.ENEMY_ATTACK);
+            }
         }
     }
 }

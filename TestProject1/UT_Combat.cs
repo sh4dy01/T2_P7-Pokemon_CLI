@@ -13,6 +13,7 @@ namespace UnitTest
         [TestCase(20, Type.FIRE, Type.FIRE, 10)]
         [TestCase(100, Type.FIRE, Type.WATER, 50)]
         [TestCase(50, Type.ELECTRIC, Type.WATER, 100)]
+        [TestCase(100, Type.ELECTRIC, Type.GRASS, 50)]
         [TestCase(200, Type.GRASS, Type.GROUND, 400)]
         public void CalculateTheMultipliedDamageAmount(float damage, Type attack, Type defense, int expected)
         {
@@ -23,7 +24,10 @@ namespace UnitTest
         }
 
         [Test]
-        public void CheckIfPokemonHasCorrectLife()
+        [TestCase(10, 20)]
+        [TestCase(1000, 0)]
+        [TestCase(10, 20)]
+        public void CheckIfPokemonHasCorrectLife(int hp, int expected)
         {
             Pokemon pokemon = new(PokemonRegistry.GetRandomPokemon());
             Assert.That(pokemon.Currenthealth, Is.EqualTo(pokemon.MaxHealth));
@@ -36,6 +40,21 @@ namespace UnitTest
 
             pokemon.Heal(1000);
             Assert.That(pokemon.Currenthealth, Is.EqualTo(pokemon.MaxHealth));
+        }
+
+        [Test]
+        public void CheckIfPokemonHasCorrectLevel()
+        {
+            Pokemon pokemon = new(PokemonRegistry.GetRandomPokemon());
+            Assert.That(pokemon.Level, Is.EqualTo(1));
+
+            pokemon.GainExperience(20);
+            Assert.That(pokemon.Level, Is.EqualTo(2));
+
+            pokemon = new(PokemonRegistry.GetRandomPokemon());
+            pokemon.GainExperience(1000);
+            Assert.That(pokemon.Level, Is.EqualTo(9));
+            Assert.That(pokemon.Experience, Is.EqualTo(120));
         }
     }
 }

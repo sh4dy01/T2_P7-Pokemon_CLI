@@ -104,6 +104,7 @@ namespace cs.project07.pokemon.game.states.gui
 
         private void PaintText()
         {
+            PaintBackground();
             Console.SetCursorPosition(Left + Width / 2 - _text.Length / 2, Top + Height / 2);
             Console.Write(_text);
         }
