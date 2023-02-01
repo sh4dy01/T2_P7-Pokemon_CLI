@@ -9,7 +9,7 @@ namespace cs.project07.pokemon.game
 {
     public class Game : IUpdatable, IRenderable<Game>
     {
-        static public Vector2 ConsoleSize = new Vector2(237,60);
+        public static Vector2 ConsoleSize = new(237,60);
 
         public bool Running = true;
         public Game Parent { get; set; }
@@ -46,7 +46,7 @@ namespace cs.project07.pokemon.game
 
         private void InitStates()
         {
-            StatesList?.Push(new MenuState(this));
+            StatesList?.Push(new CombatState(this));
         }
 
         private void Init()

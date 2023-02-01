@@ -54,10 +54,10 @@ namespace cs.project07.pokemon.game.states
             // Render the actual state
             Console.BackgroundColor = BackgroundColor;
             Console.ForegroundColor = ForegroundColor;
-            PaintBackground();
+            //PaintBackground();
         }
 
-        private void PaintBackground()
+        protected void PaintBackground()
         {
             for (var y = 0; y < Height; y++)
             {

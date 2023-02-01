@@ -181,7 +181,7 @@ namespace cs.project07.pokemon.game.map
         {
             // Render childs
             // ------ layers
-            if (Layers == null || Layers.Count <= 0) return;
+            if (Layers is not { Count: > 0 }) return;
             foreach (Layer layer in Layers.Values)
                 layer.Render();
         }
