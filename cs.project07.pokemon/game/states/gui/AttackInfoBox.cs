@@ -53,7 +53,7 @@ namespace cs.project07.pokemon.game.states.gui
                 Console.SetCursorPosition(Left, Top+1);
                 Console.WriteLine("Damage: " + _attackInfo.Power);
                 Console.SetCursorPosition(Left, Top + 2);
-                Console.WriteLine("Type: " + _attackInfo.ElementType);
+                Console.WriteLine("Type: " + _attackInfo.Element);
                 Console.SetCursorPosition(Left, Top + 3);
                 Console.WriteLine("PP: " + _attackInfo.Usage);
             }

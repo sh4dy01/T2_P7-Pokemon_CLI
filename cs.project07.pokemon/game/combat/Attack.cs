@@ -13,10 +13,9 @@ namespace cs.project07.pokemon
         private int _maxUsage;
         private int _currentUsage;
 
-
         public string Name => _name;
         public int Power { get => _power; set => _power = value; }
-        public ElementType ElementType { get => _type; }
+        public ElementType Element { get => _type; }
         public int Usage { get => _currentUsage; }
 
         public Attack(string name, int damage, ElementType type, int maxUsage = 20)
@@ -27,28 +26,24 @@ namespace cs.project07.pokemon
             _maxUsage = maxUsage;
             _currentUsage = _maxUsage;
         }
-        
+
         public void Use()
         {
             _currentUsage--;
         }
 
-        public bool IsSpecialMove()
+        static ElementType[] _specialTypes = new[]
         {
-            if (ElementType is ElementType.DARK or ElementType.ELECTRIC or ElementType.FIRE or ElementType.WATER or ElementType.GRASS or ElementType.PSYCHIC)
-            {
-                return true;
-            }
-            else return false;
-        }
+            ElementType.DARK,
+            ElementType.ELECTRIC,
+            ElementType.FIRE,
+            ElementType.WATER,
+            ElementType.GRASS,
+            ElementType.PSYCHIC,
+        };
 
-        public bool IsPhysicalMove()
-        {
-            if (ElementType is (ElementType.NORMAL or ElementType.STEEL or ElementType.FIGHTING or ElementType.FLYING or ElementType.GROUND or ElementType.ROCK or ElementType.POISON or ElementType.GHOST or ElementType.BUG))
-            {
-                return true;
-            }
-            else return false;
-        }
+        public bool IsSpecialMove() => _specialTypes.Contains(Element);
+        public bool IsPhysicalMove() => !IsSpecialMove();
+        
     }
 }

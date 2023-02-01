@@ -12,52 +12,56 @@ namespace cs.project07.pokemon.game.entites
         public const int LEVEL_UP_STEP = 20;
 
         PokedexEntry _dex;
+        Stat _stat;
 
         private bool _isDead = false;
         private float _currentHealth;
-        private float _maxHealth;
         private int _level;
         private float _experience;
         private float _requiredExperience;
 
-        private float? _maxEnemyHealth;
-
         //TODO: Create a stat object to store all stats -> pokedex not settable / pokemon yes
 
+        public PokedexEntry Dex => _dex;
+        public Stat Stat => _stat;
         public bool IsDead { get => _isDead; set => _isDead = value; }
         public string Name { get => _dex.Name; }
         public int Level { get => _level; }
         public float Currenthealth { get => _currentHealth; }
         public float Experience { get => _experience; }
         public float RequiredExp { get => _requiredExperience; }
-        public float MaxHealth { get => _maxHealth; }
-        public float Attack { get => _dex.Attack; }
-        public float SPAttack { get => _dex.SPAttack; }
-        public float Defense { get => _dex.Defense; }
-        public float SPDefense { get => _dex.SPDefense; }
-        public float Speed { get => _dex.Speed; }
+        public float MaxHealth { get => Stat.MaxHP; }
+        public virtual float Attack { get => Stat.Attack; }
+        public virtual float SPAttack { get => Stat.SPAttack; }
+        public virtual float Defense { get => Stat.Defense; }
+        public virtual float SPDefense { get => Stat.SPDefense; }
+        public float Speed { get => Stat.Speed; }
 
-        public ElementType Type { get => _dex.Type; }
+        public virtual ElementType Element { get => _dex.Element; }
         public Attack[] Attacks { get => _dex.Attacks; }
 
-
+        protected Pokemon()
+        {
+            
+        }
+        
         public Pokemon(PokedexEntry dex)
         {
             _dex = dex;
-            _currentHealth = _dex.MaxHealth;
+            _stat = new Stat((dex.Stat.MaxHP, dex.Stat.Attack, dex.Stat.Defense, dex.Stat.SPAttack, dex.Stat.SPDefense, dex.Stat.Speed));
+            _currentHealth = _dex.Stat.MaxHP;
             _level = 1;
             _experience = 0;
-            _maxHealth = _dex.MaxHealth;
             _requiredExperience = LEVEL_UP_STEP;
         }
 
-        public void InitEnemyStats(int level)
+        public void InitEnemyStats()
         {
-            _level = level;
-            _maxEnemyHealth = _dex.MaxHealth;
-            for (int i = 0; i < level; i++)
+            _level = PokemonListManager.GetAverageLevel();
+            
+            for (int i = 0; i < _level; i++)
             {
-                _maxEnemyHealth += _maxEnemyHealth * 0.1f;
+                _stat.LevelUpStat(_dex.Stat);
             }
         }
 
@@ -86,12 +90,12 @@ namespace cs.project07.pokemon.game.entites
             if (_currentHealth <= 0) return;
 
             _currentHealth += amount;
-            if (_currentHealth >= _maxHealth) _currentHealth = _maxHealth;
+            if (_currentHealth >= _stat.MaxHP) _currentHealth = _stat.MaxHP;
         }
 
         public void HealMax()
         {
-            _currentHealth = _maxHealth;
+            _currentHealth = _stat.MaxHP;
         }
 
         public void GainExperience(int experience)
@@ -121,7 +125,7 @@ namespace cs.project07.pokemon.game.entites
 
             foreach (Attack a in Attacks)
             {
-                if (TypeChart.IsSuperEffective(a.ElementType, defenderType))
+                if (TypeChart.IsSuperEffective(a.Element, defenderType))
                 {
                     if (a.Power > maxDamage)
                     {
@@ -130,7 +134,7 @@ namespace cs.project07.pokemon.game.entites
                         maxDamage = a.Power;
                     }
                 }
-                else if (TypeChart.IsEffective(a.ElementType, defenderType) && !isAttackSuperEffective)
+                else if (TypeChart.IsEffective(a.Element, defenderType) && !isAttackSuperEffective)
                 {
                     if (a.Power > maxDamage)
                     {
@@ -138,7 +142,7 @@ namespace cs.project07.pokemon.game.entites
                         maxDamage = a.Power;
                     }
                 }
-                else if (TypeChart.IsNotEffective(a.ElementType, defenderType))
+                else if (TypeChart.IsNotEffective(a.Element, defenderType))
                 {
                     continue;
                 }

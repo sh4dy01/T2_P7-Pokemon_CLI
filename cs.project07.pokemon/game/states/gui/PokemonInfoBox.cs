@@ -119,7 +119,7 @@ namespace cs.project07.pokemon.game.states.gui
         private void RenderBasicInfo()
         {
             Console.SetCursorPosition(Left, Top);
-            Console.ForegroundColor = TypeChart.TypeColor[_pokemon.Type];
+            Console.ForegroundColor = TypeChart.TypeColor[_pokemon.Element];
             Console.WriteLine(_pokemon.Name);
             Console.ForegroundColor = ConsoleColor.White;
             Console.SetCursorPosition(Left + Width - 6, Top + 1);
