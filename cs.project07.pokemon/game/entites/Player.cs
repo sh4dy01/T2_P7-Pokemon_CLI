@@ -46,10 +46,14 @@ namespace cs.project07.pokemon.game.entites
         {
             if(zoom == 4) 
             {
+                BackgroundColor = ConsoleColor.Green;
+                ForegroundColor = ConsoleColor.Black;
                 playerPosition = new Vector2(playerPosition.X * zoom, playerPosition.Y * zoom);
             }
             else if(zoom == 1) 
             {
+                BackgroundColor = ConsoleColor.Red;
+                ForegroundColor = ConsoleColor.Red;
                 playerPosition = new Vector2(playerPosition.X / 4, playerPosition.Y / 4);
             }
         }
