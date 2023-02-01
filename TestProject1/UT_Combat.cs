@@ -1,8 +1,10 @@
+using cs.project07.pokemon;
 using cs.project07.pokemon.game.combat;
 using cs.project07.pokemon.game.entites;
 using NUnit.Framework;
+using Type = cs.project07.pokemon.Type;
 
-namespace cs.project07.pokemon.tests.game.combat
+namespace UnitTest
 {
     public class PokemonTests
     {
