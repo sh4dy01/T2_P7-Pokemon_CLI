@@ -53,8 +53,8 @@ namespace cs.project07.pokemon.game.states.gui
                 Top = Parent.Height /2;
             }
             
-            _healthPercentage = (_pokemon.Currenthealth / _pokemon.MaxHealth) * 100;
-            _oldLifePercentage = (_pokemon.Currenthealth / _pokemon.MaxHealth) * 100;
+            _healthPercentage = (_pokemon.Currenthealth / _pokemon.Stat.MaxHP) * 100;
+            _oldLifePercentage = (_pokemon.Currenthealth / _pokemon.Stat.MaxHP) * 100;
             _oldExpPercentage = (_pokemon.Experience / _pokemon.RequiredExp) * 100;
             _expPercentage = (_pokemon.Experience / _pokemon.RequiredExp) * 100;
 
@@ -71,13 +71,13 @@ namespace cs.project07.pokemon.game.states.gui
         {
             if (!_isEnemy)
             {
-                string health = (int)_pokemon.Currenthealth + "/ " + (int)_pokemon.MaxHealth;
+                string health = (int)_pokemon.Currenthealth + "/ " + (int)_pokemon.Stat.MaxHP;
                 Console.SetCursorPosition(Left + Width - 2, Top + 4);
                 Console.WriteLine(health);
             }
 
             _pokemon = pokemon;
-            _healthPercentage = (_pokemon.Currenthealth / _pokemon.MaxHealth) * 100;
+            _healthPercentage = (_pokemon.Currenthealth / _pokemon.Stat.MaxHP) * 100;
 
             int startIndex = (int)(_oldLifePercentage / 5);
             int endIndex = (int)((_oldLifePercentage - _healthPercentage) / 5);
@@ -85,7 +85,7 @@ namespace cs.project07.pokemon.game.states.gui
             if (_healthPercentage <= 0)
                 endIndex = 0;
 
-            currentLifePos.X = Left + 3 + _oldLifePercentage / 5;
+            currentLifePos.X = Left + 3 + (int)_oldLifePercentage / 5;
             for (int i = startIndex; i > endIndex; i--)
             {
                 Console.SetCursorPosition((int)currentLifePos.X, (int)currentLifePos.Y);
@@ -99,7 +99,40 @@ namespace cs.project07.pokemon.game.states.gui
 
         public void UpdateExperience(int experience)
         {
-            //TODO
+            int lvUp = 0;
+            while (experience > 0)
+            {
+                int _requiredExp = (int)_pokemon.RequiredExp + lvUp * Pokemon.LEVEL_UP_STEP;
+                _expPercentage = (experience / _pokemon.RequiredExp) * 100;
+                if (_expPercentage >= 100) _expPercentage = 100;
+                
+                int startIndex = 20 - (int)(_oldExpPercentage / 5);
+                int endIndex = 20 - (int)((_expPercentage - _oldExpPercentage) / 5);
+
+                currentExpPos.X = Left + Width + 3 - (int)_oldExpPercentage / 5;
+                for (int i = startIndex; i > endIndex; i--)
+                {
+                    Console.SetCursorPosition((int)currentExpPos.X, (int)currentExpPos.Y);
+                    Console.BackgroundColor = ConsoleColor.Cyan;
+                    Console.Write(' ');
+                    currentExpPos.X--;
+                    Thread.Sleep(100);
+                }
+
+                Console.BackgroundColor = ConsoleColor.Black;
+
+                experience -= _requiredExp;
+                if (experience > 0)
+                {
+                    lvUp++;
+                    _oldExpPercentage = 0;
+                    for (int i = 0; i < 20; i++)
+                    {
+                        Console.SetCursorPosition(Left + Width + 3 - i, (int)currentExpPos.Y);
+                        Console.Write(' ');
+                    }
+                }
+            }
         }
 
         public void Render()
@@ -131,7 +164,7 @@ namespace cs.project07.pokemon.game.states.gui
         private void RenderPlayerPokemonInfo()
         {
             Console.SetCursorPosition(Left + Width - 2, Top + 4);
-            Console.WriteLine((int)_pokemon.Currenthealth + "/ " + (int)_pokemon.MaxHealth);
+            Console.WriteLine((int)_pokemon.Currenthealth + "/ " + (int)_pokemon.Stat.MaxHP);
             Console.SetCursorPosition(Left, Top + 5);
             Console.WriteLine("Exp:");
             for (int i = 0; i < 20; i++)
