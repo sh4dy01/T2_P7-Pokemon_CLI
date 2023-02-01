@@ -157,12 +157,12 @@ namespace cs.project07.pokemon.game.states.list
                             Button.ExecuteAction(_buttonManager.Buttons);
                         break;
                     case ConsoleKey.M:
-                        if (Map.Zoom == 4 && !showMenu)
+                        if (CurrentMap.Zoom == 4 && !showMenu)
                         {
                             CurrentMap.Zoom = 1;
                             Player.zoomPlayer(CurrentMap.Zoom);
                         }
-                        else if (Map.Zoom == 1 && !showMenu)
+                        else if (CurrentMap.Zoom == 1 && !showMenu)
                         {
                             CurrentMap.Zoom = 4;
                             Player.zoomPlayer(CurrentMap.Zoom);
