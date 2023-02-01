@@ -57,6 +57,7 @@ namespace cs.project07.pokemon.game.states.list
             Name = "Combat";
             _isPlayerTurn = true;
             _currentView = CombatView.INTRO;
+            _enemyPokemon.InitEnemyStats();
             SwitchView(_currentView);
         }
 
@@ -111,10 +112,12 @@ namespace cs.project07.pokemon.game.states.list
             _playerPokemon = pokemon;
             _playerPokemonUi = new PokemonInfoBox(this, _playerPokemon, false);
             _attackInfoUi = new AttackInfoBox(this);
+            
             if (_enemyPokemon.Level > _playerPokemon.Level)
                 _runChance *= 0.5f;
             else if (_enemyPokemon.Level < _playerPokemon.Level)
                 _runChance *= 1.5f;
+            
             SwitchView(CombatView.SELECT_ACTION);
         }
 
@@ -157,7 +160,7 @@ namespace cs.project07.pokemon.game.states.list
         
         private void DealPlayerDamage()
         {
-            Attack attack = _enemyPokemon.ChooseBestAttack(_playerPokemon.Type);
+            Attack attack = _enemyPokemon.ChooseBestAttack(_playerPokemon.Element);
             _dialogBox.UpdateText("The enemy " + _enemyPokemon.Name + " used " + attack.Name + " !");
             _playerPokemon.TakeDamage(GetDamageWithMultiplier(attack, _enemyPokemon, _playerPokemon));
             _playerPokemonUi.UpdateHealth(_playerPokemon);

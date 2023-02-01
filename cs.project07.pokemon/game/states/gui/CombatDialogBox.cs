@@ -26,7 +26,7 @@ namespace cs.project07.pokemon.game.states.gui
 
         public void InitSelectAttackButtons(Attack[] attacks) 
         {
-            int offsetX = -10;
+            int offsetX = -25;
             int offsetY = -1;
             bool selected = true;
 
@@ -49,7 +49,7 @@ namespace cs.project07.pokemon.game.states.gui
                         else
                             UpdateText("No more uses left");
                     },
-                    ActiveForegroundColor = TypeChart.TypeColor[attack.ElementType]
+                    ActiveForegroundColor = TypeChart.TypeColor[attack.Element]
                 };
             }
         }
@@ -65,6 +65,14 @@ namespace cs.project07.pokemon.game.states.gui
                     ((CombatState)Parent).SwitchView(CombatState.CombatView.SELECT_ATTACK);
                 }
             };
+            _buttons["INVENTORY"] = new Button(this, "INVENTORY")
+            {
+                Offsets = new Vector2(-10, 1),
+                Action = () =>
+                {
+
+                }
+            };
             _buttons["POKEMON"] = new Button(this, "POKEMON")
             {
                 Offsets = new Vector2(10, -1),
@@ -73,17 +81,9 @@ namespace cs.project07.pokemon.game.states.gui
                     //Switch to select pokemon state
                 }
             };
-            _buttons["INVENTORY"] = new Button(this, "INVENTORY")
-            {
-                Offsets = new Vector2(-10, 2),
-                Action = () =>
-                {
-
-                }
-            };
             _buttons["RUN"] = new Button(this, "RUN")
             {
-                Offsets = new Vector2(10, 2),
+                Offsets = new Vector2(10, 1),
                 Action = () =>
                 {
                     ((CombatState)Parent).TryToRun();
@@ -94,7 +94,7 @@ namespace cs.project07.pokemon.game.states.gui
         {
             var pokemons = PokemonListManager.BattleTeam;
             
-            int offsetX = -10;
+            int offsetX = -45;
             int offsetY = -1;
             bool selected = true;
 
@@ -105,10 +105,10 @@ namespace cs.project07.pokemon.game.states.gui
                 SetOffset(ref offsetX, ref offsetY, ref selected, i);
 
                 var pokemon = pokemons[i];
-                _buttons[pokemon.Name] = new Button(this, pokemon.Name)
+                _buttons[pokemon.Name+i] = new Button(this, "Lv:" + pokemon.Level + " " + pokemon.Name)
                 {
                     Offsets = new Vector2(offsetX, offsetY),
-                    Selected = true,
+                    Selected = selected,
                     Action = () =>
                     {
                         ((CombatState)Parent).SwapPlayerPokemon(pokemon);
@@ -120,9 +120,9 @@ namespace cs.project07.pokemon.game.states.gui
         private static void SetOffset(ref int offsetX, ref int offsetY, ref bool selected, int i)
         {
             if (i > 0) selected = false;
-            if (i == 2)
+            if (i %2 == 0)
             {
-                offsetX = 10;
+                offsetX += 20;
                 offsetY = -1;
             }
 
