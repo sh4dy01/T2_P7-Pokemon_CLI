@@ -6,6 +6,8 @@ namespace cs.project07.pokemon.game.states.list
 {
     public class CombatState : State
     {
+        private bool _isInit = false;
+        
         const string EFFECTIVE_MSG = "It's super effective!";
         const string INEFFECTIVE_MSG = "It's not very effective...";
         
@@ -27,7 +29,8 @@ namespace cs.project07.pokemon.game.states.list
         private float _runChance = 50;
         
         private CombatView _currentView;
-        
+        private readonly DamageCalculator _damageCalculator;
+
         private readonly CombatDialogBox _dialogBox;
         private readonly Pokemon _enemyPokemon;
         private readonly PokemonInfoBox _enemyPokemonUi;
@@ -44,6 +47,7 @@ namespace cs.project07.pokemon.game.states.list
             _pokemonListManager = new PokemonListManager(); //TODO : REMOVE
             _dialogBox = new CombatDialogBox(this);
             _enemyPokemonUi = new PokemonInfoBox(this, _enemyPokemon, true);
+            _damageCalculator = new DamageCalculator();
 
             Init();
         }
@@ -145,7 +149,7 @@ namespace cs.project07.pokemon.game.states.list
         {
             _attackInfoUi.Hide();
             _dialogBox.UpdateText("Your " + _playerPokemon.Name + " used " + attack.Name + " !");
-            _enemyPokemon.TakeDamage(DamageWithMultiplier(attack, _playerPokemon, _enemyPokemon));
+            _enemyPokemon.TakeDamage(GetDamageWithMultiplier(attack, _playerPokemon, _enemyPokemon));
             _enemyPokemonUi.UpdateHealth(_enemyPokemon);
             _isPlayerTurn = false;
             _dialogBox.ResetButtons();
@@ -155,67 +159,20 @@ namespace cs.project07.pokemon.game.states.list
         {
             Attack attack = _enemyPokemon.ChooseBestAttack(_playerPokemon.Type);
             _dialogBox.UpdateText("The enemy " + _enemyPokemon.Name + " used " + attack.Name + " !");
-            _playerPokemon.TakeDamage(DamageWithMultiplier(attack, _enemyPokemon, _playerPokemon));
+            _playerPokemon.TakeDamage(GetDamageWithMultiplier(attack, _enemyPokemon, _playerPokemon));
             _playerPokemonUi.UpdateHealth(_playerPokemon);
             _isPlayerTurn = true;
         }
 
-        private float DamageWithMultiplier(Attack attack, Pokemon attacker, Pokemon defender)
+        private int GetDamageWithMultiplier(Attack attack, Pokemon attacker, Pokemon defender)
         {
-            Random rnd = new Random();
+            float damage = _damageCalculator.DamageWithMultiplier(attack, attacker, defender, out float damageMultiplier, out int critical);
 
-            float damageMultiplier = TypeChart.GetDamageMultiplier(attack.Type, defender.Type);
-
-            GetAttAndDefStat(attack, attacker, defender, out float A, out float D);
-            
-            float STAB = GetSTAB(attack, attacker);
-            int critical = IsCritical(attacker);
-            float random = rnd.Next(217, 256) / 255.0f;
-
-            float damage = ((2 * attacker.Level * critical / 5 + 2) * attack.Power * A / D / 50 + 2) * STAB * damageMultiplier * random;
-            
             UpdateEffectivenessMessage(damageMultiplier, critical > 1);
 
-            return damage;
+            return (int)damage;
         }
 
-        private static float GetSTAB(Attack attack, Pokemon attacker)
-        {
-            float STAB = 1;
-            if (attack.Type == attacker.Type)
-                STAB = 1.5f;
-            
-            return STAB;
-        }
-
-        private static void GetAttAndDefStat(Attack attack, Pokemon attacker, Pokemon defender, out float A, out float D)
-        {
-            if (attack.IsPhysicalMove())
-            {
-                A = attacker.Attack;
-                D = defender.Defense;
-            }
-            else
-            {
-                A = attacker.SPAttack;
-                D = defender.SPDefense;
-            }
-        }
-
-        private static int IsCritical(Pokemon attacker)
-        {
-            Random rnd = new();
-            
-            int critical = 1;
-            
-            int chance = rnd.Next(256);
-            int threshold = (int)attacker.Speed / 2;
-            
-            if (chance <= threshold)
-                critical = 2;
-
-            return critical;
-        }
 
         private void UpdateEffectivenessMessage(float damageMultiplier, bool isCritical)
         {
@@ -234,7 +191,7 @@ namespace cs.project07.pokemon.game.states.list
 
             if (isCritical)
             {
-                _effectivenessMessage += "Critical Hit !";
+                _effectivenessMessage += " Critical Hit !";
             }
         }
 
@@ -301,6 +258,11 @@ namespace cs.project07.pokemon.game.states.list
         public override void Render()
         {
             base.Render();
+            if (!_isInit)
+            {
+                PaintBackground();
+                _isInit = true;
+            }
             
             _dialogBox.Render();
             if (_playerPokemon is not null)
