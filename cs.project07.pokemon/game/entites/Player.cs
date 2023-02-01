@@ -148,7 +148,8 @@ namespace cs.project07.pokemon.game.entites
             foreach (var element in ItemsPossibilities)
             {
                 if (grid[(int)playerPosition.X, (int)playerPosition.Y] == element)
-                { 
+                {
+                    int i = 0;
                 }
             }
         }
