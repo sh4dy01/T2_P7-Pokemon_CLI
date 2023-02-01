@@ -27,9 +27,7 @@ namespace cs.project07.pokemon.game.save
         
         static public void SaveData()
         {
-            //var writer =File.Open(SAVEPATH, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
-            
-            StreamWriter writer = new StreamWriter(File.OpenWrite(SAVEPATH));
+            StreamWriter writer = new StreamWriter(File.OpenRead(SAVEPATH));
 
             foreach (var element in _toSave)
             {

@@ -143,9 +143,7 @@ namespace cs.project07.pokemon.game
         private void End()
         {
             Running = false;
-            Save();
             Console.ResetColor();
-            
             //Console.Clear();
         }
 
