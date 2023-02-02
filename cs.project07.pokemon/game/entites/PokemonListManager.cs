@@ -23,7 +23,7 @@
         private static void SetStarter()
         {
             _battleTeam[0] = new Pokemon(PokemonRegistry.GetRandomStarter());
-            _battleTeam[1] = new Pokemon(PokemonRegistry.GetRandomStarter());
+            _battleTeam[1] = new Pokemon(PokemonRegistry.GetPokemonByPokedexId(25));
             _battleTeam[2] = new Pokemon(PokemonRegistry.GetPokemonByPokedexId(493));
             _battleTeam[3] = new Pokemon(PokemonRegistry.GetRandomStarter());
             _battleTeam[4] = new Pokemon(PokemonRegistry.GetRandomStarter());
@@ -47,6 +47,11 @@
         public static void SetActivePokemon(Pokemon pokemon)
         {
             _activePokemon = Array.IndexOf(_battleTeam, pokemon);
+        }
+
+        public static void EndCombat()
+        {
+            _activePokemon = -1;
         }
 
         public static int GetAverageLevel()

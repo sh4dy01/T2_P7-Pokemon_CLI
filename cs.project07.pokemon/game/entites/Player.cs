@@ -118,7 +118,7 @@ namespace cs.project07.pokemon.game.entites
             {
                 const int maxPercentage = 15;
                 int percentage = new Random().Next(1, 100);
-                if (percentage > 0 && percentage <= maxPercentage)
+                if (percentage is > 0 and <= maxPercentage)
                 {
                     Game.StatesList?.Push(new CombatState(game));
                 }
