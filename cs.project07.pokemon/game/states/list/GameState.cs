@@ -64,7 +64,7 @@ namespace cs.project07.pokemon.game.states.list
                 Offsets = new Vector2(150, 0),
                 Action = () =>
                 {
-                    Parent.Save();
+                    Parent.Parent.Save();
                     while(Game.StatesList?.Count > 0) 
                     {
                         Game.StatesList?.Pop();
@@ -216,11 +216,37 @@ namespace cs.project07.pokemon.game.states.list
         public override void Save()
         {
             Player.Save();
+
+            string mapNumber = "";
+            int index = 0;
+            foreach (char c in CurrentMap.GetName())
+            {
+                index++;
+                if (index > 3) mapNumber += c;
+            }
+
+            SaveManager.PrepareData(
+                new Tuple<string, int>("map", Convert.ToInt32(mapNumber))
+                );
+            //CurrentMap?.Save();
         }
 
         public override void Load()
         {
+            //send Load to childs
             Player.Load();
+
+            //Load in the Map class
+            var data = SaveManager.LoadData("map");
+            if (data != null)
+            {
+
+                string map = "map" + Convert.ToString(data);
+                CurrentMap = Maps[map];
+                CurrentMap.Zoom = CurrentMap.Zoom;
+            }
+
+            //CurrentMap?.Load();
         }
 
         public void ChangeMap (string mapName)

@@ -21,7 +21,7 @@ using cs.project07.pokemon.game.states.list;
 
 namespace cs.project07.pokemon.game.map
 {
-    public class Map : IUpdatable, IRenderable<State>
+    public class Map : IUpdatable, IRenderable<State>, ISavable
     {
         public Vector2 PlayerSpawnPosition;
         public Dictionary<string, Layer>? Layers;
@@ -44,6 +44,7 @@ namespace cs.project07.pokemon.game.map
             }
         }
 
+        public string GetName() { return _Name; }
         public State Parent { get; set; }
         public int Left { get; set; }
         public int Top { get; set; }
@@ -211,6 +212,10 @@ namespace cs.project07.pokemon.game.map
             foreach (Layer layer in Layers.Values)
                 layer.Render();
         }
+
+        public void Save() { }
+
+        public void Load() { }
 
         /* ######################################################### */
         public class Layer : IUpdatable, IRenderable<Map>

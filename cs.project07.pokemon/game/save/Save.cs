@@ -14,29 +14,40 @@ namespace cs.project07.pokemon.game.save
     {
         private const string SAVEPATH = "../../../game/save/Save.txt";
         private const string METAPATH = "game/save/Meta.txt";
-        static public void SaveData(params Tuple<string, int>[] data)
+        static private Dictionary<string, int>? _toSave { get; set; } 
+
+        static public void PrepareData(params Tuple<string,int>[] data)
+        {
+            if (_toSave == null) _toSave = new Dictionary<string, int>();
+            foreach (var element in data)
+            {
+                _toSave.Add(element.Item1, element.Item2);
+            }
+        }
+        
+        static public void SaveData()
         {
             //var writer =File.Open(SAVEPATH, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
             
             StreamWriter writer = new StreamWriter(File.OpenWrite(SAVEPATH));
 
-            foreach (var element in data)
+            foreach (var element in _toSave)
             {
-                writer.WriteLine(element.Item1.ToString() + " " + element.Item2.ToString());
+                writer.WriteLine(element.Key.ToString() + " " + element.Value.ToString());
             }
             writer.WriteLine("endFile");
 
             writer.Close();
         }
 
-        static public Dictionary<string,int>? LoadData() 
+        static public int? LoadData(string element) 
         {
             string? line = "";
             string? key;
             string? value;
             bool onKey = true;
 
-            Dictionary<string, int> data = new Dictionary<string, int>();
+            int? data = null;
 
             StreamReader reader = new StreamReader(File.OpenRead(SAVEPATH));
 
@@ -59,9 +70,10 @@ namespace cs.project07.pokemon.game.save
                         value += c;
                 }
 
-                if (key != null && value != null)
+                if (key == element && value != null )
                 {
-                    data.Add(key, Convert.ToInt32(value));
+                    reader.Close();
+                    return Convert.ToInt32(value);
                 }
 
                 line = reader.ReadLine();
