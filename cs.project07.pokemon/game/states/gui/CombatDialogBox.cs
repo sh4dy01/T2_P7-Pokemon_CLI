@@ -1,5 +1,5 @@
 ﻿using cs.project07.pokemon.game.combat;
-using cs.project07.pokemon.game.entites;
+using cs.project07.pokemon.game.Registry;
 using cs.project07.pokemon.game.states.list;
 using System.Numerics;
 using System.Text;

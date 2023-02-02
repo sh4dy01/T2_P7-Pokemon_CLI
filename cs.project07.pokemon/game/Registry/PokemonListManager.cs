@@ -1,4 +1,6 @@
-﻿namespace cs.project07.pokemon.game.entites
+﻿using cs.project07.pokemon.game.entites;
+
+namespace cs.project07.pokemon.game.Registry
 {
     internal static class PokemonListManager
     {
@@ -82,7 +84,7 @@
         public static void SetPokemonInBattleTeam(Pokemon pokemonToAdd)
         {
             if (_battleTeam.Last() != null) return;
-            
+
             for (int i = 0; i < _battleTeam.Length; i++)
             {
                 if (_battleTeam[i] == null)
@@ -96,7 +98,7 @@
         internal static int GetPokemonCount()
         {
             int pokemonInBattle = 0;
-            
+
             foreach (var pokemon in _battleTeam)
             {
                 if (pokemon is not null)

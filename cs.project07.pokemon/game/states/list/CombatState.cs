@@ -3,6 +3,7 @@ using cs.project07.pokemon.game.states.gui;
 using cs.project07.pokemon.game.combat;
 using System.Text;
 using System.Numerics;
+using cs.project07.pokemon.game.Registry;
 
 namespace cs.project07.pokemon.game.states.list
 {

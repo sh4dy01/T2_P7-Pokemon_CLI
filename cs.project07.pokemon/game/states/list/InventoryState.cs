@@ -6,6 +6,7 @@ using cs.project07.pokemon.game.items.list;
 using cs.project07.pokemon.game.items;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using cs.project07.pokemon.game.Registry;
 
 namespace cs.project07.pokemon.game.states.list
 {
