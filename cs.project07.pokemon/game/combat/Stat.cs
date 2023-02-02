@@ -8,7 +8,7 @@ namespace cs.project07.pokemon.game.combat
 {
     public class Stat
     {
-        const float LEVEL_UP_STEP = 0.02f;
+        public const float LEVEL_UP_STEP = 0.02f;
         
         private float _maxHP;
         private float _attack;

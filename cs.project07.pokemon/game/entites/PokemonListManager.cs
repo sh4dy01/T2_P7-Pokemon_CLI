@@ -49,6 +49,11 @@
             _activePokemon = Array.IndexOf(_battleTeam, pokemon);
         }
 
+        public static void EndCombat()
+        {
+            _activePokemon = -1;
+        }
+
         public static int GetAverageLevel()
         {
             float avgLevel = 0;

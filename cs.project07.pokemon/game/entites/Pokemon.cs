@@ -9,7 +9,7 @@ namespace cs.project07.pokemon.game.entites
 {
     public class Pokemon
     {
-        public const int LEVEL_UP_STEP = 20;
+        public const int LEVEL_UP_STEP = 25;
         public const int LEVEL_UP_GAINED = 50;
 
         private readonly PokedexEntry _dex;
@@ -25,7 +25,13 @@ namespace cs.project07.pokemon.game.entites
         public Stat Stat => _stat;
         public bool IsDead { get => _isDead; set => _isDead = value; }
         public string Name { get => _dex.Name; }
-        public int Level { get => _level; }
+
+        public int Level
+        {
+            get => _level;
+            protected set => _level = value;
+        }
+
         public float Currenthealth { get => _currentHealth; }
         public float Experience { get => _experience; }
         public float RequiredExp { get => _requiredExperience; }
@@ -49,13 +55,19 @@ namespace cs.project07.pokemon.game.entites
             _isDead = false;
         }
 
-        public void InitEnemyStats()
+        public virtual void InitEnemyStats()
         {
             _level = PokemonListManager.GetAverageLevel();
-            
+            LevelUpStat();
+        }
+
+        protected void LevelUpStat()
+        {
             for (int i = 1; i < _level; i++)
             {
                 _stat.LevelUpStat(_dex.Stat);
+                _requiredExperience += LEVEL_UP_STEP;
+                _currentHealth += (int)_stat.MaxHP * Stat.LEVEL_UP_STEP;
             }
         }
 
@@ -98,9 +110,9 @@ namespace cs.project07.pokemon.game.entites
 
             while (_experience >= _requiredExperience)
             {
+                _experience -= _requiredExperience;
                 _level++;
                 _requiredExperience += LEVEL_UP_STEP;
-                _experience -= _requiredExperience;
             }
         }
 
