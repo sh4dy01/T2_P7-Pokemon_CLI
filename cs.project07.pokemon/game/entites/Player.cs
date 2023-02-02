@@ -7,10 +7,12 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using cs.project07.pokemon.game.save;
+using cs.project07.pokemon.game.Registry;
 
 namespace cs.project07.pokemon.game.entites
 {
-    public class Player
+    public class Player : ISavable
     {
         const int incrementMouvement = 4;
         const int sizePlayer = 4;
@@ -56,6 +58,138 @@ namespace cs.project07.pokemon.game.entites
                 ForegroundColor = ConsoleColor.Red;
                 playerPosition = new Vector2(playerPosition.X / 4, playerPosition.Y / 4);
             }
+        }
+
+        public void Save()
+        {
+            //save player pos
+            SaveManager.PrepareData(
+                new Tuple<string, int>( "PlayerPosX" , ((int)playerPosition.X) ),
+                new Tuple<string, int>( "PlayerPosY" , ((int)playerPosition.Y) )
+                );
+
+            //save captured pokemon
+            SaveManager.PrepareData(
+                new Tuple<string, int>("CapturedPokemonNumber", PokemonListManager.PokemonCaptured.Count)
+                );
+            foreach (var pokemon in PokemonListManager.PokemonCaptured)
+            {
+                pokemon.Save();
+            }
+
+            //Save battle team
+            var BattleTeam = PokemonListManager.BattleTeam;
+            int numberOfPoke = 0;
+
+            foreach (var pokemon in BattleTeam)
+            {
+                if (pokemon != null) numberOfPoke++;
+            }
+
+            SaveManager.PrepareData(
+                new Tuple<string, int>("BattleTeamPokemonNumber", numberOfPoke)
+                );
+            foreach (var pokemon in BattleTeam)
+            {
+                if (pokemon != null) pokemon.Save();
+            }
+
+        }
+
+      public void Load()
+        {
+            var data = SaveManager.Loaded;
+            //load player pos data
+            var PlayerPosX = data?["PlayerPosX"];
+            var PlayerPosY = data?["PlayerPosY"];
+            if (PlayerPosX != null && PlayerPosY != null)
+            {
+                playerPosition = new Vector2((float)PlayerPosX, (float)PlayerPosY);
+            }
+
+            
+            //load captured pokemon
+            if (data.ContainsKey("CapturedPokemonNumber")) { 
+            var NumberOfCapturedPokemon = data?["CapturedPokemonNumber"];
+            int? index = data?.Keys.ToList().IndexOf("CapturedPokemonNumber");
+            List<Pokemon> CapturedPokemon = new List<Pokemon>();
+
+                if (NumberOfCapturedPokemon != null)
+                {
+                    index += 1;
+                    for (int i = 0; i < NumberOfCapturedPokemon; i++)
+                    {
+                        int ID, MaxHP, Attack, Defense, SPAttack, SPDeffense, Speed, Level, CurrentHP, Experience, PokemonNumberOfAttacks = 0;
+                        List<int> PokemonAttackPP = new List<int>();
+
+                        ID                     = data.ElementAt((int)index + i * 11 + 0).Value;
+                        MaxHP                  = data.ElementAt((int)index + i * 11 + 1).Value;
+                        Attack                 = data.ElementAt((int)index + i * 11 + 2).Value;
+                        Defense                = data.ElementAt((int)index + i * 11 + 3).Value;
+                        SPAttack               = data.ElementAt((int)index + i * 11 + 4).Value;
+                        SPDeffense             = data.ElementAt((int)index + i * 11 + 5).Value;
+                        Speed                  = data.ElementAt((int)index + i * 11 + 6).Value;
+                        Level                  = data.ElementAt((int)index + i * 11 + 7).Value;
+                        CurrentHP              = data.ElementAt((int)index + i * 11 + 8).Value;
+                        Experience             = data.ElementAt((int)index + i * 11 + 9).Value;
+                        PokemonNumberOfAttacks = data.ElementAt((int)index + i * 11 + 10).Value;
+
+                        for (int y = 1; y < PokemonNumberOfAttacks + 1; y++)
+                        {
+                            PokemonAttackPP.Add(data.ElementAt((int)index + i * 11 + 10 + y).Value);
+                        }
+
+                        index += PokemonNumberOfAttacks;
+                        //to-do fonction de création de poké
+                        // CapturedPokemon.add(pokemon);
+                    }
+
+                }
+            }
+
+            
+
+            //load captured pokemon
+            if (data.ContainsKey("BattleTeamPokemonNumber")) { 
+                int? BattleTeamPokemonNumber = data?["BattleTeamPokemonNumber"];
+                int? index = data?.Keys.ToList().IndexOf("BattleTeamPokemonNumber");
+                List<Pokemon> BattleTeam = new List<Pokemon>();
+
+                if (BattleTeamPokemonNumber != null)
+                {
+                    index += 1;
+                    for (int i = 0; i < BattleTeamPokemonNumber; i++)
+                    {
+                        int ID, MaxHP, Attack, Defense, SPAttack, SPDeffense, Speed, Level, CurrentHP, Experience, PokemonNumberOfAttacks = 0;
+                        List<int> PokemonAttackPP = new List<int>();
+
+                        ID                     = data.ElementAt((int)index + i * 11 + 0).Value;
+                        MaxHP                  = data.ElementAt((int)index + i * 11 + 1).Value;
+                        Attack                 = data.ElementAt((int)index + i * 11 + 2).Value;
+                        Defense                = data.ElementAt((int)index + i * 11 + 3).Value;
+                        SPAttack               = data.ElementAt((int)index + i * 11 + 4).Value;
+                        SPDeffense             = data.ElementAt((int)index + i * 11 + 5).Value;
+                        Speed                  = data.ElementAt((int)index + i * 11 + 6).Value;
+                        Level                  = data.ElementAt((int)index + i * 11 + 7).Value;
+                        CurrentHP              = data.ElementAt((int)index + i * 11 + 8).Value;
+                        Experience             = data.ElementAt((int)index + i * 11 + 9).Value;
+                        PokemonNumberOfAttacks = data.ElementAt((int)index + i * 11 + 10).Value;
+
+                        for (int y = 1; y < PokemonNumberOfAttacks + 1; y++)
+                        {
+                            PokemonAttackPP.Add(data.ElementAt((int)index + i * 11 + 10 + y).Value);
+                        }
+
+                        index += PokemonNumberOfAttacks;
+                        //to-do fonction de création de poké
+                        // BattleTeam.add(pokemon);
+                    }
+
+
+                }
+            }
+
+
         }
 
         public void mouvPlayer(char dir)
@@ -145,14 +279,21 @@ namespace cs.project07.pokemon.game.entites
             }
         }
 
-        public void collisionItems(char[,] grid)
+        public void collisionItems(char[,] grid, Map map)
         {
             char[] ItemsPossibilities = { 'p', 'P', 'h', 'H', 'b', 'B', 'c', 'C', 'S' };
             foreach (var element in ItemsPossibilities)
             {
                 if (grid[(int)playerPosition.X, (int)playerPosition.Y] == element)
                 {
-                    int i = 0;
+                    foreach (var item in InventoryManager.Inventory)
+                    {
+                        if (item.ID == element) item.Add();
+                        map.ModifyMap((int)playerPosition.X, (int)playerPosition.Y, "ITEMS", '\0');
+                        map.ModifyMap((int)playerPosition.X, (int)playerPosition.Y, "GROUND", ' ');
+
+                    }
+                    
                 }
             }
         }

@@ -1,4 +1,5 @@
 ﻿using cs.project07.pokemon.game.combat;
+using cs.project07.pokemon.game.save;
 using cs.project07.pokemon.game.Registry;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace cs.project07.pokemon.game.entites
 {
-    public class Pokemon
+    public class Pokemon : ISavable
     {
         public const int LEVEL_UP_STEP = 25;
         public const int LEVEL_UP_GAINED = 50;
@@ -59,6 +60,31 @@ namespace cs.project07.pokemon.game.entites
             InitStat();
         }
 
+        public void Save() {
+            SaveManager.PrepareData(
+                new Tuple<string, int>("PokemonID"              + Id, _dex.PokedexID),
+                new Tuple<string, int>("PokemonMaxHP"           + Id, ((int)Stat.MaxHP)),
+                new Tuple<string, int>("PokemonAttack"          + Id, ((int)Stat.Attack)),
+                new Tuple<string, int>("PokemonDefense"         + Id, ((int)Stat.Defense)),
+                new Tuple<string, int>("PokemonSPAttack"        + Id, ((int)Stat.SPAttack)),
+                new Tuple<string, int>("PokemonSPDefense"       + Id, ((int)Stat.SPDefense)),
+                new Tuple<string, int>("PokemonSpeed"           + Id, ((int)Stat.Speed)),
+                new Tuple<string, int>("PokemonLevel"           + Id, Level),
+                new Tuple<string, int>("PokemonCurrentHP"       + Id, ((int)Currenthealth)),
+                new Tuple<string, int>("PokemonExperience"      + Id, ((int)Experience)),
+                new Tuple<string, int>("PokemonNumberOfAttacks" + Id, Attacks.Length)
+                );
+
+            int index = 0;
+            foreach (var attack in Attacks)
+            {
+                SaveManager.PrepareData(
+                    new Tuple<string, int>("AttackPP" + Id + index, attack.Usage)
+                    );
+                index++;
+            }
+        }
+        public void Load() { }
         public void SetId()
         {
             _id = PokemonListManager.GetNextId();

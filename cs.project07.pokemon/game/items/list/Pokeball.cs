@@ -67,6 +67,28 @@ namespace cs.project07.pokemon.game.items.list
                     break;
             }
         }
+        public float GetMultiplcator()
+        {
+            switch (_pokeballLevel)
+            {
+                case 0:
+                    return 1;
+                    break;
+
+                case 1:
+                    return 1.5f;
+                    break;
+
+                case 2:
+                    return 2;
+                    break;
+
+                case 3:
+                    return 255;
+                    break;
+            }
+            return 1;
+        }
 
         override public void Use(Pokemon pokemon)
         {

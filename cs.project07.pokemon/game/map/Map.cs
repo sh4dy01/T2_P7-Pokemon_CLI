@@ -21,7 +21,7 @@ using cs.project07.pokemon.game.states.list;
 
 namespace cs.project07.pokemon.game.map
 {
-    public class Map : IUpdatable, IRenderable<State>
+    public class Map : IUpdatable, IRenderable<State>, ISavable
     {
         public Vector2 PlayerSpawnPosition;
         public Dictionary<string, Layer>? Layers;
@@ -44,6 +44,7 @@ namespace cs.project07.pokemon.game.map
             }
         }
 
+        public string GetName() { return _Name; }
         public State Parent { get; set; }
         public int Left { get; set; }
         public int Top { get; set; }
@@ -65,6 +66,20 @@ namespace cs.project07.pokemon.game.map
             InitLayers();
         }
 
+        public void ModifyMap (int x, int y , string layerName, char newChar)
+        {
+            char[,] tempData = Layers[layerName].ZoomedData;
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    tempData[x+i,y+j] = newChar;
+                }
+            }
+
+            Layers[layerName].SetZoomData(tempData);
+        }
+
         public void InitDefaults()
         {
             Zoom = 4;
@@ -74,7 +89,7 @@ namespace cs.project07.pokemon.game.map
             Height = Parent.Height;
             BackgroundColor = ConsoleColor.Gray;
             ForegroundColor = ConsoleColor.Black;
-            _Teleporters = Save.LoadMeta(_Name);
+            _Teleporters = SaveManager.LoadMeta(_Name);
         }
 
         private void InitLayers()
@@ -220,12 +235,16 @@ namespace cs.project07.pokemon.game.map
                 layer.Render();
         }
 
+        public void Save() { }
+
+        public void Load() { }
+
         /* ######################################################### */
         public class Layer : IUpdatable, IRenderable<Map>
         {
             public char[,]? Data;
             private char[,]? _zoomedData;
-            public char[,]? ZoomedData { get => _zoomedData; }
+            public char[,]? ZoomedData { get => _zoomedData;}
             private int _zoom;
             public int Zoom
             {
@@ -268,6 +287,8 @@ namespace cs.project07.pokemon.game.map
             public int Height { get; set; }
             public ConsoleColor ForegroundColor { get; set; }
             public ConsoleColor BackgroundColor { get; set; }
+
+            public void SetZoomData (char[,]? newData) { _zoomedData = newData; }
 
             public Layer(Map parent)
             {

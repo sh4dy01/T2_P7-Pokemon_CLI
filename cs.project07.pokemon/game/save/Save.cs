@@ -10,31 +10,46 @@ using System.Threading.Tasks;
 namespace cs.project07.pokemon.game.save
 {
 
-    static class Save
+    static class SaveManager
     {
         private const string SAVEPATH = "../../../game/save/Save.txt";
-        private const string METAPATH = "../../../game/save/Meta.txt";
-        static void SaveData(params Tuple<string, int>[] data)
-        {
-            StreamWriter writer = new StreamWriter(File.OpenRead(SAVEPATH));
+        private const string METAPATH = "game/save/Meta.txt";
+        static private Dictionary<string, int>? _toSave { get; set; }
+        static private Dictionary<string, int>? _Loaded;
+        static public Dictionary<string, int>? Loaded => _Loaded;
 
+        static public void PrepareData(params Tuple<string,int>[] data)
+        {
+            if (_toSave == null) _toSave = new Dictionary<string, int>();
             foreach (var element in data)
             {
-                writer.WriteLine(element.Item1.ToString() + " " + element.Item2.ToString());
+                _toSave.Add(element.Item1, element.Item2);
+            }
+        }
+        
+        static public void SaveData()
+        {
+            //var writer =File.Open(SAVEPATH, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+            
+            StreamWriter writer = new StreamWriter(File.OpenWrite(SAVEPATH));
+
+            foreach (var element in _toSave)
+            {
+                writer.WriteLine(element.Key.ToString() + " " + element.Value.ToString());
             }
             writer.WriteLine("endFile");
 
             writer.Close();
         }
 
-        static Dictionary<string,int>? LoadData() 
+        static public void LoadData() 
         {
             string? line = "";
             string? key;
             string? value;
             bool onKey = true;
 
-            Dictionary<string, int> data = new Dictionary<string, int>();
+            Dictionary<string, int>? data = new Dictionary<string, int>();
 
             StreamReader reader = new StreamReader(File.OpenRead(SAVEPATH));
 
@@ -56,7 +71,7 @@ namespace cs.project07.pokemon.game.save
                         value += c;
                 }
 
-                if (key != null && value != null)
+                if (key != null && value != null )
                 {
                     data.Add(key, Convert.ToInt32(value));
                 }
@@ -67,7 +82,7 @@ namespace cs.project07.pokemon.game.save
             reader.Close();
 
 
-            return data;
+            _Loaded = data;
         }
 
         public static List<Tuple<string,int,int,string,int,int>>? LoadMeta(string mapName)
