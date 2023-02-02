@@ -35,6 +35,8 @@ namespace cs.project07.pokemon.game.states.list
         private readonly CombatDialogBox _dialogBox;
         private readonly Pokemon _enemyPokemon;
         private readonly PokemonInfoBox _enemyPokemonUi;
+
+        private string[]? _playerSprite;
         
         private Pokemon? _playerPokemon;
         private AttackInfoBox? _attackInfoUi;
@@ -47,6 +49,9 @@ namespace cs.project07.pokemon.game.states.list
             _enemyPokemonUi = new PokemonInfoBox(this, _enemyPokemon, true);
             _damageCalculator = new DamageCalculator();
             _attackInfoUi = new AttackInfoBox(this);
+            _playerSprite = null;
+
+            BackgroundColor = ConsoleColor.Gray;
 
             Init();
         }
@@ -121,7 +126,7 @@ namespace cs.project07.pokemon.game.states.list
             PokemonListManager.SetActivePokemon(pokemon);
             
             _playerPokemon = pokemon;
-
+            _playerSprite = AsciiArtLoader.GetPlayerSpriteByName(_playerPokemon.Name);
             _playerPokemonUi = new PokemonInfoBox(this, _playerPokemon, false);
             _playerPokemonUi.Render();
             
@@ -301,6 +306,9 @@ namespace cs.project07.pokemon.game.states.list
             base.Render();
 
             _dialogBox.Render();
+            //Me: Print me all the chars in the _playerSprite
+
+
 
             if (!_isInit)
             {
@@ -312,6 +320,17 @@ namespace cs.project07.pokemon.game.states.list
             {
                 _playerPokemonUi.Render();
                 _attackInfoUi.Render();
+
+                if (_playerSprite is not null)
+                {
+                    Console.BackgroundColor = BackgroundColor;
+                    Console.ForegroundColor = ForegroundColor;
+                    for (int i = 0; i < _playerSprite.Length; i++)
+                    {
+                        Console.SetCursorPosition(50, 25 + i);
+                        Console.WriteLine(_playerSprite[i]);
+                    }
+                }
             }
 
             _enemyPokemonUi.Render();

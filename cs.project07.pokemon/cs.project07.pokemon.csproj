@@ -20,6 +20,12 @@
   </ItemGroup>
 
 	<ItemGroup>
+		<None Update="game\assets\ascii\pikachu_back.ans">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="game\assets\ascii\pikachu_back.txt">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="game\map\list\Map1.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
