@@ -529,14 +529,14 @@ namespace cs.project07.pokemon.game.states.list
 
             foreach (var pokeball in InventoryManager.Inventory)
             {
-                if (pokeball.getName() == "Poke Ball" || pokeball.getName() == "Super Ball"
-                    || pokeball.getName() == "Hyper Ball" || pokeball.getName() == "Master Ball")
+                if (pokeball.Name == "Poke Ball" || pokeball.Name == "Super Ball"
+                    || pokeball.Name == "Hyper Ball" || pokeball.Name == "Master Ball")
                 {
                     count++;
                     Console.BackgroundColor = ConsoleColor.Gray;
                     Console.ForegroundColor = ConsoleColor.Black;
                     Console.SetCursorPosition(Xpos, Ypos + 2 * count + 1);
-                    Console.WriteLine(pokeball.getName() + " " + pokeball.GetQuantity());
+                    Console.WriteLine(pokeball.Name + " " + pokeball.GetQuantity());
                 }
             }
         }
@@ -550,16 +550,16 @@ namespace cs.project07.pokemon.game.states.list
             bool first = false;
             foreach (var pokeball in InventoryManager.Inventory)
             {
-                if (pokeball.getName() == "Potion" || pokeball.getName() == "Super Potion"
-                    || pokeball.getName() == "Hyper Potion" || pokeball.getName() == "Potion Max")
+                if (pokeball.Name == "Potion" || pokeball.Name == "Super Potion"
+                    || pokeball.Name == "Hyper Potion" || pokeball.Name == "Potion Max")
                 {
                     count++;
                     if (count == 1) //Why first show is 3 ????
                         first = true;
                     else
                         first = false;
-                    string temp = pokeball.getName() + " " + pokeball.GetQuantity();
-                    _buttons[pokeball.getName()] = new Button(_dialogBox, temp)
+                    string temp = pokeball.Name + " " + pokeball.GetQuantity();
+                    _buttons[pokeball.Name] = new Button(_dialogBox, temp)
                     {
                         Selected = first,
                         Offsets = new Vector2(Xpos * 2, Ypos + 2 * count + 1),
@@ -584,15 +584,15 @@ namespace cs.project07.pokemon.game.states.list
             bool first = false;
             foreach (var pokeball in InventoryManager.Inventory)
             {
-                if (pokeball.getName() == "Spray")
+                if (pokeball.Name == "Spray")
                 {
                     count++;
                     if (count == 1) //Why first show is 3 ????
                         first = true;
                     else
                         first = false;
-                    string temp = pokeball.getName() + " " + pokeball.GetQuantity();
-                    _buttons[pokeball.getName()] = new Button(_dialogBox, temp)
+                    string temp = pokeball.Name + " " + pokeball.GetQuantity();
+                    _buttons[pokeball.Name] = new Button(_dialogBox, temp)
                     {
                         Selected = first,
                         Offsets = new Vector2(Xpos * 3, Ypos + 2 * count + 1),
