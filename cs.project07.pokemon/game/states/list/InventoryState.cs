@@ -142,7 +142,6 @@ namespace cs.project07.pokemon.game.states.list
         {
             _currentView = view;
             _buttons.Clear();
-            PaintBackground();
             switch (view)
             {
                 case InventoryView.MENU:
@@ -150,6 +149,7 @@ namespace cs.project07.pokemon.game.states.list
                     break;
                 case InventoryView.POKEMON:
                     showInventoryPokemon();
+                    drawBattelTeam();
                     break;
                 case InventoryView.POKEDEX:
                     //_dialogBox.SwitchState(CombatDialogBox.CombatButtonState.SELECT_ATTACK);
@@ -238,6 +238,14 @@ namespace cs.project07.pokemon.game.states.list
             //    _buttons.ElementAt(i).Value.Offsets += new Vector2(3, 1 + i);
             //}
         }
+        int countStat;
+        int inlineXStat;
+        int inlineYStat;
+        Pokemon pokemonStat;
+        float XposStat;
+        float YposStat;
+        int increXStat;
+        int increYStat;
 
         private void drawBattelTeam()
         {
@@ -260,9 +268,9 @@ namespace cs.project07.pokemon.game.states.list
                 const int increY = 2;
                 Console.BackgroundColor = ConsoleColor.DarkGray;
                 Console.ForegroundColor = ConsoleColor.Black;
-                for(int i = 0; i <= 6;i++)
+                for (int i = 0; i <= 6; i++)
                 {
-                    for(int j = 0; j <= 47; j++)
+                    for (int j = 0; j <= 47; j++)
                     {
                         Console.SetCursorPosition((int)Xpos - increX - 3 + j, (int)Ypos - 1 + 1 * i);
                         Console.WriteLine(" ");
@@ -275,49 +283,55 @@ namespace cs.project07.pokemon.game.states.list
                 Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY);
                 Console.WriteLine("Lvl : " + pokemon.Level);
                 //Element
-                Console.SetCursorPosition((int)Xpos - increX, (int)Ypos + increY*2);
+                Console.SetCursorPosition((int)Xpos - increX, (int)Ypos + increY * 2);
                 Console.WriteLine("Type : " + pokemon.Element);
                 //Xp
-                Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY*2);
+                Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY * 2);
                 Console.WriteLine("XP : " + pokemon.Experience + "/" + pokemon.RequiredExp);
 
-                BackgroundColor = ConsoleColor.DarkGray;
-                if (count == showMoreStatPoke)
-                {
-                    for (int i = 0; i <= 9; i++)
-                    {
-                        for (int j = 0; j <= 47; j++)
-                        {
-                            Console.SetCursorPosition((int)Xpos - increX - 3 + j, (int)Ypos + 6 + +1 * i);
-                            Console.WriteLine(" ");
-                        }
-                    }
-                    //STAT//
-                    Console.SetCursorPosition((int)Xpos + 2, (int)Ypos + increY * 4);
-                    Console.WriteLine("STATS");
-                    //Attack
-                    Console.SetCursorPosition((int)Xpos - increX, (int)Ypos + increY * 5);
-                    Console.WriteLine("Attack : " + pokemon.Stat.Attack);
-                    //Defense
-                    Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY * 5);
-                    Console.WriteLine("Defense : " + pokemon.Stat.Defense);
-                    //SPAttack
-                    Console.SetCursorPosition((int)Xpos - increX - 2, (int)Ypos + increY * 6);
-                    Console.WriteLine("SPAttack : " + pokemon.Stat.SPAttack);
-                    //SPDefense
-                    Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY * 6);
-                    Console.WriteLine("SPDefense : " + pokemon.Stat.SPDefense);
-                    //Speed
-                    Console.SetCursorPosition((int)Xpos, (int)Ypos + increY * 7);
-                    Console.WriteLine("Speed : " + pokemon.Stat.Speed);
+                initInteractionButtonPokemon();
+                Console.SetCursorPosition(0, 0);
+            }
+        }
 
-                    if (!moreStatPoke)
+        private void initInteractionButtonPokemon()
+        {
+            BackgroundColor = ConsoleColor.DarkGray;
+            if (count == showMoreStatPoke)
+            {
+                for (int i = 0; i <= 9; i++)
+                {
+                    for (int j = 0; j <= 47; j++)
                     {
-                        moreStatPoke = true;
-                        _buttons.Clear();
+                        Console.SetCursorPosition((int)Xpos - increX - 3 + j, (int)Ypos + 6 + +1 * i);
+                        Console.WriteLine(" ");
                     }
-                    navButtonPokeStat((int)Xpos - increX, (int)Ypos + increY * 9);
                 }
+                //STAT//
+                Console.SetCursorPosition((int)Xpos + 2, (int)Ypos + increY * 4);
+                Console.WriteLine("STATS");
+                //Attack
+                Console.SetCursorPosition((int)Xpos - increX, (int)Ypos + increY * 5);
+                Console.WriteLine("Attack : " + pokemon.Stat.Attack);
+                //Defense
+                Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY * 5);
+                Console.WriteLine("Defense : " + pokemon.Stat.Defense);
+                //SPAttack
+                Console.SetCursorPosition((int)Xpos - increX - 2, (int)Ypos + increY * 6);
+                Console.WriteLine("SPAttack : " + pokemon.Stat.SPAttack);
+                //SPDefense
+                Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY * 6);
+                Console.WriteLine("SPDefense : " + pokemon.Stat.SPDefense);
+                //Speed
+                Console.SetCursorPosition((int)Xpos, (int)Ypos + increY * 7);
+                Console.WriteLine("Speed : " + pokemon.Stat.Speed);
+
+                if (!moreStatPoke)
+                {
+                    moreStatPoke = true;
+                    _buttons.Clear();
+                }
+                navButtonPokeStat((int)Xpos - increX, (int)Ypos + increY * 9);
                 int tempX = inlineX;
                 int tempY = inlineY;
                 int tempCount = count;
@@ -345,7 +359,6 @@ namespace cs.project07.pokemon.game.states.list
                 count = tempCount;
                 inlineX = tempX;
                 inlineY = tempY;
-                Console.SetCursorPosition(0, 0);
             }
         }
 
@@ -445,7 +458,7 @@ namespace cs.project07.pokemon.game.states.list
                 {
                     //Game.StatesList?.Pop();
                 },
-                                BackgroundColor = ConsoleColor.Gray,
+                BackgroundColor = ConsoleColor.Gray,
                 ForegroundColor = ConsoleColor.Black,
                 ActiveBackgroundColor = ConsoleColor.DarkGray,
                 ActiveForegroundColor = ConsoleColor.Black
@@ -455,6 +468,9 @@ namespace cs.project07.pokemon.game.states.list
         public override void Update()
         {
             _buttonManager.Update();
+                drawInventory= false;
+            //if (showItems)
+            //    ShowItems();
         }
 
         public override void Render()
@@ -462,8 +478,6 @@ namespace cs.project07.pokemon.game.states.list
             PaintBackground();
             if (drawInventory)
                 drawBattelTeam();
-            if (showItems)
-                ShowItems();
             _buttonManager.Render();
         }
     }
