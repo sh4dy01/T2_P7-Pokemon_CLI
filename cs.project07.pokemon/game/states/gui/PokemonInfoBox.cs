@@ -61,7 +61,7 @@ namespace cs.project07.pokemon.game.states.gui
             currentLifePos.X = Left + 3 + _healthPercentage / 5;
             currentLifePos.Y = Top + 3;
             currentExpPos.X = Left + Width + 3 - _expPercentage / 5;
-            currentExpPos.Y = Top + 4;
+            currentExpPos.Y = Top + 5;
 
             BackgroundColor = ConsoleColor.Black;
             ForegroundColor = ConsoleColor.White;
@@ -104,15 +104,15 @@ namespace cs.project07.pokemon.game.states.gui
             int lvUp = 0;
             while (experience > 0)
             {
-                int _requiredExp = (int)_pokemon.RequiredExp + lvUp * Pokemon.LEVEL_UP_STEP;
-                _expPercentage = (experience / _pokemon.RequiredExp) * 100;
+                float _requiredExp = (int)_pokemon.RequiredExp + lvUp * Pokemon.LEVEL_UP_STEP;
+                _expPercentage = (experience / _requiredExp) * 100;
                 if (_expPercentage >= 100) _expPercentage = 100;
                 
                 int startIndex = 20 - (int)(_oldExpPercentage / 5);
                 int endIndex = 20 - (int)((_expPercentage - _oldExpPercentage) / 5);
 
-                currentExpPos.X = Left + Width + 3 - (int)_oldExpPercentage / 5;
-                for (int i = startIndex; i > endIndex; i--)
+                currentExpPos.X = Left + Width - 1 - (int)_oldExpPercentage / 5;
+                for (int i = startIndex; i > endIndex; i--) // TODO: Fix this
                 {
                     Console.SetCursorPosition((int)currentExpPos.X, (int)currentExpPos.Y);
                     Console.BackgroundColor = ConsoleColor.Cyan;
@@ -123,16 +123,14 @@ namespace cs.project07.pokemon.game.states.gui
 
                 Console.BackgroundColor = ConsoleColor.Black;
 
-                experience -= _requiredExp;
+                experience -= (int)_requiredExp;
                 if (experience > 0)
                 {
                     lvUp++;
                     _oldExpPercentage = 0;
-                    for (int i = 0; i < 20; i++)
-                    {
-                        Console.SetCursorPosition(Left + Width + 3 - i, (int)currentExpPos.Y);
-                        Console.Write(' ');
-                    }
+                    
+                    Console.SetCursorPosition(Left + 4, (int)currentExpPos.Y);
+                    Console.WriteLine(new string(' ', 20));
                 }
             }
         }
