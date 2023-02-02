@@ -136,6 +136,8 @@ namespace cs.project07.pokemon.game
         public void Load()
         {
             // Load the state instance
+
+            SaveManager.LoadData();
             if (StatesList?.Count > 0)
                 StatesList.First().Load();
         }

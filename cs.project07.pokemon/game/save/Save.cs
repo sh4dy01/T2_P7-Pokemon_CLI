@@ -14,7 +14,9 @@ namespace cs.project07.pokemon.game.save
     {
         private const string SAVEPATH = "../../../game/save/Save.txt";
         private const string METAPATH = "game/save/Meta.txt";
-        static private Dictionary<string, int>? _toSave { get; set; } 
+        static private Dictionary<string, int>? _toSave { get; set; }
+        static private Dictionary<string, int>? _Loaded;
+        static public Dictionary<string, int>? Loaded => _Loaded;
 
         static public void PrepareData(params Tuple<string,int>[] data)
         {
@@ -40,14 +42,14 @@ namespace cs.project07.pokemon.game.save
             writer.Close();
         }
 
-        static public int? LoadData(string element) 
+        static public void LoadData() 
         {
             string? line = "";
             string? key;
             string? value;
             bool onKey = true;
 
-            int? data = null;
+            Dictionary<string, int>? data = new Dictionary<string, int>();
 
             StreamReader reader = new StreamReader(File.OpenRead(SAVEPATH));
 
@@ -70,10 +72,9 @@ namespace cs.project07.pokemon.game.save
                         value += c;
                 }
 
-                if (key == element && value != null )
+                if (key != null && value != null )
                 {
-                    reader.Close();
-                    return Convert.ToInt32(value);
+                    data.Add(key, Convert.ToInt32(value));
                 }
 
                 line = reader.ReadLine();
@@ -82,7 +83,7 @@ namespace cs.project07.pokemon.game.save
             reader.Close();
 
 
-            return data;
+            _Loaded = data;
         }
 
         public static List<Tuple<string,int,int,string,int,int>>? LoadMeta(string mapName)
