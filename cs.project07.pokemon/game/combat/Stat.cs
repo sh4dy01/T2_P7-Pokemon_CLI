@@ -32,12 +32,22 @@ namespace cs.project07.pokemon.game.combat
         //UT Test
         public void LevelUpStat(Stat stat)
         {
-            _maxHP += (int)(stat.MaxHP * LEVEL_UP_STEP); 
-            _attack += (int)(stat.Attack * LEVEL_UP_STEP);
-            _defense += (int)(stat.Defense * LEVEL_UP_STEP);
-            _spAttack += (int)(stat.SPAttack * LEVEL_UP_STEP);
-            _spDefense += (int)(stat.SPDefense * LEVEL_UP_STEP);
-            _speed += (int)(stat.Speed * LEVEL_UP_STEP);
+            _maxHP += (float)Math.Round(stat.MaxHP * LEVEL_UP_STEP, 1); 
+            _attack += (float)Math.Round(stat.Attack * LEVEL_UP_STEP, 1);
+            _defense += (float)Math.Round(stat.Defense * LEVEL_UP_STEP, 1);
+            _spAttack += (float)Math.Round(stat.SPAttack * LEVEL_UP_STEP, 1);
+            _spDefense += (float)Math.Round(stat.SPDefense * LEVEL_UP_STEP, 1);
+            _speed += (float)Math.Round(stat.Speed * LEVEL_UP_STEP, 1);
+        }
+
+        public void RoundToInt()
+        {
+            _maxHP = (float)Math.Round(_maxHP, 0);
+            _attack = (float)Math.Round(_attack, 0);
+            _defense = (float)Math.Round(_defense, 0);
+            _spAttack = (float)Math.Round(_spAttack, 0);
+            _spDefense = (float)Math.Round(_spDefense, 0);
+            _speed = (float)Math.Round(_speed, 0);
         }
     }
 }

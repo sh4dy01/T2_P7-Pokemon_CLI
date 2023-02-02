@@ -56,12 +56,15 @@ namespace cs.project07.pokemon.game.entites
             InitStat();
         }
 
-        private void InitStat()
+        protected void InitStat()
         {
             for (int i = 1; i < _level; i++)
             {
                 LevelUpStat();
             }
+
+            _stat.RoundToInt();
+            _currentHealth = _stat.MaxHP;
         }
 
         public virtual void InitEnemyStats()
@@ -87,7 +90,7 @@ namespace cs.project07.pokemon.game.entites
 
         protected void LevelUpStat()
         {
-            _currentHealth += (int)(_stat.MaxHP * Stat.LEVEL_UP_STEP);
+            _currentHealth += (int)Math.Round(_stat.MaxHP * Stat.LEVEL_UP_STEP);
             _stat.LevelUpStat(_dex.Stat);
             _requiredExperience += LEVEL_UP_STEP;
         }
