@@ -12,18 +12,22 @@ namespace cs.project07.pokemon.game.items.list
         public Spray()
         {
             _quantity = 0;
-            _name = "Spray";
-            _id = 'S';
+            Init();
         }
 
         public Spray(int quantity)
         {
             _quantity = quantity;
+            Init();
+        }
+
+        protected override void Init()
+        {
             _name = "Spray";
             _id = 'S';
         }
 
-        override public void Use(Player player)
+        public override void Use(Player player)
         {
             if (_quantity <= 0) return ;
             _quantity--;

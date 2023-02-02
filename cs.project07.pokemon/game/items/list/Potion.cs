@@ -10,13 +10,27 @@ namespace cs.project07.pokemon.game.items.list
 {
     internal class Potion : Item
     {
-        private int _potionLevel;
+        private readonly int _potionLevel;
         public Potion(int potionLevel) 
         {
             if (potionLevel < 0 || potionLevel > 3) throw new ArgumentException ("potion level is only settable between 0 and 3");
             _quantity = 0;
             _potionLevel = potionLevel;
 
+            Init();
+
+        }
+        public Potion(int potionLevel, int quantity) 
+        {
+            if (potionLevel is < 0 or > 3) return;
+            _quantity = quantity;
+            _potionLevel = potionLevel;
+
+            Init();
+        }
+
+        protected override void Init()
+        {
             switch (_potionLevel)
             {
                 case 0:
@@ -40,37 +54,8 @@ namespace cs.project07.pokemon.game.items.list
                     break;
             }
         }
-        public Potion(int quantity, int potionLevel) 
-        {
-            if (potionLevel < 0 || potionLevel > 3) throw new ArgumentException("potion level is only settable between 0 and 3");
-            _quantity = quantity;
-            _potionLevel = potionLevel;
 
-            switch (_potionLevel)
-            {
-                case 0:
-                    _id = 'p';
-                    _name = "Potion";
-                    break;
-
-                case 1:
-                    _id = 'P';
-                    _name = "Super Potion";
-                    break;
-
-                case 2:
-                    _id = 'h';
-                    _name = "Hyper Potion"; 
-                    break;
-
-                case 3:
-                    _id = 'H';
-                    _name = "Potion Max";
-                    break;
-            }
-        }
-
-        override public void Use(Pokemon pokemon) 
+        public override void Use(Pokemon pokemon) 
         {
             if (_quantity <= 0) return ;
             _quantity--;
