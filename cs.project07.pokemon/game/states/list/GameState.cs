@@ -14,6 +14,7 @@ namespace cs.project07.pokemon.game.states.list
         private Dictionary<string, Map> Maps;
 
         public Player Player { get; set; }
+        private CombatState Combat;
         private Game game;
 
         private ButtonManager _buttonManager;
@@ -33,6 +34,7 @@ namespace cs.project07.pokemon.game.states.list
             InitPlayer();
             _dialogBox = new DialogBox(this);
             InitMenu();
+            Load();
         }
 
         private void InitMenu()
@@ -63,6 +65,7 @@ namespace cs.project07.pokemon.game.states.list
                 Offsets = new Vector2(150, 0),
                 Action = () =>
                 {
+                    Parent.Parent.Save();
                     while(Game.StatesList?.Count > 0) 
                     {
                         Game.StatesList?.Pop();
@@ -211,6 +214,45 @@ namespace cs.project07.pokemon.game.states.list
                 CurrentMap?.Render();
             Player.drawPlayer(CurrentMap.Zoom, SetCameraOffset());
         }
+
+        public override void Save()
+        {
+            Player.Save();
+
+            string mapNumber = "";
+            int index = 0;
+            foreach (char c in CurrentMap.GetName())
+            {
+                index++;
+                if (index > 3) mapNumber += c;
+            }
+
+            SaveManager.PrepareData(
+                new Tuple<string, int>("map", Convert.ToInt32(mapNumber))
+                );
+            //CurrentMap?.Save();
+        }
+
+        public override void Load()
+        {
+            SaveManager.LoadData();
+
+            //send Load to childs
+            Player.Load();
+
+            //Load in the Map class
+            var data = SaveManager.Loaded["map"];
+            if (data != null)
+            {
+
+                string map = "map" + Convert.ToString(data);
+                CurrentMap = Maps[map];
+                CurrentMap.Zoom = CurrentMap.Zoom;
+            }
+
+            //CurrentMap?.Load();
+        }
+
 
         public void ChangeMap (string mapName)
         {
