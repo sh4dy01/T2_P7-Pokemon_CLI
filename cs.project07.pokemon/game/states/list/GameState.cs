@@ -93,7 +93,7 @@ namespace cs.project07.pokemon.game.states.list
 
             Maps["map1"].ParseFileToLayers("game/map/list/Map1.txt");
             Maps["map2"].ParseFileToLayers("game/map/list/Map2.txt");
-            CurrentMap = Maps["map2"];
+            CurrentMap = Maps["map1"];
         }
 
         private void InitPlayer()
