@@ -168,5 +168,23 @@ namespace UnitTest
             Assert.That(pokemon.Experience, Is.EqualTo(expLeft));
             Assert.That(pokemon.RequiredExp, Is.EqualTo(expNeeded));
         }
+        
+        //Level up stat multiplier is 0.07f
+        [Test]
+        [TestCase(1, 100, 100)]
+        [TestCase(5, 20, 26)]
+        [TestCase(100, 100, 793)]
+        public void CheckIfPokemonStatLevelUpCorrectly(int level, int baseStat, int statLvlExpected)
+        {
+            Fakemon pokemon = new(ElementType.NORMAL, (baseStat, baseStat, baseStat, baseStat, baseStat, baseStat));
+
+            pokemon.SetLevel(level);
+
+            Assert.That(pokemon.Stat.Attack, Is.EqualTo(statLvlExpected));
+            Assert.That(pokemon.Stat.Defense, Is.EqualTo(statLvlExpected));
+            Assert.That(pokemon.Stat.SPAttack, Is.EqualTo(statLvlExpected));
+            Assert.That(pokemon.Stat.SPDefense, Is.EqualTo(statLvlExpected));
+            Assert.That(pokemon.Stat.Speed, Is.EqualTo(statLvlExpected));
+        }
     }
 }

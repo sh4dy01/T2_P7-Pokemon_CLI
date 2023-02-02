@@ -27,7 +27,9 @@ namespace UnitTest
         public void SetLevel(int level)
         {
             _level = level;
+            InitStat();
         }
+        
         public void InitHealth(int amount)
         {
             if (amount < 0) amount = 0;
