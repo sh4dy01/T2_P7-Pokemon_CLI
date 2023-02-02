@@ -315,41 +315,46 @@ namespace cs.project07.pokemon.game.states.list
                     //Speed
                     Console.SetCursorPosition((int)Xpos, (int)Ypos + increY * 7);
                     Console.WriteLine("Speed : " + pokemon.Stat.Speed);
-
                     if (!moreStatPoke)
                     {
                         moreStatPoke = true;
                         _buttons.Clear();
                     }
-                    navButtonPokeStat((int)Xpos - increX, (int)Ypos + increY * 9); 
+                    int calcX = (int)Xpos - increX;
+                    int calcY = (int)Ypos + increY * 9;
+                    _dialogBox.Left = 0;
+                    _dialogBox.Top = 0;
+                    navButtonPokeStat(calcX, calcY);
+                    _buttonManager.Update();
+
                 }
 
-                    int tempX = inlineX;
-                    int tempY = inlineY;
-                    int tempCount = count;
-                    count = 0;
-                    inlineX = 0;
-                    inlineY = 1;
+                int tempX = inlineX;
+                int tempY = inlineY;
+                int tempCount = count;
+                count = 0;
+                inlineX = 0;
+                inlineY = 1;
 
-                    foreach (Pokemon pok in _pokemonInInventory)
+                foreach (Pokemon pok in _pokemonInInventory)
+                {
+                    BackgroundColor = ConsoleColor.Gray;
+                    ForegroundColor = ConsoleColor.Black;
+                    count++;
+                    inlineX++;
+                    if (count == 4)
                     {
-                        BackgroundColor = ConsoleColor.Gray;
-                        ForegroundColor = ConsoleColor.Black;
-                        count++;
-                        inlineX++;
-                        if (count == 4)
-                        {
-                            inlineX = 1;
-                            inlineY = 3;
-                        }
-                        float Xpos2 = Console.WindowWidth / 6 * inlineX * 1.5f;
-                        float Ypos2 = Console.WindowHeight / 5 * inlineY;
-                        Console.SetCursorPosition((int)Xpos2 + 2, (int)Ypos2);
-                        Console.WriteLine(pok.Name);
+                        inlineX = 1;
+                        inlineY = 3;
                     }
-                    count = tempCount;
-                    inlineX = tempX;
-                    inlineY = tempY;
+                    float Xpos2 = Console.WindowWidth / 6 * inlineX * 1.5f;
+                    float Ypos2 = Console.WindowHeight / 5 * inlineY;
+                    Console.SetCursorPosition((int)Xpos2 + 2, (int)Ypos2);
+                    Console.WriteLine(pok.Name);
+                }
+                count = tempCount;
+                inlineX = tempX;
+                inlineY = tempY;
             }
         }
 
@@ -411,8 +416,6 @@ namespace cs.project07.pokemon.game.states.list
         {
             int Xpos = Console.WindowWidth / 4;
             int Ypos = 5;
-            _dialogBox.Left = 0;
-            _dialogBox.Top = 0;
             if(showItems)
             {
                 _buttons["POKEBALLS"] = new Button(_dialogBox, "Pokeballs")
@@ -460,6 +463,8 @@ namespace cs.project07.pokemon.game.states.list
 
         public override void Update()
         {
+            if (renderItem)
+                ShowItems();
             _buttonManager.Update();
         }
 
@@ -468,8 +473,6 @@ namespace cs.project07.pokemon.game.states.list
             PaintBackground();
             if (renderBattleTeam)
                 drawBattelTeam();
-            if (renderItem)
-                ShowItems();
             _buttonManager.Render();
         }
     }
