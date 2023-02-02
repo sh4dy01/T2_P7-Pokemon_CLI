@@ -17,7 +17,7 @@ namespace cs.project07.pokemon.game.states.list
             MENU,
             POKEMON,
             POKEDEX,
-            ITEM
+            ITEMS
         }
 
         enum AllItemList
@@ -41,12 +41,6 @@ namespace cs.project07.pokemon.game.states.list
         private ButtonManager _buttonManager;
         private Dictionary<string, Button> _buttons;
         private DialogBox _dialogBox;
-        public Pokemon[] _pokemonInInventory { get; private set; }
-        bool drawInventory = false;
-        int showMoreStatPoke = -1;
-        bool moreStatPoke = false;
-
-        public List<Item> _itemList { get; private set; }
 
         public InventoryState(Game gameReceive) : base(gameReceive) 
         {
@@ -78,20 +72,7 @@ namespace cs.project07.pokemon.game.states.list
 
         }
 
-        private void InitItem()
-        {
-            _itemList = new List<Item>();
-            for(int i = 0; i < 4; i++)
-            {
-                _itemList.Add(new Pokeball(i));
-            }
-            for (int i = 0; i < 4; i++)
-            {
-                _itemList.Add(new Potion(i));
-            }
-            _itemList.Add(new Spray());
-        }
-
+        //####### INVENTORY MENU #######//
         private void InitMenu()
         {
             _buttonManager = new ButtonManager();
@@ -115,13 +96,13 @@ namespace cs.project07.pokemon.game.states.list
                     SwitchView(InventoryView.POKEMON);
                 }
             };
-            _buttons["SAVE"] = new Button(_dialogBox, "Save")
+            _buttons["ITEMS"] = new Button(_dialogBox, "Items")
             {
                 Selected = false,
                 //Offsets = new Vector2(3, 2),
                 Action = () =>
                 {
-                    //TO DO SAVE THE GAME
+                    SwitchView(InventoryView.ITEMS);
                 }
             };
             _buttons["EXIT"] = new Button(_dialogBox, "Exit")
@@ -144,13 +125,10 @@ namespace cs.project07.pokemon.game.states.list
             _buttonManager.HandleKeyEvent(pressedKey);
             if(_currentView == InventoryView.POKEMON && pressedKey == ConsoleKey.Backspace && !moreStatPoke)
             {
-                drawInventory = false;
                 SwitchView(InventoryView.MENU);
             }
             if (_currentView == InventoryView.POKEMON && pressedKey == ConsoleKey.Backspace && moreStatPoke)
             {
-                showMoreStatPoke = -1;
-                moreStatPoke = false;
                 SwitchView(InventoryView.POKEMON);
             }
         }
@@ -163,20 +141,28 @@ namespace cs.project07.pokemon.game.states.list
         private void SwitchView(InventoryView view)
         {
             _currentView = view;
-
             _buttons.Clear();
             switch (view)
             {
                 case InventoryView.MENU:
+                    renderBattleTeam = false;
                     ShowMenu();
                     break;
                 case InventoryView.POKEMON:
+                    showMoreStatPoke = -1;
+                    moreStatPoke = false;
+                    renderBattleTeam= true;
+                    initUseButton = true;
                     showInventoryPokemon();
                     break;
                 case InventoryView.POKEDEX:
                     //_dialogBox.SwitchState(CombatDialogBox.CombatButtonState.SELECT_ATTACK);
                     break;
-                case InventoryView.ITEM:
+                case InventoryView.ITEMS:
+                    renderBattleTeam = false;
+                    showItems = true;
+                    renderItem = true;
+                    ShowItems();
                     break;
                 default:
                     break;
@@ -184,7 +170,12 @@ namespace cs.project07.pokemon.game.states.list
         }
 
 
-
+        //####### BATTLETEAM #######//
+        public Pokemon[] _pokemonInInventory { get; private set; }
+        bool renderBattleTeam = false;
+        int showMoreStatPoke = -1;
+        bool moreStatPoke = false;
+        private bool initUseButton = false;
         public void addPokemon(Pokemon pokemonToADD)
         {
             //if(_pokemonInInventory.Count <= 6)
@@ -221,7 +212,7 @@ namespace cs.project07.pokemon.game.states.list
                 float Ypos = Console.WindowHeight / 5 * inlineY;
                 _buttons[pokemon.Name + count] = new Button(_dialogBox, pokemon.Name)
                 {
-                    Offsets = new Vector2(Xpos, Ypos),
+                    Offsets = new Vector2(Xpos + 2, Ypos),
                     Selected = first,
                     Action = () =>
                     {
@@ -229,17 +220,17 @@ namespace cs.project07.pokemon.game.states.list
                         showMoreStatPoke = numb;
                         //TO DO: SHOW Pokemon interface
                     },
-                    BackgroundColor = ConsoleColor.Gray,
+                    BackgroundColor = ConsoleColor.DarkGray,
                     ForegroundColor = ConsoleColor.Black,
                     ActiveBackgroundColor = ConsoleColor.DarkGray,
-                    ActiveForegroundColor= ConsoleColor.Black
+                    ActiveForegroundColor= ConsoleColor.White
                  
                 };
 
 
             }
             count++;
-            drawInventory = true;
+            renderBattleTeam = true;
             //_buttons["RETURN"] = new Button(_dialogBox, "Return")
             //{
             //    Selected = false,
@@ -274,11 +265,11 @@ namespace cs.project07.pokemon.game.states.list
                 float Ypos = Console.WindowHeight / 5 * inlineY;
                 const int increX = 15;
                 const int increY = 2;
-                Console.BackgroundColor = ConsoleColor.Gray;
+                Console.BackgroundColor = ConsoleColor.DarkGray;
                 Console.ForegroundColor = ConsoleColor.Black;
-                for(int i = 0; i <= 6;i++)
+                for (int i = 0; i <= 6; i++)
                 {
-                    for(int j = 0; j <= 47; j++)
+                    for (int j = 0; j <= 47; j++)
                     {
                         Console.SetCursorPosition((int)Xpos - increX - 3 + j, (int)Ypos - 1 + 1 * i);
                         Console.WriteLine(" ");
@@ -291,22 +282,24 @@ namespace cs.project07.pokemon.game.states.list
                 Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY);
                 Console.WriteLine("Lvl : " + pokemon.Level);
                 //Element
-                Console.SetCursorPosition((int)Xpos - increX, (int)Ypos + increY*2);
+                Console.SetCursorPosition((int)Xpos - increX, (int)Ypos + increY * 2);
                 Console.WriteLine("Type : " + pokemon.Element);
                 //Xp
-                Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY*2);
+                Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY * 2);
                 Console.WriteLine("XP : " + pokemon.Experience + "/" + pokemon.RequiredExp);
 
-                if(count == showMoreStatPoke)
+                if (count == showMoreStatPoke)
                 {
-                    //for (int i = 0; i <= 9; i++)
-                    //{
-                    //    for (int j = 0; j <= 47; j++)
-                    //    {
-                    //        Console.SetCursorPosition((int)Xpos - increX - 3 + j, (int)Ypos + 6 + + 1 * i);
-                    //        Console.WriteLine(" ");
-                    //    }
-                    //}
+                    BackgroundColor = ConsoleColor.DarkGray;
+
+                    for (int i = 0; i <= 9; i++)
+                    {
+                        for (int j = 0; j <= 47; j++)
+                        {
+                            Console.SetCursorPosition((int)Xpos - increX - 3 + j, (int)Ypos + 6 + +1 * i);
+                            Console.WriteLine(" ");
+                        }
+                    }
                     //STAT//
                     Console.SetCursorPosition((int)Xpos + 2, (int)Ypos + increY * 4);
                     Console.WriteLine("STATS");
@@ -325,22 +318,27 @@ namespace cs.project07.pokemon.game.states.list
                     //Speed
                     Console.SetCursorPosition((int)Xpos, (int)Ypos + increY * 7);
                     Console.WriteLine("Speed : " + pokemon.Stat.Speed);
-
                     if (!moreStatPoke)
                     {
                         moreStatPoke = true;
                         _buttons.Clear();
                     }
-                    navButtonPokeStat((int)Xpos - increX, (int)Ypos + increY * 9);
+                    int calcX = (int)Xpos - increX;
+                    int calcY = (int)Ypos + increY * 9;
+                    _dialogBox.Left = 0;
+                    _dialogBox.Top = 0;
+                    navButtonPokeStat(calcX, calcY);
+                    _buttonManager.Update();
+
                 }
+
                 int tempX = inlineX;
                 int tempY = inlineY;
                 int tempCount = count;
                 count = 0;
                 inlineX = 0;
                 inlineY = 1;
-                //_dialogBox.Left = 0;
-                //_dialogBox.Top = 0;
+
                 foreach (Pokemon pok in _pokemonInInventory)
                 {
                     BackgroundColor = ConsoleColor.Gray;
@@ -354,60 +352,130 @@ namespace cs.project07.pokemon.game.states.list
                     }
                     float Xpos2 = Console.WindowWidth / 6 * inlineX * 1.5f;
                     float Ypos2 = Console.WindowHeight / 5 * inlineY;
-                    Console.SetCursorPosition((int)Xpos2, (int)Ypos2);
+                    Console.SetCursorPosition((int)Xpos2 + 2, (int)Ypos2);
                     Console.WriteLine(pok.Name);
                 }
                 count = tempCount;
                 inlineX = tempX;
                 inlineY = tempY;
-                Console.SetCursorPosition(0, 0);
             }
         }
 
         private void navButtonPokeStat(int Xpos, int Ypos)
         {
-            _dialogBox.Left = 0;
-            _dialogBox.Top = 0;
-            _buttons["USE_ITEM"] = new Button(_dialogBox, "Items")
+            if(initUseButton) 
             {
-                Selected = true,
-                Offsets = new Vector2(Xpos, Ypos),
-                Action = () =>
+                _buttons["USE_ITEM"] = new Button(_dialogBox, "Items")
                 {
-                    SwitchView(InventoryView.ITEM);
-                },
-                BackgroundColor = ConsoleColor.Gray,
-                ForegroundColor = ConsoleColor.Black,
-                ActiveBackgroundColor = ConsoleColor.DarkGray,
-                ActiveForegroundColor = ConsoleColor.Black
-            };
-            _buttons["SWAP_TEAM"] = new Button(_dialogBox, "Swap pokemon")
+                    Selected = true,
+                    Offsets = new Vector2(Xpos, Ypos),
+                    Action = () =>
+                    {
+                        SwitchView(InventoryView.ITEMS);
+                    },
+                    BackgroundColor = ConsoleColor.Gray,
+                    ForegroundColor = ConsoleColor.Black,
+                    ActiveBackgroundColor = ConsoleColor.DarkGray,
+                    ActiveForegroundColor = ConsoleColor.Black
+                };
+                _buttons["SWAP_TEAM"] = new Button(_dialogBox, "Swap pokemon")
+                {
+                    Selected = false,
+                    Offsets = new Vector2(Xpos+30, Ypos),
+                    Action = () =>
+                    {
+                        SwitchView(InventoryView.POKEMON);
+                    },
+                    BackgroundColor = ConsoleColor.Gray,
+                    ForegroundColor = ConsoleColor.Black,
+                    ActiveBackgroundColor = ConsoleColor.DarkGray,
+                    ActiveForegroundColor = ConsoleColor.Black
+                };
+                initUseButton = false;
+            }
+        }
+
+
+        //####### ITEM MENU #######//
+        public List<Item> _itemList { get; private set; }
+        bool showItems = false;
+        private bool renderItem = false;
+
+        private void InitItem()
+        {
+            _itemList = new List<Item>();
+            for (int i = 0; i < 4; i++)
             {
-                Selected = false,
-                Offsets = new Vector2(Xpos+30, Ypos),
-                Action = () =>
+                _itemList.Add(new Pokeball(i));
+            }
+            for (int i = 0; i < 4; i++)
+            {
+                _itemList.Add(new Potion(i));
+            }
+            _itemList.Add(new Spray());
+        }
+
+        private void ShowItems()
+        {
+            int Xpos = Console.WindowWidth / 4;
+            int Ypos = 5;
+            if(showItems)
+            {
+                _buttons["POKEBALLS"] = new Button(_dialogBox, "Pokeballs")
                 {
-                    SwitchView(InventoryView.POKEMON);
-                },
-                BackgroundColor = ConsoleColor.Gray,
-                ForegroundColor = ConsoleColor.Black,
-                ActiveBackgroundColor = ConsoleColor.DarkGray,
-                ActiveForegroundColor = ConsoleColor.Black
-            };
+                    Offsets = new Vector2(Xpos, Ypos),
+                    Selected = true,
+                    Action = () =>
+                    {
+                        //SwitchView(InventoryView.POKEMON);
+                    },
+                    BackgroundColor = ConsoleColor.Gray,
+                    ForegroundColor = ConsoleColor.Black,
+                    ActiveBackgroundColor = ConsoleColor.DarkGray,
+                    ActiveForegroundColor = ConsoleColor.Black
+                };
+                _buttons["POTIONS"] = new Button(_dialogBox, "Potions")
+                {
+                    Selected = false,
+                    Offsets = new Vector2(Xpos*2, Ypos),
+                    Action = () =>
+                    {
+                        //SwitchView(InventoryView.ITEMS);
+                    },
+                    BackgroundColor = ConsoleColor.Gray,
+                    ForegroundColor = ConsoleColor.Black,
+                    ActiveBackgroundColor = ConsoleColor.DarkGray,
+                    ActiveForegroundColor = ConsoleColor.Black
+                };
+                _buttons["SPRAYS"] = new Button(_dialogBox, "Sprays")
+                {
+                    Selected = false,
+                    Offsets = new Vector2(Xpos*3, Ypos),
+                    Action = () =>
+                    {
+                        //Game.StatesList?.Pop();
+                    },
+                    BackgroundColor = ConsoleColor.Gray,
+                    ForegroundColor = ConsoleColor.Black,
+                    ActiveBackgroundColor = ConsoleColor.DarkGray,
+                    ActiveForegroundColor = ConsoleColor.Black
+                };
+                showItems = false;
+            }
         }
 
         public override void Update()
         {
+            if (renderItem)
+                ShowItems();
             _buttonManager.Update();
         }
 
         public override void Render()
         {
             PaintBackground();
-            if (drawInventory)
-            {
+            if (renderBattleTeam)
                 drawBattelTeam();
-            }
             _buttonManager.Render();
         }
     }
