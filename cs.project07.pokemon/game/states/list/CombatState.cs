@@ -2,6 +2,7 @@
 using cs.project07.pokemon.game.states.gui;
 using cs.project07.pokemon.game.combat;
 using System.Text;
+using System.Numerics;
 
 namespace cs.project07.pokemon.game.states.list
 {
@@ -36,22 +37,25 @@ namespace cs.project07.pokemon.game.states.list
         private readonly Pokemon _enemyPokemon;
         private readonly PokemonInfoBox _enemyPokemonUi;
 
-        private string[]? _playerSprite;
-        
+        private PokemonSprite _playerSprite;
+        private PokemonSprite _enemySprite;
+
         private Pokemon? _playerPokemon;
         private AttackInfoBox? _attackInfoUi;
         private PokemonInfoBox? _playerPokemonUi;
 
         public CombatState(Game game) : base(game)
         {
+            BackgroundColor = ConsoleColor.White;
+
             _enemyPokemon = new Pokemon(PokemonRegistry.GetRandomPokemon());
             _dialogBox = new CombatDialogBox(this);
             _enemyPokemonUi = new PokemonInfoBox(this, _enemyPokemon, true);
             _damageCalculator = new DamageCalculator();
             _attackInfoUi = new AttackInfoBox(this);
-            _playerSprite = null;
-
-            BackgroundColor = ConsoleColor.Gray;
+            _playerSprite = new PokemonSprite(false, new Vector2(25, 27), ForegroundColor, BackgroundColor);
+            _enemySprite = new PokemonSprite(true, new Vector2(130, 5), ForegroundColor, BackgroundColor);
+            
 
             Init();
         }
@@ -61,6 +65,7 @@ namespace cs.project07.pokemon.game.states.list
             Name = "Combat";
             _currentView = CombatView.INTRO;
             _enemyPokemon.InitEnemyStats();
+            _enemySprite.LoadSprite(_enemyPokemon.Name);
             SwitchView(_currentView);
         }
 
@@ -126,7 +131,8 @@ namespace cs.project07.pokemon.game.states.list
             PokemonListManager.SetActivePokemon(pokemon);
             
             _playerPokemon = pokemon;
-            _playerSprite = AsciiArtLoader.GetPlayerSpriteByName(_playerPokemon.Name);
+            _playerSprite.LoadSprite(pokemon.Name);
+            
             _playerPokemonUi = new PokemonInfoBox(this, _playerPokemon, false);
             _playerPokemonUi.Render();
             
@@ -144,6 +150,7 @@ namespace cs.project07.pokemon.game.states.list
             {
                 _playerPokemon = null;
                 _playerPokemonUi.Clear();
+                _playerSprite.Clear();
 
                 if (!PokemonListManager.IsAllPokemonDead())
                 {
@@ -159,6 +166,9 @@ namespace cs.project07.pokemon.game.states.list
 
                 int oldLevel = _playerPokemon.Level;
                 int experience = Pokemon.LEVEL_UP_GAINED * _enemyPokemon.Level;
+
+                _enemySprite.Clear();
+                _enemySprite = null;
 
                 _playerPokemonUi.UpdateExperience(experience);
                 _playerPokemon.GainExperience(experience);
@@ -321,18 +331,16 @@ namespace cs.project07.pokemon.game.states.list
                 _playerPokemonUi.Render();
                 _attackInfoUi.Render();
 
-                if (_playerSprite is not null)
+                if (!_playerSprite.IsEmpty())
                 {
-                    Console.BackgroundColor = BackgroundColor;
-                    Console.ForegroundColor = ForegroundColor;
-                    for (int i = 0; i < _playerSprite.Length; i++)
-                    {
-                        Console.SetCursorPosition(50, 25 + i);
-                        Console.WriteLine(_playerSprite[i]);
-                    }
+                    //_playerSprite.Render();
                 }
             }
 
+            if (_enemySprite is not null)
+            {
+                _enemySprite.Render();
+            }
             _enemyPokemonUi.Render();
             // Render childs
             // ------ Map
