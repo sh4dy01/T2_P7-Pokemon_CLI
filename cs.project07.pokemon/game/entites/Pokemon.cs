@@ -14,7 +14,8 @@ namespace cs.project07.pokemon.game.entites
 
         protected PokedexEntry _dex;
         protected Stat _stat;
-        
+
+        private int _id;
         private bool _isDead;
         protected float _currentHealth;
         protected int _level;

@@ -1,4 +1,4 @@
-﻿namespace cs.project07.pokemon.game.combat
+﻿namespace cs.project07.pokemon.game.states.gui
 {
     internal static class AsciiArtLoader
     {
