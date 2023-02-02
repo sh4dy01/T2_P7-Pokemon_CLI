@@ -16,7 +16,7 @@ namespace cs.project07.pokemon.game.combat
 
         public static string[] GetEnemySpriteByName(string name)
         {
-            string[] lines = System.IO.File.ReadAllLines(@"game\assets\ascii" + name + "_front.txt");
+            string[] lines = System.IO.File.ReadAllLines(@"game\assets\ascii\" + name.ToLower() + "_front.ans");
             return lines;
         }
     }
