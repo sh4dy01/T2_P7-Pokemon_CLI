@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace cs.project07.pokemon.game.states.gui
 {
-    internal class PokemonInfoBox : IRenderable<State>
+    public class PokemonInfoBox : IRenderable<State>
     {        
         private Pokemon _pokemon;
         private bool _isEnemy;
@@ -70,6 +70,7 @@ namespace cs.project07.pokemon.game.states.gui
 
         public void UpdateHealth(Pokemon pokemon) //TODO: Clean this
         {
+            
             if (!_isEnemy)
             {
                 StringBuilder sb = new StringBuilder();
@@ -85,17 +86,35 @@ namespace cs.project07.pokemon.game.states.gui
             int startIndex = (int)(_oldLifePercentage / 5);
             int endIndex = (int)((_oldLifePercentage - _healthPercentage) / 5);
 
+            if (_healthPercentage > _oldLifePercentage)
+            {
+                endIndex = (int)(_healthPercentage - _oldLifePercentage) / 5;
+
+                currentLifePos.X = Left + 3 + (int)_oldLifePercentage / 5;
+                for (int i = startIndex; i < endIndex; i++)
+                {
+                    Console.SetCursorPosition((int)currentLifePos.X, (int)currentLifePos.Y);
+                    RenderBar(i);
+                    currentLifePos.X++;
+                    Thread.Sleep(100);
+                }
+            }
+            else
+            {
+                currentLifePos.X = Left + 3 + (int)_oldLifePercentage / 5;
+                for (int i = startIndex; i > endIndex; i--)
+                {
+                    Console.SetCursorPosition((int)currentLifePos.X, (int)currentLifePos.Y);
+                    RenderBar(i);
+                    currentLifePos.X--;
+                    Thread.Sleep(100);
+                }
+            }
+            
             if (_healthPercentage <= 0)
                 endIndex = 0;
 
-            currentLifePos.X = Left + 3 + (int)_oldLifePercentage / 5;
-            for (int i = startIndex; i > endIndex; i--)
-            {
-                Console.SetCursorPosition((int)currentLifePos.X, (int)currentLifePos.Y);
-                RenderBar(i);
-                currentLifePos.X--;
-                Thread.Sleep(100);
-            }
+           
 
             _oldLifePercentage = _healthPercentage;
         }

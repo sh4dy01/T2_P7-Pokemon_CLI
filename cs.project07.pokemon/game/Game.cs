@@ -6,6 +6,7 @@ using cs.project07.pokemon.game.Registry;
 using cs.project07.pokemon.game.states;
 using cs.project07.pokemon.game.states.list;
 using System.Numerics;
+using System;
 
 namespace cs.project07.pokemon.game
 {
@@ -33,6 +34,7 @@ namespace cs.project07.pokemon.game
 
         public void InitDefaults()
         {
+            Console.SetBufferSize(Convert.ToInt32(ConsoleSize.X), Convert.ToInt32(ConsoleSize.Y));
             Console.SetWindowSize(Convert.ToInt32(ConsoleSize.X), Convert.ToInt32(ConsoleSize.Y));
             Console.SetWindowPosition(0, 0);
             Parent = this;
@@ -49,7 +51,7 @@ namespace cs.project07.pokemon.game
 
         private void InitStates()
         {
-            StatesList?.Push(new InventoryState(this));
+            StatesList?.Push(new MenuState(this));
         }
 
         private void Init()
