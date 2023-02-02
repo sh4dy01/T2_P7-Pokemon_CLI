@@ -297,30 +297,30 @@ namespace cs.project07.pokemon.game.states.list
         private void initInteractionButtonPokemon()
         {
             BackgroundColor = ConsoleColor.DarkGray;
-            if (count == showMoreStatPoke)
+            if (countStat == showMoreStatPoke)
             {
                 for (int i = 0; i <= 9; i++)
                 {
                     for (int j = 0; j <= 47; j++)
                     {
-                        Console.SetCursorPosition((int)Xpos - increX - 3 + j, (int)Ypos + 6 + +1 * i);
+                        Console.SetCursorPosition((int)XposStat - increXStat - 3 + j, (int)YposStat + 6 + +1 * i);
                         Console.WriteLine(" ");
                     }
                 }
                 //STAT//
-                Console.SetCursorPosition((int)Xpos + 2, (int)Ypos + increY * 4);
+                Console.SetCursorPosition((int)XposStat + 2, (int)YposStat + increYStat * 4);
                 Console.WriteLine("STATS");
                 //Attack
-                Console.SetCursorPosition((int)Xpos - increX, (int)Ypos + increY * 5);
-                Console.WriteLine("Attack : " + pokemon.Stat.Attack);
+                Console.SetCursorPosition((int)XposStat - increXStat, (int)YposStat + increYStat * 5);
+                Console.WriteLine("Attack : " + pokemonStat.Stat.Attack);
                 //Defense
-                Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY * 5);
-                Console.WriteLine("Defense : " + pokemon.Stat.Defense);
+                Console.SetCursorPosition((int)XposStat + increXStat, (int)YposStat + increYStat * 5);
+                Console.WriteLine("Defense : " + pokemonStat.Stat.Defense);
                 //SPAttack
-                Console.SetCursorPosition((int)Xpos - increX - 2, (int)Ypos + increY * 6);
-                Console.WriteLine("SPAttack : " + pokemon.Stat.SPAttack);
+                Console.SetCursorPosition((int)XposStat - increXStat - 2, (int)YposStat + increYStat * 6);
+                Console.WriteLine("SPAttack : " + pokemonStat.Stat.SPAttack);
                 //SPDefense
-                Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY * 6);
+                Console.SetCursorPosition((int)XposStat + increXStat, (int)YposStat + increYStat * 6);
                 Console.WriteLine("SPDefense : " + pokemon.Stat.SPDefense);
                 //Speed
                 Console.SetCursorPosition((int)Xpos, (int)Ypos + increY * 7);
