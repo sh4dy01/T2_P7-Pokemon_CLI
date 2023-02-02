@@ -235,11 +235,13 @@ namespace cs.project07.pokemon.game.states.list
 
         public override void Load()
         {
+            SaveManager.LoadData();
+
             //send Load to childs
             Player.Load();
 
             //Load in the Map class
-            var data = SaveManager.LoadData("map");
+            var data = SaveManager.Loaded["map"];
             if (data != null)
             {
 
