@@ -3,6 +3,7 @@ using cs.project07.pokemon.game.Registry;
 using cs.project07.pokemon.game.states.list;
 using System.Numerics;
 using System.Text;
+using cs.project07.pokemon.game.items.list;
 
 namespace cs.project07.pokemon.game.states.gui
 {
@@ -72,7 +73,7 @@ namespace cs.project07.pokemon.game.states.gui
                 Offsets = new Vector2(-10, 1),
                 Action = () =>
                 {
-                    ((CombatState)Parent).SwitchView(CombatState.CombatView.SELECT_ACTION);
+                    ((CombatState)Parent).SwitchView(CombatState.CombatView.SELECT_ITEM);
                 }
             };
             _buttons["POKEMON"] = new Button(this, "POKEMON")
@@ -154,32 +155,48 @@ namespace cs.project07.pokemon.game.states.gui
         internal void InitSelectItemsButtons()
         {
             int offsetX = -25;
-            int offsetY = -1;
+            int offsetY = -2;
             bool selected = true;
-            /*
-            for (int i = 0; i < attacks.Length; i++)
-            {
-                SetOffset(ref offsetX, ref offsetY, ref selected, i, 20);
 
-                var attack = attacks[i];
-                _buttons[attack.Name] = new Button(this, attack.Name)
+            int count = 0;
+            foreach (var item in InventoryManager.Inventory.Where(item => item.Name != "Spray"))
+            {
+                _buttons[item.Name] = new Button(this, item.Name + " x" + item.GetQuantity())
                 {
                     Offsets = new Vector2(offsetX, offsetY),
                     Selected = selected,
                     Action = () =>
                     {
-                        if (attack.Usage > 0)
+                        item.Add();
+                        if (item.GetQuantity() > 0)
                         {
-                            ((CombatState)Parent).DealEnemyDamage(attack);
-                            attack.Use();
+                            if (item.GetType() == typeof(Potion))
+                                item.Use(PokemonListManager.ActivePokemon);
+                            
+                            else if (item.GetType() == typeof(Pokeball))
+                            {
+                                item.Use();
+                                ((CombatState)Parent).TryToCatch(((Pokeball)item).GetMultiplicator());
+                                return;
+                            }
+                            ((CombatState)Parent).SwitchView(CombatState.CombatView.END_TURN);
                         }
                         else
                             UpdateText("No more uses left");
                     },
-                    ForegroundColor = TypeChart.TypeColor[attack.Element],
-                    ActiveForegroundColor = TypeChart.TypeColor[attack.Element]
+                    ForegroundColor = ConsoleColor.White,
+                    ActiveForegroundColor = ConsoleColor.White
                 };
-            }*/
+
+                selected = false;
+                if (count == 3)
+                {
+                    offsetY = -3;
+                    offsetX = 15;
+                }
+                offsetY ++;
+                count++;
+            }
         }
 
         private static void SetOffset(ref int offsetX, ref int offsetY, ref bool selected, int i, int offsetXIncrement)
