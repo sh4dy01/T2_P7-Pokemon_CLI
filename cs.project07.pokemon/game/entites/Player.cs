@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using cs.project07.pokemon.game.save;
 using cs.project07.pokemon.game.Registry;
+using cs.project07.pokemon.game.states.gui;
 
 namespace cs.project07.pokemon.game.entites
 {
@@ -26,6 +27,7 @@ namespace cs.project07.pokemon.game.entites
         public Vector2 playerPosition;
         private ConsoleColor BackgroundColor;
         private ConsoleColor ForegroundColor;
+        private DialogBox? dialog;
         private int _SprayMovementLeft { get; set; }
         public void SetSprayMovementLeft (int sprayMovementLeft) { _SprayMovementLeft = sprayMovementLeft;  }
         public State _parent { get; set; }
@@ -94,17 +96,27 @@ namespace cs.project07.pokemon.game.entites
                 if (pokemon != null) pokemon.Save();
             }
 
+
+            //Save Items
+            foreach (var item in InventoryManager.Inventory)
+            {
+                SaveManager.PrepareData(
+                new Tuple<string, int>(Convert.ToString(item.ID), item.GetQuantity())
+                );
+            }
         }
 
       public void Load()
         {
             var data = SaveManager.Loaded;
             //load player pos data
-            var PlayerPosX = data?["PlayerPosX"];
-            var PlayerPosY = data?["PlayerPosY"];
-            if (PlayerPosX != null && PlayerPosY != null)
-            {
-                playerPosition = new Vector2((float)PlayerPosX, (float)PlayerPosY);
+            if (data != null) if (data.ContainsKey("PlayerPosX") && data.ContainsKey("PlayerPosY")) {
+                var PlayerPosX = data?["PlayerPosX"];
+                var PlayerPosY = data?["PlayerPosY"];
+                if (PlayerPosX != null && PlayerPosY != null)
+                {
+                    playerPosition = new Vector2((float)PlayerPosX, (float)PlayerPosY);
+                }
             }
 
             
@@ -149,7 +161,7 @@ namespace cs.project07.pokemon.game.entites
 
             
 
-            //load captured pokemon
+            //load battleTeam pokemon
             if (data.ContainsKey("BattleTeamPokemonNumber")) { 
                 int? BattleTeamPokemonNumber = data?["BattleTeamPokemonNumber"];
                 int? index = data?.Keys.ToList().IndexOf("BattleTeamPokemonNumber");
@@ -187,9 +199,31 @@ namespace cs.project07.pokemon.game.entites
 
 
                 }
+
+                // load items
+                char[] ItemsPossibilities = InventoryManager.ItemsPossibilities;
+                foreach (var id in ItemsPossibilities)
+                {
+                    string strID = id.ToString();
+                    foreach (var item in InventoryManager.Inventory)
+                    {
+                        if (id == item.ID) if (data.ContainsKey(strID)) item.SetQuantity(data[strID]);
+                    }
+                }
+
             }
 
 
+        }
+
+        public void Render()
+        {
+            if (dialog != null) dialog.Render();
+        }
+
+        public void StopDialog()
+        {
+            dialog= null;
         }
 
         public void mouvPlayer(char dir)
@@ -281,16 +315,28 @@ namespace cs.project07.pokemon.game.entites
 
         public void collisionItems(char[,] grid, Map map)
         {
-            char[] ItemsPossibilities = { 'p', 'P', 'h', 'H', 'b', 'B', 'c', 'C', 'S' };
+            char[] ItemsPossibilities = InventoryManager.ItemsPossibilities;
             foreach (var element in ItemsPossibilities)
             {
                 if (grid[(int)playerPosition.X, (int)playerPosition.Y] == element)
                 {
                     foreach (var item in InventoryManager.Inventory)
                     {
-                        if (item.ID == element) item.Add();
-                        map.ModifyMap((int)playerPosition.X, (int)playerPosition.Y, "ITEMS", '\0');
-                        map.ModifyMap((int)playerPosition.X, (int)playerPosition.Y, "GROUND", ' ');
+                        if (item.ID == element)
+                        {
+                            item.Add();
+                            map.ModifyMap((int)playerPosition.X, (int)playerPosition.Y, "ITEMS", '\0');
+                            map.ModifyMap((int)playerPosition.X, (int)playerPosition.Y, "GROUND", ' ');
+                            int id = map.ItemsId;
+                            SaveManager.PrepareData(
+                                new Tuple<string, int>("item" + id + "x", (int)playerPosition.X),
+                                new Tuple<string, int>("item" + id + "y", (int)playerPosition.Y)
+                                );
+                            dialog = new DialogBox(_parent);
+                            dialog.UpdateText("vous avez récupéré x1 "+ item.Name);
+                            dialog.Render();
+                            
+                        }
 
                     }
                     

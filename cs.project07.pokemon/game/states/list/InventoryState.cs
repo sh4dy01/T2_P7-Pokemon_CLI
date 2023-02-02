@@ -55,7 +55,6 @@ namespace cs.project07.pokemon.game.states.list
             Name = "Inventory";
             _currentView = InventoryView.MENU;
             _dialogBox = new DialogBox(this);
-            InitItem();
             InitMenu();
             Pokemon test = new Pokemon(PokemonRegistry.GetRandomPokemon(), 5);
             addPokemon(test);
@@ -94,7 +93,11 @@ namespace cs.project07.pokemon.game.states.list
                 Action = () =>
                 {
                     SwitchView(InventoryView.POKEMON);
-                }
+                },
+                BackgroundColor = ConsoleColor.Gray,
+                ForegroundColor = ConsoleColor.Black,
+                ActiveBackgroundColor = ConsoleColor.DarkGray,
+                ActiveForegroundColor = ConsoleColor.Black
             };
             _buttons["ITEMS"] = new Button(_dialogBox, "Items")
             {
@@ -103,7 +106,11 @@ namespace cs.project07.pokemon.game.states.list
                 Action = () =>
                 {
                     SwitchView(InventoryView.ITEMS);
-                }
+                },
+                BackgroundColor = ConsoleColor.Gray,
+                ForegroundColor = ConsoleColor.Black,
+                ActiveBackgroundColor = ConsoleColor.DarkGray,
+                ActiveForegroundColor = ConsoleColor.Black
             };
             _buttons["EXIT"] = new Button(_dialogBox, "Exit")
             {
@@ -112,7 +119,11 @@ namespace cs.project07.pokemon.game.states.list
                 Action = () =>
                 {
                     Game.StatesList?.Pop();
-                }
+                },
+                BackgroundColor = ConsoleColor.Gray,
+                ForegroundColor = ConsoleColor.Black,
+                ActiveBackgroundColor = ConsoleColor.DarkGray,
+                ActiveForegroundColor = ConsoleColor.Black
             };
             for (int i = 0; i < _buttons.Count; i++)
             {
@@ -122,14 +133,47 @@ namespace cs.project07.pokemon.game.states.list
 
         public override void HandleKeyEvent(ConsoleKey pressedKey)
         {
+            //BATTLE TEAM
             _buttonManager.HandleKeyEvent(pressedKey);
-            if(_currentView == InventoryView.POKEMON && pressedKey == ConsoleKey.Backspace && !moreStatPoke)
+            if (_currentView == InventoryView.POKEMON && pressedKey == ConsoleKey.Backspace && !moreStatPoke)
             {
                 SwitchView(InventoryView.MENU);
             }
             if (_currentView == InventoryView.POKEMON && pressedKey == ConsoleKey.Backspace && moreStatPoke)
             {
                 SwitchView(InventoryView.POKEMON);
+            }
+
+            //ITEMS
+            if (_currentView == InventoryView.ITEMS && pressedKey == ConsoleKey.Backspace && renderPokeball)
+            {
+                renderPokeball = false;
+
+                rendTitleItem = false;
+                showItems = true;
+                ShowItems();
+            }
+            else if (_currentView == InventoryView.ITEMS && pressedKey == ConsoleKey.Backspace && showPotion)
+            {
+                showPotion = false;
+
+                _buttons.Clear();
+                rendTitleItem = false;
+                showItems = true;
+                ShowItems();
+            }
+            else if (_currentView == InventoryView.ITEMS && pressedKey == ConsoleKey.Backspace && showSpray)
+            {
+                showSpray = false;
+
+                _buttons.Clear();
+                rendTitleItem = false;
+                showItems = true;
+                ShowItems();
+            }
+            else if (_currentView == InventoryView.ITEMS && pressedKey == ConsoleKey.Backspace && !rendTitleItem)
+            {
+                SwitchView(InventoryView.MENU);
             }
         }
 
@@ -397,23 +441,13 @@ namespace cs.project07.pokemon.game.states.list
 
 
         //####### ITEM MENU #######//
-        public List<Item> _itemList { get; private set; }
         bool showItems = false;
         private bool renderItem = false;
+        bool renderPokeball = false;
+        bool showPotion = false;
+        bool showSpray = false;
+        bool rendTitleItem = false;
 
-        private void InitItem()
-        {
-            _itemList = new List<Item>();
-            for (int i = 0; i < 4; i++)
-            {
-                _itemList.Add(new Pokeball(i));
-            }
-            for (int i = 0; i < 4; i++)
-            {
-                _itemList.Add(new Potion(i));
-            }
-            _itemList.Add(new Spray());
-        }
 
         private void ShowItems()
         {
@@ -427,7 +461,9 @@ namespace cs.project07.pokemon.game.states.list
                     Selected = true,
                     Action = () =>
                     {
-                        //SwitchView(InventoryView.POKEMON);
+                        _buttons.Clear();
+                        rendTitleItem = true;
+                        renderPokeball = true;
                     },
                     BackgroundColor = ConsoleColor.Gray,
                     ForegroundColor = ConsoleColor.Black,
@@ -440,7 +476,10 @@ namespace cs.project07.pokemon.game.states.list
                     Offsets = new Vector2(Xpos*2, Ypos),
                     Action = () =>
                     {
-                        //SwitchView(InventoryView.ITEMS);
+                        _buttons.Clear();
+                        showPotion = true;
+                        rendTitleItem = true;
+                        ShowPotionList();
                     },
                     BackgroundColor = ConsoleColor.Gray,
                     ForegroundColor = ConsoleColor.Black,
@@ -453,7 +492,10 @@ namespace cs.project07.pokemon.game.states.list
                     Offsets = new Vector2(Xpos*3, Ypos),
                     Action = () =>
                     {
-                        //Game.StatesList?.Pop();
+                        _buttons.Clear();
+                        showSpray = true;
+                        rendTitleItem = true;
+                        ShowSprayList();
                     },
                     BackgroundColor = ConsoleColor.Gray,
                     ForegroundColor = ConsoleColor.Black,
@@ -463,6 +505,110 @@ namespace cs.project07.pokemon.game.states.list
                 showItems = false;
             }
         }
+
+
+        private static void RenderTitleItems()
+        {
+            Console.BackgroundColor = ConsoleColor.Gray;
+            Console.ForegroundColor = ConsoleColor.Black;
+            int Xpos = Console.WindowWidth / 4;
+            int Ypos = 5;
+            Console.SetCursorPosition(Xpos, Ypos + 1);
+            Console.WriteLine("Pokeballs");
+            Console.SetCursorPosition(Xpos * 2, Ypos + 1);
+            Console.WriteLine("Potions");
+            Console.SetCursorPosition(Xpos * 3, Ypos + 1);
+            Console.WriteLine("Sprays");
+        }
+
+        private void showPokeballList()
+        {
+            int Xpos = Console.WindowWidth / 4;
+            int Ypos = 5;
+            int count = 0;
+
+            foreach (var pokeball in InventoryManager.Inventory)
+            {
+                if (pokeball.Name == "Poke Ball" || pokeball.Name == "Super Ball"
+                    || pokeball.Name == "Hyper Ball" || pokeball.Name == "Master Ball")
+                {
+                    count++;
+                    Console.BackgroundColor = ConsoleColor.Gray;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                    Console.SetCursorPosition(Xpos, Ypos + 2 * count + 1);
+                    Console.WriteLine(pokeball.Name + " " + pokeball.GetQuantity());
+                }
+            }
+        }
+
+
+        private void ShowPotionList()
+        {
+            int Xpos = Console.WindowWidth / 4;
+            int Ypos = 5;
+            int count = 0;
+            bool first = false;
+            foreach (var pokeball in InventoryManager.Inventory)
+            {
+                if (pokeball.Name == "Potion" || pokeball.Name == "Super Potion"
+                    || pokeball.Name == "Hyper Potion" || pokeball.Name == "Potion Max")
+                {
+                    count++;
+                    if (count == 1) //Why first show is 3 ????
+                        first = true;
+                    else
+                        first = false;
+                    string temp = pokeball.Name + " " + pokeball.GetQuantity();
+                    _buttons[pokeball.Name] = new Button(_dialogBox, temp)
+                    {
+                        Selected = first,
+                        Offsets = new Vector2(Xpos * 2, Ypos + 2 * count + 1),
+                        Action = () =>
+                        {
+                            //Game.StatesList?.Pop();
+                        },
+                        BackgroundColor = ConsoleColor.Gray,
+                        ForegroundColor = ConsoleColor.Black,
+                        ActiveBackgroundColor = ConsoleColor.DarkGray,
+                        ActiveForegroundColor = ConsoleColor.Black
+                    };
+                }
+            }
+        }
+
+        private void ShowSprayList()
+        {
+            int Xpos = Console.WindowWidth / 4;
+            int Ypos = 5;
+            int count = 0;
+            bool first = false;
+            foreach (var pokeball in InventoryManager.Inventory)
+            {
+                if (pokeball.Name == "Spray")
+                {
+                    count++;
+                    if (count == 1) //Why first show is 3 ????
+                        first = true;
+                    else
+                        first = false;
+                    string temp = pokeball.Name + " " + pokeball.GetQuantity();
+                    _buttons[pokeball.Name] = new Button(_dialogBox, temp)
+                    {
+                        Selected = first,
+                        Offsets = new Vector2(Xpos * 3, Ypos + 2 * count + 1),
+                        Action = () =>
+                        {
+                            //Game.StatesList?.Pop();
+                        },
+                        BackgroundColor = ConsoleColor.Gray,
+                        ForegroundColor = ConsoleColor.Black,
+                        ActiveBackgroundColor = ConsoleColor.DarkGray,
+                        ActiveForegroundColor = ConsoleColor.Black
+                    };
+                }
+            }
+        }
+
 
         public override void Update()
         {
@@ -476,6 +622,10 @@ namespace cs.project07.pokemon.game.states.list
             PaintBackground();
             if (renderBattleTeam)
                 drawBattelTeam();
+            if (renderPokeball)
+                showPokeballList();
+            if(rendTitleItem)
+                RenderTitleItems();
             _buttonManager.Render();
         }
     }

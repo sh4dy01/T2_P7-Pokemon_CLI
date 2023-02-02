@@ -1,20 +1,2 @@
-PlayerPosX 172
-PlayerPosY 112
-CapturedPokemonNumber 0
-BattleTeamPokemonNumber 1
-PokemonID1 1
-PokemonMaxHP1 58
-PokemonAttack1 63
-PokemonDefense1 63
-PokemonSPAttack1 83
-PokemonSPDefense1 83
-PokemonSpeed1 58
-PokemonLevel1 5
-PokemonCurrentHP1 52
-PokemonExperience1 0
-PokemonNumberOfAttacks1 2
-AttackPP10 10
-AttackPP11 35
-map 1
-endFile
 
+endFile
