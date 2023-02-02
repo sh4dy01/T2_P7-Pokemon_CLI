@@ -203,7 +203,7 @@ namespace cs.project07.pokemon.game.states.list
                 float Ypos = Console.WindowHeight / 5 * inlineY;
                 _buttons[pokemon.Name + count] = new Button(_dialogBox, pokemon.Name)
                 {
-                    Offsets = new Vector2(Xpos, Ypos),
+                    Offsets = new Vector2(Xpos + 2, Ypos),
                     Selected = first,
                     Action = () =>
                     {
@@ -211,10 +211,10 @@ namespace cs.project07.pokemon.game.states.list
                         showMoreStatPoke = numb;
                         //TO DO: SHOW Pokemon interface
                     },
-                    BackgroundColor = ConsoleColor.Gray,
+                    BackgroundColor = ConsoleColor.DarkGray,
                     ForegroundColor = ConsoleColor.Black,
                     ActiveBackgroundColor = ConsoleColor.DarkGray,
-                    ActiveForegroundColor= ConsoleColor.Black
+                    ActiveForegroundColor= ConsoleColor.White
                  
                 };
 
@@ -256,7 +256,7 @@ namespace cs.project07.pokemon.game.states.list
                 float Ypos = Console.WindowHeight / 5 * inlineY;
                 const int increX = 15;
                 const int increY = 2;
-                Console.BackgroundColor = ConsoleColor.Gray;
+                Console.BackgroundColor = ConsoleColor.DarkGray;
                 Console.ForegroundColor = ConsoleColor.Black;
                 for(int i = 0; i <= 6;i++)
                 {
@@ -279,16 +279,17 @@ namespace cs.project07.pokemon.game.states.list
                 Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY*2);
                 Console.WriteLine("XP : " + pokemon.Experience + "/" + pokemon.RequiredExp);
 
-                if(count == showMoreStatPoke)
+                BackgroundColor = ConsoleColor.DarkGray;
+                if (count == showMoreStatPoke)
                 {
-                    //for (int i = 0; i <= 9; i++)
-                    //{
-                    //    for (int j = 0; j <= 47; j++)
-                    //    {
-                    //        Console.SetCursorPosition((int)Xpos - increX - 3 + j, (int)Ypos + 6 + + 1 * i);
-                    //        Console.WriteLine(" ");
-                    //    }
-                    //}
+                    for (int i = 0; i <= 9; i++)
+                    {
+                        for (int j = 0; j <= 47; j++)
+                        {
+                            Console.SetCursorPosition((int)Xpos - increX - 3 + j, (int)Ypos + 6 + +1 * i);
+                            Console.WriteLine(" ");
+                        }
+                    }
                     //STAT//
                     Console.SetCursorPosition((int)Xpos + 2, (int)Ypos + increY * 4);
                     Console.WriteLine("STATS");
@@ -336,7 +337,7 @@ namespace cs.project07.pokemon.game.states.list
                     }
                     float Xpos2 = Console.WindowWidth / 6 * inlineX * 1.5f;
                     float Ypos2 = Console.WindowHeight / 5 * inlineY;
-                    Console.SetCursorPosition((int)Xpos2, (int)Ypos2);
+                    Console.SetCursorPosition((int)Xpos2 + 2, (int)Ypos2);
                     Console.WriteLine(pok.Name);
                 }
                 count = tempCount;
