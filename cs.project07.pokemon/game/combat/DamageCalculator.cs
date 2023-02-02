@@ -11,7 +11,7 @@ namespace cs.project07.pokemon.game.combat
     {
         public static int DamageWithMultiplier(Attack attack, Pokemon attacker, Pokemon defender, out float damageMultiplier, out int critical)
         {
-            damageMultiplier = 1;
+            damageMultiplier = 1.0f;
             critical = 1;
             if (attack.Power == 0) { return 0; }
             

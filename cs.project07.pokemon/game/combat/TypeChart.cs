@@ -38,7 +38,7 @@ namespace cs.project07.pokemon.game.combat
 
         public static bool IsSuperEffective(ElementType attack, ElementType defense)
         {
-            return Chart[attack.ToString().ToLower()][defense.ToString().ToLower()] == 1;
+            return Chart[attack.ToString().ToLower()][defense.ToString().ToLower()] > 1;
         }
 
         public static bool IsEffective(ElementType attack, ElementType defense)

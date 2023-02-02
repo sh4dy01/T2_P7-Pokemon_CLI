@@ -41,15 +41,16 @@ namespace cs.project07.pokemon.game.states.gui
 
         public void InitDefaults()
         {
-            Width = 24;
-            Height = 5;
+            Width = 25;
+            Height = 6;
 
             if (_isEnemy) {
                 Left = 65;
-                Top = 15;
+                Top = 10;
+                Height = 4;
             } else
             {
-                Left = Parent.Width /2 + 25;
+                Left = Parent.Width /2 + 15;
                 Top = Parent.Height /2;
             }
             
@@ -144,7 +145,7 @@ namespace cs.project07.pokemon.game.states.gui
             Console.SetCursorPosition(Left + Width - 6, Top + 1);
             Console.WriteLine("Lv: " + _pokemon.Level);
             Console.SetCursorPosition(Left, Top + 3);
-            Console.Write("HP: ");
+            Console.Write(" HP: ");
         }
 
         private void RenderPlayerPokemonInfo()
@@ -209,7 +210,7 @@ namespace cs.project07.pokemon.game.states.gui
         {
             Console.BackgroundColor = BackgroundColor;
             
-            for (int y = 0; y < Height; y++)
+            for (int y = 0; y < Height+1; y++)
             {
                 Console.SetCursorPosition(Left, Top + y);
                 Console.WriteLine(new string(' ', Width));
