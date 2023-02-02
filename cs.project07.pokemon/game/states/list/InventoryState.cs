@@ -60,6 +60,19 @@ namespace cs.project07.pokemon.game.states.list
             _dialogBox = new DialogBox(this);
             InitItem();
             InitMenu();
+            Pokemon test = new Pokemon(PokemonRegistry.GetRandomPokemon(), 5);
+            addPokemon(test);
+            test = new Pokemon(PokemonRegistry.GetRandomPokemon(), 5);
+            addPokemon(test);
+            test = new Pokemon(PokemonRegistry.GetRandomPokemon(), 5);
+            addPokemon(test);
+            test = new Pokemon(PokemonRegistry.GetRandomPokemon(), 5);
+            addPokemon(test);
+            test = new Pokemon(PokemonRegistry.GetRandomPokemon(), 5);
+            addPokemon(test);
+            test = new Pokemon(PokemonRegistry.GetRandomPokemon(), 5);
+            addPokemon(test);
+
         }
 
         private void InitItem()
