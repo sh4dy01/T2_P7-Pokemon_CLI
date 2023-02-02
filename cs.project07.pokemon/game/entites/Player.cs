@@ -8,6 +8,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using cs.project07.pokemon.game.save;
+using cs.project07.pokemon.game.Registry;
 
 namespace cs.project07.pokemon.game.entites
 {
@@ -121,16 +122,16 @@ namespace cs.project07.pokemon.game.entites
                         int ID, MaxHP, Attack, Defense, SPAttack, SPDeffense, Speed, Level, CurrentHP, Experience, PokemonNumberOfAttacks = 0;
                         List<int> PokemonAttackPP = new List<int>();
 
-                        ID = data.ElementAt((int)index + i * 11 + 0).Value;
-                        MaxHP = data.ElementAt((int)index + i * 11 + 1).Value;
-                        Attack = data.ElementAt((int)index + i * 11 + 2).Value;
-                        Defense = data.ElementAt((int)index + i * 11 + 3).Value;
-                        SPAttack = data.ElementAt((int)index + i * 11 + 4).Value;
-                        SPDeffense = data.ElementAt((int)index + i * 11 + 5).Value;
-                        Speed = data.ElementAt((int)index + i * 11 + 6).Value;
-                        Level = data.ElementAt((int)index + i * 11 + 7).Value;
-                        CurrentHP = data.ElementAt((int)index + i * 11 + 8).Value;
-                        Experience = data.ElementAt((int)index + i * 11 + 9).Value;
+                        ID                     = data.ElementAt((int)index + i * 11 + 0).Value;
+                        MaxHP                  = data.ElementAt((int)index + i * 11 + 1).Value;
+                        Attack                 = data.ElementAt((int)index + i * 11 + 2).Value;
+                        Defense                = data.ElementAt((int)index + i * 11 + 3).Value;
+                        SPAttack               = data.ElementAt((int)index + i * 11 + 4).Value;
+                        SPDeffense             = data.ElementAt((int)index + i * 11 + 5).Value;
+                        Speed                  = data.ElementAt((int)index + i * 11 + 6).Value;
+                        Level                  = data.ElementAt((int)index + i * 11 + 7).Value;
+                        CurrentHP              = data.ElementAt((int)index + i * 11 + 8).Value;
+                        Experience             = data.ElementAt((int)index + i * 11 + 9).Value;
                         PokemonNumberOfAttacks = data.ElementAt((int)index + i * 11 + 10).Value;
 
                         for (int y = 1; y < PokemonNumberOfAttacks + 1; y++)
@@ -162,16 +163,16 @@ namespace cs.project07.pokemon.game.entites
                         int ID, MaxHP, Attack, Defense, SPAttack, SPDeffense, Speed, Level, CurrentHP, Experience, PokemonNumberOfAttacks = 0;
                         List<int> PokemonAttackPP = new List<int>();
 
-                        ID = data.ElementAt((int)index + i * 11 + 0).Value;
-                        MaxHP = data.ElementAt((int)index + i * 11 + 1).Value;
-                        Attack = data.ElementAt((int)index + i * 11 + 2).Value;
-                        Defense = data.ElementAt((int)index + i * 11 + 3).Value;
-                        SPAttack = data.ElementAt((int)index + i * 11 + 4).Value;
-                        SPDeffense = data.ElementAt((int)index + i * 11 + 5).Value;
-                        Speed = data.ElementAt((int)index + i * 11 + 6).Value;
-                        Level = data.ElementAt((int)index + i * 11 + 7).Value;
-                        CurrentHP = data.ElementAt((int)index + i * 11 + 8).Value;
-                        Experience = data.ElementAt((int)index + i * 11 + 9).Value;
+                        ID                     = data.ElementAt((int)index + i * 11 + 0).Value;
+                        MaxHP                  = data.ElementAt((int)index + i * 11 + 1).Value;
+                        Attack                 = data.ElementAt((int)index + i * 11 + 2).Value;
+                        Defense                = data.ElementAt((int)index + i * 11 + 3).Value;
+                        SPAttack               = data.ElementAt((int)index + i * 11 + 4).Value;
+                        SPDeffense             = data.ElementAt((int)index + i * 11 + 5).Value;
+                        Speed                  = data.ElementAt((int)index + i * 11 + 6).Value;
+                        Level                  = data.ElementAt((int)index + i * 11 + 7).Value;
+                        CurrentHP              = data.ElementAt((int)index + i * 11 + 8).Value;
+                        Experience             = data.ElementAt((int)index + i * 11 + 9).Value;
                         PokemonNumberOfAttacks = data.ElementAt((int)index + i * 11 + 10).Value;
 
                         for (int y = 1; y < PokemonNumberOfAttacks + 1; y++)

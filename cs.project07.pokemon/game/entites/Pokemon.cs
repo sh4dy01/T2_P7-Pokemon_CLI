@@ -62,31 +62,29 @@ namespace cs.project07.pokemon.game.entites
 
         public void Save() {
             SaveManager.PrepareData(
-                new Tuple<string, int>("PokemonID"              + _dex.PokedexID, _dex.PokedexID),
-                new Tuple<string, int>("PokemonMaxHP"           + _dex.PokedexID, ((int)Stat.MaxHP)),
-                new Tuple<string, int>("PokemonAttack"          + _dex.PokedexID, ((int)Stat.Attack)),
-                new Tuple<string, int>("PokemonDefense"         + _dex.PokedexID, ((int)Stat.Defense)),
-                new Tuple<string, int>("PokemonSPAttack"        + _dex.PokedexID, ((int)Stat.SPAttack)),
-                new Tuple<string, int>("PokemonSPDefense"       + _dex.PokedexID, ((int)Stat.SPDefense)),
-                new Tuple<string, int>("PokemonSpeed"           + _dex.PokedexID, ((int)Stat.Speed)),
-                new Tuple<string, int>("PokemonLevel"           + _dex.PokedexID, Level),
-                new Tuple<string, int>("PokemonCurrentHP"       + _dex.PokedexID, ((int)Currenthealth)),
-                new Tuple<string, int>("PokemonExperience"      + _dex.PokedexID, ((int)Experience)),
-                new Tuple<string, int>("PokemonNumberOfAttacks" + _dex.PokedexID, Attacks.Length)
+                new Tuple<string, int>("PokemonID"              + Id, _dex.PokedexID),
+                new Tuple<string, int>("PokemonMaxHP"           + Id, ((int)Stat.MaxHP)),
+                new Tuple<string, int>("PokemonAttack"          + Id, ((int)Stat.Attack)),
+                new Tuple<string, int>("PokemonDefense"         + Id, ((int)Stat.Defense)),
+                new Tuple<string, int>("PokemonSPAttack"        + Id, ((int)Stat.SPAttack)),
+                new Tuple<string, int>("PokemonSPDefense"       + Id, ((int)Stat.SPDefense)),
+                new Tuple<string, int>("PokemonSpeed"           + Id, ((int)Stat.Speed)),
+                new Tuple<string, int>("PokemonLevel"           + Id, Level),
+                new Tuple<string, int>("PokemonCurrentHP"       + Id, ((int)Currenthealth)),
+                new Tuple<string, int>("PokemonExperience"      + Id, ((int)Experience)),
+                new Tuple<string, int>("PokemonNumberOfAttacks" + Id, Attacks.Length)
                 );
 
             int index = 0;
             foreach (var attack in Attacks)
             {
                 SaveManager.PrepareData(
-                    new Tuple<string, int>("AttackPP" + _dex.PokedexID + index, attack.Usage)
+                    new Tuple<string, int>("AttackPP" + Id + index, attack.Usage)
                     );
                 index++;
             }
         }
         public void Load() { }
-
-        private void InitStat()
         public void SetId()
         {
             _id = PokemonListManager.GetNextId();
