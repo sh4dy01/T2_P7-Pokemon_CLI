@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using cs.project07.pokemon.game.save;
 using cs.project07.pokemon.game.Registry;
+using cs.project07.pokemon.game.states.gui;
 
 namespace cs.project07.pokemon.game.entites
 {
@@ -26,6 +27,7 @@ namespace cs.project07.pokemon.game.entites
         public Vector2 playerPosition;
         private ConsoleColor BackgroundColor;
         private ConsoleColor ForegroundColor;
+        private DialogBox? dialog;
         private int _SprayMovementLeft { get; set; }
         public void SetSprayMovementLeft (int sprayMovementLeft) { _SprayMovementLeft = sprayMovementLeft;  }
         public State _parent { get; set; }
@@ -100,11 +102,13 @@ namespace cs.project07.pokemon.game.entites
         {
             var data = SaveManager.Loaded;
             //load player pos data
-            var PlayerPosX = data?["PlayerPosX"];
-            var PlayerPosY = data?["PlayerPosY"];
-            if (PlayerPosX != null && PlayerPosY != null)
-            {
-                playerPosition = new Vector2((float)PlayerPosX, (float)PlayerPosY);
+            if (data != null) if (data.ContainsKey("PlayerPosX") && data.ContainsKey("PlayerPosY")) {
+                var PlayerPosX = data?["PlayerPosX"];
+                var PlayerPosY = data?["PlayerPosY"];
+                if (PlayerPosX != null && PlayerPosY != null)
+                {
+                    playerPosition = new Vector2((float)PlayerPosX, (float)PlayerPosY);
+                }
             }
 
             
@@ -149,7 +153,7 @@ namespace cs.project07.pokemon.game.entites
 
             
 
-            //load captured pokemon
+            //load battleTeam pokemon
             if (data.ContainsKey("BattleTeamPokemonNumber")) { 
                 int? BattleTeamPokemonNumber = data?["BattleTeamPokemonNumber"];
                 int? index = data?.Keys.ToList().IndexOf("BattleTeamPokemonNumber");
@@ -190,6 +194,16 @@ namespace cs.project07.pokemon.game.entites
             }
 
 
+        }
+
+        public void Render()
+        {
+            if (dialog != null) dialog.Render();
+        }
+
+        public void StopDialog()
+        {
+            dialog= null;
         }
 
         public void mouvPlayer(char dir)
@@ -288,9 +302,21 @@ namespace cs.project07.pokemon.game.entites
                 {
                     foreach (var item in InventoryManager.Inventory)
                     {
-                        if (item.ID == element) item.Add();
-                        map.ModifyMap((int)playerPosition.X, (int)playerPosition.Y, "ITEMS", '\0');
-                        map.ModifyMap((int)playerPosition.X, (int)playerPosition.Y, "GROUND", ' ');
+                        if (item.ID == element)
+                        {
+                            item.Add();
+                            map.ModifyMap((int)playerPosition.X, (int)playerPosition.Y, "ITEMS", '\0');
+                            map.ModifyMap((int)playerPosition.X, (int)playerPosition.Y, "GROUND", ' ');
+                            int id = map.ItemsId;
+                            SaveManager.PrepareData(
+                                new Tuple<string, int>("item" + id + "x", (int)playerPosition.X),
+                                new Tuple<string, int>("item" + id + "y", (int)playerPosition.Y)
+                                );
+                            dialog = new DialogBox(_parent);
+                            dialog.UpdateText("vous avez récupéré x1 "+ item.Name);
+                            dialog.Render();
+                            
+                        }
 
                     }
                     

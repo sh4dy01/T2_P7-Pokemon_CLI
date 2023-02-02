@@ -25,6 +25,8 @@ namespace cs.project07.pokemon.game.map
     {
         public Vector2 PlayerSpawnPosition;
         public Dictionary<string, Layer>? Layers;
+        private int _itemsId;
+        public int ItemsId { get { _itemsId++; return _itemsId;  } }
 
         public List<Tuple<string, int, int, string, int, int>>? _Teleporters { get; private set; }
         private string _Name;
@@ -57,6 +59,7 @@ namespace cs.project07.pokemon.game.map
         {
             Parent = parent;
             _Name = Name;
+            _itemsId = 0;
             Init();
         }
 
@@ -227,9 +230,31 @@ namespace cs.project07.pokemon.game.map
                 layer.Render();
         }
 
-        public void Save() { }
+        public void Save() {
+            SaveManager.PrepareData(
+                new Tuple<string, int>("NumberOfTakenItems", _itemsId)
+                );
+        }
 
-        public void Load() { }
+        public void Load() {
+            var data = SaveManager.Loaded;
+            int index;
+            if (data.ContainsKey("NumberOfTakenItems"))
+            {
+                index = data["NumberOfTakenItems"];
+                for (int i = 1; i < index+1; i++)
+                {
+                    SaveManager.PrepareData(
+                        new Tuple<string, int>("item" + i + "x", data["item" + i + "x"]),
+                        new Tuple<string, int>("item" + i + "y", data["item" + i + "y"])
+                        );
+                    ModifyMap(data["item" + i + "x"], data["item" + i + "y"], "ITEMS", '\0');
+                    ModifyMap(data["item" + i + "x"], data["item" + i + "y"], "GROUND", ' ');
+                }
+
+                _itemsId = data["NumberOfTakenItems"];
+            }
+        }
 
         /* ######################################################### */
         public class Layer : IUpdatable, IRenderable<Map>

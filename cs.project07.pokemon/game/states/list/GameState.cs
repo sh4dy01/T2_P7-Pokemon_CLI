@@ -160,6 +160,7 @@ namespace cs.project07.pokemon.game.states.list
                         // TODO Player use action
                         if(showMenu)
                             Button.ExecuteAction(_buttonManager.Buttons);
+                        Player.StopDialog();
                         break;
                     case ConsoleKey.M:
                         if (CurrentMap.Zoom == 4 && !showMenu)
@@ -214,6 +215,7 @@ namespace cs.project07.pokemon.game.states.list
             else
                 CurrentMap?.Render();
             Player.drawPlayer(CurrentMap.Zoom, SetCameraOffset());
+            Player.Render();
         }
 
         public override void Save()
@@ -231,7 +233,7 @@ namespace cs.project07.pokemon.game.states.list
             SaveManager.PrepareData(
                 new Tuple<string, int>("map", Convert.ToInt32(mapNumber))
                 );
-            //CurrentMap?.Save();
+            CurrentMap?.Save();
         }
 
         public override void Load()
@@ -242,16 +244,18 @@ namespace cs.project07.pokemon.game.states.list
             Player.Load();
 
             //Load in the Map class
-            var data = SaveManager.Loaded["map"];
-            if (data != null)
+            var data = SaveManager.Loaded;
+            int? value = null;
+            if (data.ContainsKey("map")) value = SaveManager.Loaded["map"];
+            if (value != null)
             {
 
-                string map = "map" + Convert.ToString(data);
+                string map = "map" + Convert.ToString(value);
                 CurrentMap = Maps[map];
                 CurrentMap.Zoom = CurrentMap.Zoom;
             }
 
-            //CurrentMap?.Load();
+            CurrentMap?.Load();
         }
 
 
