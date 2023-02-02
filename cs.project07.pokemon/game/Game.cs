@@ -1,5 +1,7 @@
 ﻿#pragma warning disable CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
 using cs.project07.pokemon.game.combat;
+using cs.project07.pokemon.game.entites;
+using cs.project07.pokemon.game.save;
 using cs.project07.pokemon.game.Registry;
 using cs.project07.pokemon.game.states;
 using cs.project07.pokemon.game.states.list;
@@ -145,6 +147,7 @@ namespace cs.project07.pokemon.game
         {
             Running = false;
             Console.ResetColor();
+            
             //Console.Clear();
         }
 
