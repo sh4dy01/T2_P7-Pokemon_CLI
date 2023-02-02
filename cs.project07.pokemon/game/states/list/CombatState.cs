@@ -31,8 +31,6 @@ namespace cs.project07.pokemon.game.states.list
         private float _runChance = 50;
         
         private CombatView _currentView;
-        private readonly DamageCalculator _damageCalculator;
-
         private readonly CombatDialogBox _dialogBox;
         private readonly Pokemon _enemyPokemon;
         private readonly PokemonInfoBox _enemyPokemonUi;
@@ -51,7 +49,6 @@ namespace cs.project07.pokemon.game.states.list
             _enemyPokemon = new Pokemon(PokemonRegistry.GetRandomPokemon());
             _dialogBox = new CombatDialogBox(this);
             _enemyPokemonUi = new PokemonInfoBox(this, _enemyPokemon, true);
-            _damageCalculator = new DamageCalculator();
             _attackInfoUi = new AttackInfoBox(this);
             _playerSprite = new PokemonSprite(false, new Vector2(25, 27), ForegroundColor, BackgroundColor);
             _enemySprite = new PokemonSprite(true, new Vector2(130, 5), ForegroundColor, BackgroundColor);

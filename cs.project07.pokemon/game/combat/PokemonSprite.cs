@@ -1,41 +1,19 @@
 ﻿using cs.project07.pokemon.game.states;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using cs.project07.pokemon.game.states.gui;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace cs.project07.pokemon.game.combat
 {
-    internal class PokemonSprite : IRenderable<State>
+    internal class PokemonSprite : Sprite
     {
-        private string[] _sprite;
         private bool _isEnemy;
 
-        public State Parent { get; set; }
-        public int Left { get; set; }
-        public int Top { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
-        public ConsoleColor ForegroundColor { get; set; }
-        public ConsoleColor BackgroundColor { get; set; }
-
-        public PokemonSprite(bool isEnemy, Vector2 position, ConsoleColor fgColor, ConsoleColor bgColor)
+        public PokemonSprite(bool isEnemy, Vector2 position, ConsoleColor fgColor, ConsoleColor bgColor) : base(position, fgColor, bgColor)
         {
             _isEnemy = isEnemy;
-            Left = (int)position.X;
-            Top = (int)position.Y;
-            ForegroundColor = fgColor;
-            BackgroundColor = bgColor;
         }
 
-        public bool IsEmpty()
-        {
-            return _sprite is null ? true : false;
-        }
-
-        public void LoadSprite(string name)
+        public override void LoadSprite(string name) 
         {
             if (!IsEmpty()) Clear();
 
@@ -54,30 +32,7 @@ namespace cs.project07.pokemon.game.combat
 
             Render();
         }
-        
-        public void Render()
-        {
-            Console.BackgroundColor = BackgroundColor;
-            Console.ForegroundColor = ForegroundColor;
-
-            for (int i = 0; i < _sprite.Length; i++)
-            {
-                Console.SetCursorPosition(Left, Top + i);
-                Console.WriteLine(_sprite[i]);
-            }
-        }
-        
-        public void Clear()
-        {
-            Console.BackgroundColor = BackgroundColor;
-            Console.ForegroundColor = ForegroundColor;
-
-            for (int i = 0; i < _sprite.Length; i++)
-            {
-                Console.SetCursorPosition(Left, Top + i);
-                Console.WriteLine(new string(' ', Width));
-            }
-        }
+       
 
         public void InitDefaults()
         {

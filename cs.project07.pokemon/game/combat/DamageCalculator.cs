@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace cs.project07.pokemon.game.combat
 {
-    public class DamageCalculator
+    public static class DamageCalculator
     {
         public static int DamageWithMultiplier(Attack attack, Pokemon attacker, Pokemon defender, out float damageMultiplier, out int critical)
         {
@@ -25,7 +25,7 @@ namespace cs.project07.pokemon.game.combat
             critical = IsCritical(attacker.Stat.Speed, null, -1);
             float random = rnd.Next(217, 256) / 255.0f;
             
-            double damage = ((((2 * attacker.Level * critical) / 5.0f + 2) * attack.Power * (a / d)) / 50 + 2) * STAB * damageMultiplier * random;
+            double damage = ((((2 * attacker.Level * critical) / 5.0f + 2) * attack.Power * (a / d)) / 50.0f + 2) * STAB * damageMultiplier * random;
 
             return (int)Math.Ceiling(damage);
         }

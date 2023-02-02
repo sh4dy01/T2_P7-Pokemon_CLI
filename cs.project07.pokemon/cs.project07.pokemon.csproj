@@ -50,6 +50,9 @@
 		<None Update="game\assets\ascii\magikarp_front.ans">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<None Update="game\assets\ascii\menu_title.txt">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="game\assets\ascii\meowth_back.ans">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
