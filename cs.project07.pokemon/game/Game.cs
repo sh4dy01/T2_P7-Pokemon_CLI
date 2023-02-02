@@ -129,6 +129,7 @@ namespace cs.project07.pokemon.game
             // Save the state instance
             if (StatesList?.Count > 0)
                 StatesList.First().Save();
+            SaveManager.SaveData();
         }
 
         public void Load()

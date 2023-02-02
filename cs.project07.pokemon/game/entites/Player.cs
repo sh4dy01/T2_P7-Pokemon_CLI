@@ -61,7 +61,9 @@ namespace cs.project07.pokemon.game.entites
 
         public void Save()
         {
-            SaveManager.SaveData(
+
+
+            SaveManager.PrepareData(
                 new Tuple<string, int>( "PlayerPosX" , ((int)playerPosition.X) ),
                 new Tuple<string, int>( "PlayerPosY" , ((int)playerPosition.Y) )
                 );
@@ -69,10 +71,11 @@ namespace cs.project07.pokemon.game.entites
 
         public void Load()
         {
-            var data = SaveManager.LoadData();
-            if (data.Count != 0)
+            var PlayerPosX = SaveManager.LoadData("PlayerPosX");
+            var PlayerPosY = SaveManager.LoadData("PlayerPosY");
+            if (PlayerPosX != null && PlayerPosY != null)
             {
-                playerPosition = new Vector2(data["PlayerPosX"], data["PlayerPosY"]);
+                playerPosition = new Vector2((float)PlayerPosX, (float)PlayerPosY);
             }
         }
 
