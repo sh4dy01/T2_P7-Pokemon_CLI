@@ -25,7 +25,7 @@ namespace cs.project07.pokemon.game.items.list
 
         override public void Use(Player player)
         {
-            if (_quantity <= 0) throw new ArgumentException("not enougth " + _name);
+            if (_quantity <= 0) return ;
             _quantity--;
 
             player.SetSprayMovementLeft(50);
