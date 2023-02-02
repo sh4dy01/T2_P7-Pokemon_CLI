@@ -151,7 +151,7 @@ namespace cs.project07.pokemon.game.states.gui
         private void RenderPlayerPokemonInfo()
         {
             Console.SetCursorPosition(Left + Width - 8, Top + 4);
-            Console.WriteLine((int)_pokemon.Currenthealth + "/ " + (int)_pokemon.Stat.MaxHP); //TODO: FIX THIS
+            Console.WriteLine((int)_pokemon.Currenthealth + "/ " + (int)_pokemon.Stat.MaxHP);
             Console.SetCursorPosition(Left, Top + 5);
             Console.WriteLine("Exp:");
             for (int i = 0; i < 20; i++)

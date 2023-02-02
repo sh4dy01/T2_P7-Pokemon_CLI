@@ -9,20 +9,20 @@ namespace cs.project07.pokemon
 
         private static Attack[] _attacks =
         {
-            new Attack("Tackle", 10, ElementType.NORMAL),
-            new Attack("Scratch", 10, ElementType.NORMAL),
-            new Attack("Growl", 10, ElementType.NORMAL),
-            new Attack("Quick attack", 10, ElementType.NORMAL),
-            new Attack("Splash", 0, ElementType.NORMAL),
+            new Attack("Tackle", 35, ElementType.NORMAL, 35),
+            new Attack("Scratch", 40, ElementType.NORMAL, 35),
+            new Attack("Growl", 10, ElementType.NORMAL, 40),
+            new Attack("Quick attack", 40, ElementType.NORMAL, 30),
+            new Attack("Splash", 0, ElementType.NORMAL, 40),
 
-            new Attack("Vine whip", 20, ElementType.GRASS, TYPE_PP),
-            new Attack("Ember", 20, ElementType.FIRE, TYPE_PP),
-            new Attack("Water gun", 20, ElementType.WATER, TYPE_PP),
-            new Attack("Thunder shock", 20, ElementType.ELECTRIC, TYPE_PP),
-            new Attack("Rollout", 20, ElementType.GROUND, TYPE_PP),
-            new Attack("Confusion", 30, ElementType.PSYCHIC, TYPE_PP),
+            new Attack("Vine whip", 35, ElementType.GRASS, 10),
+            new Attack("Ember", 40, ElementType.FIRE, 25),
+            new Attack("Water gun", 40, ElementType.WATER, 25),
+            new Attack("Thunder shock", 40, ElementType.ELECTRIC, 30),
+            new Attack("Rollout", 30, ElementType.GROUND, 20),
+            new Attack("Confusion", 50, ElementType.PSYCHIC, 25),
             new Attack("Judgment", 100, ElementType.NORMAL, SPECIAL_PP),
-            new Attack("Hyper beam", 100, ElementType.NORMAL, SPECIAL_PP),
+            new Attack("Hyper beam", 150, ElementType.NORMAL, SPECIAL_PP),
         };
 
         static public Attack TACKLE = _attacks[0];

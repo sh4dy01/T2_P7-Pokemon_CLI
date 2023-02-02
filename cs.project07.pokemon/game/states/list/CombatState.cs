@@ -161,7 +161,6 @@ namespace cs.project07.pokemon.game.states.list
             }
             else if (_enemyPokemon.IsDead)
             {
-
                 int oldLevel = _playerPokemon.Level;
                 int experience = Pokemon.LEVEL_UP_GAINED * _enemyPokemon.Level;
 
