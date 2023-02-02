@@ -101,8 +101,7 @@ namespace cs.project07.pokemon.game.states.gui
 
         public void Render()
         {
-            Console.SetCursorPosition(Left + (int)Offsets.X - 3, Top + (int)Offsets.Y);
-
+            Console.SetCursorPosition((int)Offsets.X - 3, (int)Offsets.Y);
             if (Selected && Left >= 0)
             {
                 Console.BackgroundColor = ActiveBackgroundColor;
@@ -116,7 +115,7 @@ namespace cs.project07.pokemon.game.states.gui
                 Console.WriteLine("   ");
             }
 
-            Console.SetCursorPosition(Left + (int)Offsets.X, Top + (int)Offsets.Y);
+            Console.SetCursorPosition((int)Offsets.X, (int)Offsets.Y);
             Console.WriteLine(Text);
         }
 
