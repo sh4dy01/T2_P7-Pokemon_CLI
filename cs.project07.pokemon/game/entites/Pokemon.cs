@@ -25,6 +25,7 @@ namespace cs.project07.pokemon.game.entites
 
         public PokedexEntry Dex => _dex;
         public Stat Stat => _stat;
+        public int Id { get => _id; }
         public bool IsDead { get => _isDead; set => _isDead = value; }
         public string Name { get => _dex.Name; }
 
@@ -58,6 +59,11 @@ namespace cs.project07.pokemon.game.entites
             InitStat();
         }
 
+        public void SetId()
+        {
+            _id = PokemonListManager.GetNextId();
+        }
+
         protected void InitStat()
         {
             for (int i = 1; i < _level; i++)
@@ -73,7 +79,7 @@ namespace cs.project07.pokemon.game.entites
         {
             float threshold;
             int avgLevel = PokemonListManager.GetAverageLevel();
-            int pkmCount = PokemonListManager.GetPokemonCount();
+            int pkmCount = PokemonListManager.GetPokemonInBattleCount();
 
             if (pkmCount < 2)
             {
@@ -84,10 +90,7 @@ namespace cs.project07.pokemon.game.entites
             Random rnd = new Random();
             _level = rnd.Next(1, (int)threshold);
             
-            for (int i = 1; i < _level; i++)
-            {
-                LevelUpStat();
-            }
+            InitStat();
         }
 
         protected void LevelUpStat()
