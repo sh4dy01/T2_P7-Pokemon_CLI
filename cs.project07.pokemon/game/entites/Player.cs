@@ -81,7 +81,8 @@ namespace cs.project07.pokemon.game.entites
                     Yposition = playerPosition.Y + incrementMouvement;
                     break;
             }
-            _SprayMovementLeft--;
+            if (_SprayMovementLeft > 0)
+                _SprayMovementLeft--;
             playerPosition = new Vector2(Xposition, Yposition);
         }
         public bool collisionWall(char[,] grid, char dir)
