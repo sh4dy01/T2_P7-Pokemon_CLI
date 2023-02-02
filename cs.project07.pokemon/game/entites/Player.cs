@@ -125,7 +125,7 @@ namespace cs.project07.pokemon.game.entites
                 int percentage = new Random().Next(1, 100);
                 if (percentage is > 0 and <= maxPercentage)
                 {
-                    Game.StatesList?.Push(new CombatState(game));
+                    Game.StatesList?.Push(new CombatState(game, false));
                 }
             }
         }
@@ -154,6 +154,14 @@ namespace cs.project07.pokemon.game.entites
                 {
                     int i = 0;
                 }
+            }
+        }
+
+        public void collisionBoss(char[,] grid, Game game)
+        {
+            if (grid[(int)playerPosition.X, (int)playerPosition.Y] == 'A')
+            {
+                Game.StatesList?.Push(new CombatState(game, true));
             }
         }
 

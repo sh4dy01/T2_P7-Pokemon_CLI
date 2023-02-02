@@ -30,8 +30,11 @@ namespace cs.project07.pokemon.game.states.list
 
         private bool _isPlayerTurn = true;
         private string _effectivenessMessage = "";
-        private float _runChance = 50;
         
+        private float _runChance = 50;
+        private float _catchRate = 50;
+        private int _catchAttempts = 0;
+
         private CombatView _currentView;
         private readonly CombatDialogBox _dialogBox;
         private readonly Pokemon _enemyPokemon;
@@ -44,11 +47,14 @@ namespace cs.project07.pokemon.game.states.list
         private AttackInfoBox? _attackInfoUi;
         private PokemonInfoBox? _playerPokemonUi;
 
-        public CombatState(Game game) : base(game)
+        public CombatState(Game game, bool isBoss) : base(game)
         {
+            Console.Clear();
+
             BackgroundColor = ConsoleColor.White;
 
-            _enemyPokemon = new Pokemon(PokemonRegistry.GetRandomPokemon(), 2);
+            _enemyPokemon = isBoss ? new BossPokemon(PokemonRegistry.GetPokemonByPokedexId(493)) : // FIGHT ARCEUS
+                new Pokemon(PokemonRegistry.GetRandomPokemon(), 2); // Fight pokemon
             _dialogBox = new CombatDialogBox(this);
             _enemyPokemonUi = new PokemonInfoBox(this, _enemyPokemon, true);
             _attackInfoUi = new AttackInfoBox(this);
@@ -320,8 +326,6 @@ namespace cs.project07.pokemon.game.states.list
             _dialogBox.Render();
             //Me: Print me all the chars in the _playerSprite
 
-
-
             if (!_isInit)
             {
                 PaintBackground();
@@ -352,6 +356,23 @@ namespace cs.project07.pokemon.game.states.list
         public void TryToRun()
         {
             Random rnd = new();
+            if (rnd.Next(0, 100) <= _runChance)
+            {
+                _dialogBox.UpdateText("You ran away !");
+                SwitchView(CombatView.END_COMBAT);
+            }
+            else
+            {
+                _dialogBox.UpdateText("You failed to run away !");
+                _isPlayerTurn = false;
+                SwitchView(CombatView.ENEMY_ATTACK);
+            }
+        }
+
+        public void TryToCatch(int multiplicator)
+        {
+            Random rnd = new();
+            
             if (rnd.Next(0, 100) <= _runChance)
             {
                 _dialogBox.UpdateText("You ran away !");

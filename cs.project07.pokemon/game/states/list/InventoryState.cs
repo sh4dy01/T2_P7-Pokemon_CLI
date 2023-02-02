@@ -49,7 +49,9 @@ namespace cs.project07.pokemon.game.states.list
         public List<Item> _itemList { get; private set; }
 
         public InventoryState(Game gameReceive) : base(gameReceive) 
-        { 
+        {
+            Console.Clear();
+
             game = gameReceive;
             Init();
         }
