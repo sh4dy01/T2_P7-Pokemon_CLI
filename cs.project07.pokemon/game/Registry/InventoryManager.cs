@@ -18,20 +18,7 @@ namespace cs.project07.pokemon.game.Registry
             new Spray(),
         };
 
-        public static void AddItem(Item item)
-        {
-            if (_inventory.Contains(item))
-            {
-                _inventory.Find(x => x.getName() == item.getName()).Add(1);
-            }
-        }
+        public static List<Item> Inventory => _inventory;
 
-        public static void RemoveItem(Item item)
-        {
-            if (_inventory.Contains(item))
-            {
-                _inventory.Find(x => x.getName() == item.getName()).Remove(1);
-            }
-        }
     }
 }

@@ -279,14 +279,21 @@ namespace cs.project07.pokemon.game.entites
             }
         }
 
-        public void collisionItems(char[,] grid)
+        public void collisionItems(char[,] grid, Map map)
         {
             char[] ItemsPossibilities = { 'p', 'P', 'h', 'H', 'b', 'B', 'c', 'C', 'S' };
             foreach (var element in ItemsPossibilities)
             {
                 if (grid[(int)playerPosition.X, (int)playerPosition.Y] == element)
                 {
-                    int i = 0;
+                    foreach (var item in InventoryManager.Inventory)
+                    {
+                        if (item.ID == element) item.Add();
+                        map.ModifyMap((int)playerPosition.X, (int)playerPosition.Y, "ITEMS", '\0');
+                        map.ModifyMap((int)playerPosition.X, (int)playerPosition.Y, "GROUND", ' ');
+
+                    }
+                    
                 }
             }
         }
