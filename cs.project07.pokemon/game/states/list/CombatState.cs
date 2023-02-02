@@ -110,6 +110,7 @@ namespace cs.project07.pokemon.game.states.list
                     CheckIfCombatEnd();
                     break;
                 case CombatView.END_COMBAT:
+                    PokemonListManager.EndCombat();
                     Game.StatesList.Pop();
                     break;
             }
@@ -173,7 +174,6 @@ namespace cs.project07.pokemon.game.states.list
                 _playerPokemonUi.UpdateExperience(experience);
                 _playerPokemon.GainExperience(experience);
                 PokemonListManager.UpdatePokemon(_playerPokemon);
-                PokemonListManager.EndCombat();
 
                 if (oldLevel >= _playerPokemon.Level) return;
 
