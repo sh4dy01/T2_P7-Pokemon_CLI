@@ -8,7 +8,7 @@ namespace cs.project07.pokemon.game.combat
 {
     public class Stat
     {
-        public const float LEVEL_UP_STEP = 0.02f;
+        public const float LEVEL_UP_STEP = 0.07f;
         
         private float _maxHP;
         private float _attack;
@@ -29,6 +29,7 @@ namespace cs.project07.pokemon.game.combat
             (_maxHP, _attack, _defense, _spAttack, _spDefense, _speed) = stat;
         }
 
+        //UT Test
         public void LevelUpStat(Stat stat)
         {
             _maxHP += (int)(stat.MaxHP * LEVEL_UP_STEP); 

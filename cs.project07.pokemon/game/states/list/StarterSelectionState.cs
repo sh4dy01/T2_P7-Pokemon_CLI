@@ -58,7 +58,7 @@ namespace cs.project07.pokemon.game.states.list
                     Offsets = new Vector2(offsetX + 10, offsetY),
                     Action = () =>
                     {
-                        PokemonListManager.SetStarter(new Pokemon(starter));
+                        PokemonListManager.SetStarter(new Pokemon(starter, 5));
                         Game.StatesList?.Push(new GameState(Parent));
                     },
                     ForegroundColor = TypeChart.TypeColor[starter.Element],

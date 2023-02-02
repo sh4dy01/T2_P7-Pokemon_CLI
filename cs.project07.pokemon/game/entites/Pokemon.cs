@@ -44,31 +44,52 @@ namespace cs.project07.pokemon.game.entites
             
         }
         
-        public Pokemon(PokedexEntry dex)
+        public Pokemon(PokedexEntry dex, int level)
         {
             _dex = dex;
             _stat = new Stat((dex.Stat.MaxHP, dex.Stat.Attack, dex.Stat.Defense, dex.Stat.SPAttack, dex.Stat.SPDefense, dex.Stat.Speed));
             _currentHealth = _dex.Stat.MaxHP;
-            _level = 1;
+            _level = level;
             _experience = 0;
             _requiredExperience = LEVEL_UP_STEP;
             _isDead = false;
+            InitStat();
+        }
+
+        private void InitStat()
+        {
+            for (int i = 1; i < _level; i++)
+            {
+                LevelUpStat();
+            }
         }
 
         public virtual void InitEnemyStats()
         {
-            _level = PokemonListManager.GetAverageLevel();
-            LevelUpStat();
+            float threshold;
+            int avgLevel = PokemonListManager.GetAverageLevel();
+            int pkmCount = PokemonListManager.GetPokemonCount();
+
+            if (pkmCount < 2)
+            {
+                threshold = avgLevel / 1.5f;
+            }
+            else threshold = avgLevel;
+            
+            Random rnd = new Random();
+            _level = rnd.Next(1, (int)threshold);
+            
+            for (int i = 1; i < _level; i++)
+            {
+                LevelUpStat();
+            }
         }
 
         protected void LevelUpStat()
         {
-            for (int i = 1; i < _level; i++)
-            {
-                _stat.LevelUpStat(_dex.Stat);
-                _requiredExperience += LEVEL_UP_STEP;
-                _currentHealth += (int)_stat.MaxHP * Stat.LEVEL_UP_STEP;
-            }
+            _currentHealth += (int)(_stat.MaxHP * Stat.LEVEL_UP_STEP);
+            _stat.LevelUpStat(_dex.Stat);
+            _requiredExperience += LEVEL_UP_STEP;
         }
 
         public void InitHealth(int amount)
@@ -113,6 +134,7 @@ namespace cs.project07.pokemon.game.entites
                 _experience -= _requiredExperience;
                 _level++;
                 _requiredExperience += LEVEL_UP_STEP;
+                _stat.LevelUpStat(_dex.Stat);
             }
         }
 

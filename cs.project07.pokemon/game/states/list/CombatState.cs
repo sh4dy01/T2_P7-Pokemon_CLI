@@ -46,7 +46,7 @@ namespace cs.project07.pokemon.game.states.list
         {
             BackgroundColor = ConsoleColor.White;
 
-            _enemyPokemon = new Pokemon(PokemonRegistry.GetRandomPokemon());
+            _enemyPokemon = new Pokemon(PokemonRegistry.GetRandomPokemon(), 2);
             _dialogBox = new CombatDialogBox(this);
             _enemyPokemonUi = new PokemonInfoBox(this, _enemyPokemon, true);
             _attackInfoUi = new AttackInfoBox(this);

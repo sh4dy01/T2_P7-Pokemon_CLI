@@ -92,5 +92,20 @@
                 }
             }
         }
+
+        internal static int GetPokemonCount()
+        {
+            int pokemonInBattle = 0;
+            
+            foreach (var pokemon in _battleTeam)
+            {
+                if (pokemon is not null)
+                {
+                    pokemonInBattle++;
+                }
+            }
+
+            return pokemonInBattle;
+        }
     }
 }
