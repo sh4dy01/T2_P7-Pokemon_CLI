@@ -142,6 +142,7 @@ namespace cs.project07.pokemon.game.states.list
         {
             _currentView = view;
             _buttons.Clear();
+            PaintBackground();
             switch (view)
             {
                 case InventoryView.MENU:
@@ -155,6 +156,7 @@ namespace cs.project07.pokemon.game.states.list
                     break;
                 case InventoryView.ITEMS:
                     ShowItems();
+                    drawInventory = false;
                     break;
                 default:
                     break;
@@ -349,6 +351,9 @@ namespace cs.project07.pokemon.game.states.list
 
         private void navButtonPokeStat(int Xpos, int Ypos)
         {
+            _buttonManager = new ButtonManager();
+            _buttons = _buttonManager.Buttons;
+
             _dialogBox.Left = 0;
             _dialogBox.Top = 0;
             _buttons["USE_ITEM"] = new Button(_dialogBox, "Items")
@@ -377,6 +382,8 @@ namespace cs.project07.pokemon.game.states.list
                 ActiveBackgroundColor = ConsoleColor.DarkGray,
                 ActiveForegroundColor = ConsoleColor.Black
             };
+
+            _buttonManager.InitHandleKeyEvent();
         }
 
 
