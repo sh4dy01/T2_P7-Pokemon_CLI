@@ -23,13 +23,15 @@ namespace cs.project07.pokemon.game.Registry
 
         public static void SetStarter(Pokemon pokemon)
         {
+            pokemon.SetId();
             _battleTeam[0] = pokemon;
         }
 
         public static void AddPokemon(Pokemon pokemon)
         {
-            _pokemonCaptured.Add(pokemon);
-            SetPokemonInBattleTeam(pokemon);
+            pokemon.SetId();
+            if (!SetPokemonInBattleTeam(pokemon))
+                _pokemonCaptured.Add(pokemon);
         }
 
         public static void UpdatePokemon(Pokemon pokemonToUpdate)
@@ -81,21 +83,23 @@ namespace cs.project07.pokemon.game.Registry
             return true;
         }
 
-        public static void SetPokemonInBattleTeam(Pokemon pokemonToAdd)
+        public static bool SetPokemonInBattleTeam(Pokemon pokemonToAdd)
         {
-            if (_battleTeam.Last() != null) return;
+            if (_battleTeam.Last() != null) return false;
 
             for (int i = 0; i < _battleTeam.Length; i++)
             {
                 if (_battleTeam[i] == null)
                 {
                     _battleTeam[i] = pokemonToAdd;
-                    break;
+                    return true;
                 }
             }
+
+            return false;
         }
 
-        internal static int GetPokemonCount()
+        internal static int GetPokemonInBattleCount()
         {
             int pokemonInBattle = 0;
 
@@ -108,6 +112,11 @@ namespace cs.project07.pokemon.game.Registry
             }
 
             return pokemonInBattle;
+        }
+
+        internal static int GetNextId()
+        {
+            return GetPokemonInBattleCount() + _pokemonCaptured.Count + 1;
         }
     }
 }
