@@ -72,7 +72,7 @@ namespace cs.project07.pokemon.game.states.gui
                 Offsets = new Vector2(-10, 1),
                 Action = () =>
                 {
-
+                    ((CombatState)Parent).SwitchView(CombatState.CombatView.SELECT_ACTION);
                 }
             };
             _buttons["POKEMON"] = new Button(this, "POKEMON")
@@ -131,6 +131,7 @@ namespace cs.project07.pokemon.game.states.gui
 
                 StringBuilder sb = new StringBuilder();
                 sb.Append("Lv:").Append(pokemon.Level).Append(' ').Append(pokemon.Name).Append(' ').Append(Math.Round((int)pokemon.Currenthealth / pokemon.Stat.MaxHP * 100)).Append('%');
+
                 _buttons[pokemon.Name + i] = new Button(this, sb.ToString())
                 {
                     Offsets = new Vector2(offsetX, offsetY),
@@ -148,6 +149,37 @@ namespace cs.project07.pokemon.game.states.gui
                 
                 selected = false;
             }
+        }
+
+        internal void InitSelectItemsButtons()
+        {
+            int offsetX = -25;
+            int offsetY = -1;
+            bool selected = true;
+            /*
+            for (int i = 0; i < attacks.Length; i++)
+            {
+                SetOffset(ref offsetX, ref offsetY, ref selected, i, 20);
+
+                var attack = attacks[i];
+                _buttons[attack.Name] = new Button(this, attack.Name)
+                {
+                    Offsets = new Vector2(offsetX, offsetY),
+                    Selected = selected,
+                    Action = () =>
+                    {
+                        if (attack.Usage > 0)
+                        {
+                            ((CombatState)Parent).DealEnemyDamage(attack);
+                            attack.Use();
+                        }
+                        else
+                            UpdateText("No more uses left");
+                    },
+                    ForegroundColor = TypeChart.TypeColor[attack.Element],
+                    ActiveForegroundColor = TypeChart.TypeColor[attack.Element]
+                };
+            }*/
         }
 
         private static void SetOffset(ref int offsetX, ref int offsetY, ref bool selected, int i, int offsetXIncrement)

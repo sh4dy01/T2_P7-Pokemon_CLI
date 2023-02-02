@@ -19,6 +19,7 @@ namespace cs.project07.pokemon.game.states.list
             INTRO,
             SELECT_POKEMON,
             SELECT_ACTION,
+            SELECT_ITEM,
             SELECT_ATTACK,
             EFFECTIVE,
             ACTION_USE,
@@ -84,6 +85,10 @@ namespace cs.project07.pokemon.game.states.list
                 case CombatView.SELECT_ACTION:
                     _dialogBox.ResetText();
                     _dialogBox.InitSelectActionButtons();
+                    break;
+                case CombatView.SELECT_ITEM:
+                    _dialogBox.ResetText();
+                    _dialogBox.InitSelectItemsButtons();
                     break;
                 case CombatView.SELECT_ATTACK:
                     _currentView = CombatView.SELECT_ATTACK;
