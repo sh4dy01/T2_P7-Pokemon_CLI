@@ -1,4 +1,4 @@
-PlayerPosX 80
-PlayerPosY 136
+PlayerPosX 132
+PlayerPosY 364
+map 2
 endFile
-
