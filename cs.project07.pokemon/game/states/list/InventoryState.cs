@@ -4,6 +4,7 @@ using cs.project07.pokemon.game.entites;
 using System.Numerics;
 using cs.project07.pokemon.game.items.list;
 using cs.project07.pokemon.game.items;
+using System.Runtime.InteropServices;
 
 namespace cs.project07.pokemon.game.states.list
 {
@@ -42,6 +43,7 @@ namespace cs.project07.pokemon.game.states.list
         private DialogBox _dialogBox;
         public Pokemon[] _pokemonInInventory { get; private set; }
         bool drawInventory = false;
+        int showMoreStatPoke = 0;
 
         public List<Item> _itemList { get; private set; }
 
@@ -184,8 +186,8 @@ namespace cs.project07.pokemon.game.states.list
             _pokemonInInventory = PokemonListManager.BattleTeam;
             foreach (Pokemon pokemon in _pokemonInInventory) 
             {
-
                 count++;
+                int numb = count;
                 inlineX++;
                 if(count == 1) //Why first show is 3 ????
                     first = true;
@@ -204,6 +206,8 @@ namespace cs.project07.pokemon.game.states.list
                     Selected = first,
                     Action = () =>
                     {
+                        //showPokemonStats(pokemon, Xpos, Ypos);
+                        showMoreStatPoke = numb;
                         //TO DO: SHOW Pokemon interface
                     }
                 };
@@ -227,7 +231,7 @@ namespace cs.project07.pokemon.game.states.list
             //}
         }
 
-        private void drawStatPokemon()
+        private void drawBattelTeam()
         {
             int count = 0;
             int inlineX = 0;
@@ -250,9 +254,9 @@ namespace cs.project07.pokemon.game.states.list
                 Console.ForegroundColor = ConsoleColor.Black;
                 for(int i = 0; i <= 6;i++)
                 {
-                    for(int j = 0; j <= 40; j++)
+                    for(int j = 0; j <= 47; j++)
                     {
-                        Console.SetCursorPosition((int)Xpos - increX - 1 + j, (int)Ypos - 1 + 1 * i);
+                        Console.SetCursorPosition((int)Xpos - increX - 3 + j, (int)Ypos - 1 + 1 * i);
                         Console.WriteLine(" ");
                     }
                 }
@@ -268,25 +272,63 @@ namespace cs.project07.pokemon.game.states.list
                 //Xp
                 Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY*2);
                 Console.WriteLine("XP : " + pokemon.Experience + "/" + pokemon.RequiredExp);
-                ////STAT//
-                //Console.SetCursorPosition((int)Xpos + 2, (int)Ypos + increY*4);
-                //Console.WriteLine("STATS");
-                ////Attack
-                //Console.SetCursorPosition((int)Xpos - increX, (int)Ypos + increY*5);
-                //Console.WriteLine("Attack : " + pokemon.Attack);
-                ////Defense
-                //Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY * 5);
-                //Console.WriteLine("Defense : " + pokemon.Defense);
-                ////SPAttack
-                //Console.SetCursorPosition((int)Xpos - increX, (int)Ypos + increY * 6);
-                //Console.WriteLine("SPAttack : " + pokemon.SPAttack);
-                ////SPDefense
-                //Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY * 6);
-                //Console.WriteLine("SPDefense : " + pokemon.SPDefense);
-                ////Speed
-                //Console.SetCursorPosition((int)Xpos, (int)Ypos + increY * 7);
-                //Console.WriteLine("Speed : " + pokemon.Speed);
+
+                if(count == showMoreStatPoke)
+                {
+                    for (int i = 0; i <= 6; i++)
+                    {
+                        for (int j = 0; j <= 47; j++)
+                        {
+                            Console.SetCursorPosition((int)Xpos - increX - 3 + j, (int)Ypos + 6 + 1 * i);
+                            Console.WriteLine(" ");
+                        }
+                    }
+                    //STAT//
+                    Console.SetCursorPosition((int)Xpos + 2, (int)Ypos + increY * 4);
+                    Console.WriteLine("STATS");
+                    //Attack
+                    Console.SetCursorPosition((int)Xpos - increX, (int)Ypos + increY * 5);
+                    Console.WriteLine("Attack : " + pokemon.Attack);
+                    //Defense
+                    Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY * 5);
+                    Console.WriteLine("Defense : " + pokemon.Defense);
+                    //SPAttack
+                    Console.SetCursorPosition((int)Xpos - increX - 2, (int)Ypos + increY * 6);
+                    Console.WriteLine("SPAttack : " + pokemon.SPAttack);
+                    //SPDefense
+                    Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY * 6);
+                    Console.WriteLine("SPDefense : " + pokemon.SPDefense);
+                    //Speed
+                    Console.SetCursorPosition((int)Xpos, (int)Ypos + increY * 7);
+                    Console.WriteLine("Speed : " + pokemon.Speed);
+                }
             }
+        }
+
+        private void showPokemonStats(Pokemon pokemon, float positionX, float positionY)
+        {
+            //int inlineX = position;
+            //int inlineY = position;
+            //if(position == 4)
+            //{
+            //    inlineX = 1;
+            //    inlineY = 3;
+            //}
+
+            float Xpos = positionX;
+            float Ypos = positionY;
+            const int increX = 15;
+            const int increY = 2;
+
+            //for (int i = 0; i <= 6; i++)
+            //{
+            //    for (int j = 0; j <= 40; j++)
+            //    {
+            //        Console.SetCursorPosition((int)Xpos - increX - 1 + j, (int)Ypos + 6 + 1 * i);
+            //        Console.WriteLine(" ");
+            //    }
+            //}
+
         }
 
         public override void Update()
@@ -299,7 +341,7 @@ namespace cs.project07.pokemon.game.states.list
             PaintBackground();
             if (drawInventory)
             {
-                drawStatPokemon();
+                drawBattelTeam();
             }
             _buttonManager.Render();
         }
