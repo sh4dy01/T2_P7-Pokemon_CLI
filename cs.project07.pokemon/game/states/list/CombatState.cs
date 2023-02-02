@@ -42,7 +42,7 @@ namespace cs.project07.pokemon.game.states.list
 
         public CombatState(Game game) : base(game)
         {
-            _enemyPokemon = new Pokemon(PokemonRegistry.GetPokemonByPokedexId(493)); //TODO : Get the random pokemon
+            _enemyPokemon = new Pokemon(PokemonRegistry.GetRandomPokemon());
             _dialogBox = new CombatDialogBox(this);
             _enemyPokemonUi = new PokemonInfoBox(this, _enemyPokemon, true);
             _damageCalculator = new DamageCalculator();
@@ -155,21 +155,16 @@ namespace cs.project07.pokemon.game.states.list
                 int oldLevel = _playerPokemon.Level;
                 int experience = Pokemon.LEVEL_UP_GAINED * _enemyPokemon.Level;
 
-                _playerPokemon.GainExperience(experience);
                 _playerPokemonUi.UpdateExperience(experience);
+                _playerPokemon.GainExperience(experience);
+                PokemonListManager.UpdatePokemon(_playerPokemon);
+                PokemonListManager.EndCombat();
 
-                if (oldLevel < _playerPokemon.Level)
-                {
-                    StringBuilder sb = new();
+                if (oldLevel >= _playerPokemon.Level) return;
 
-                    sb.Append("Your ");
-                    sb.Append(_playerPokemon.Name);
-                    sb.Append(" gained ");
-                    sb.Append(_playerPokemon.Level - oldLevel);
-                    sb.Append(" level !");
-
-                    _dialogBox.UpdateText(sb.ToString());
-                }
+                StringBuilder sb = new();
+                sb.Append("Your ").Append(_playerPokemon.Name).Append(" gained ").Append(_playerPokemon.Level - oldLevel).Append(" level !");
+                _dialogBox.UpdateText(sb.ToString());
             }
             else switch (_isPlayerTurn)
             {

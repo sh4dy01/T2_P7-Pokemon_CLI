@@ -104,7 +104,7 @@ namespace cs.project07.pokemon
         
         public static PokedexEntry GetRandomPokemon()
         {
-            return Pokemons.ElementAt(new Random().Next(0, Pokemons.Count)).Value;
+            return Pokemons.ElementAt(new Random().Next(0, Pokemons.Count - 1)).Value;
         }
     }
 }
