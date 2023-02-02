@@ -16,7 +16,7 @@ namespace cs.project07.pokemon.game.states.list
             MENU,
             POKEMON,
             POKEDEX,
-            ITEM
+            ITEMS
         }
 
         enum AllItemList
@@ -40,12 +40,6 @@ namespace cs.project07.pokemon.game.states.list
         private ButtonManager _buttonManager;
         private Dictionary<string, Button> _buttons;
         private DialogBox _dialogBox;
-        public Pokemon[] _pokemonInInventory { get; private set; }
-        bool drawInventory = false;
-        int showMoreStatPoke = -1;
-        bool moreStatPoke = false;
-
-        public List<Item> _itemList { get; private set; }
 
         public InventoryState(Game gameReceive) : base(gameReceive) 
         { 
@@ -75,20 +69,7 @@ namespace cs.project07.pokemon.game.states.list
 
         }
 
-        private void InitItem()
-        {
-            _itemList = new List<Item>();
-            for(int i = 0; i < 4; i++)
-            {
-                _itemList.Add(new Pokeball(i));
-            }
-            for (int i = 0; i < 4; i++)
-            {
-                _itemList.Add(new Potion(i));
-            }
-            _itemList.Add(new Spray());
-        }
-
+        //####### INVENTORY MENU #######//
         private void InitMenu()
         {
             _buttonManager = new ButtonManager();
@@ -112,13 +93,13 @@ namespace cs.project07.pokemon.game.states.list
                     SwitchView(InventoryView.POKEMON);
                 }
             };
-            _buttons["SAVE"] = new Button(_dialogBox, "Save")
+            _buttons["ITEMS"] = new Button(_dialogBox, "Items")
             {
                 Selected = false,
                 //Offsets = new Vector2(3, 2),
                 Action = () =>
                 {
-                    //TO DO SAVE THE GAME
+                    SwitchView(InventoryView.ITEMS);
                 }
             };
             _buttons["EXIT"] = new Button(_dialogBox, "Exit")
@@ -160,7 +141,6 @@ namespace cs.project07.pokemon.game.states.list
         private void SwitchView(InventoryView view)
         {
             _currentView = view;
-
             _buttons.Clear();
             switch (view)
             {
@@ -173,7 +153,8 @@ namespace cs.project07.pokemon.game.states.list
                 case InventoryView.POKEDEX:
                     //_dialogBox.SwitchState(CombatDialogBox.CombatButtonState.SELECT_ATTACK);
                     break;
-                case InventoryView.ITEM:
+                case InventoryView.ITEMS:
+                    ShowItems();
                     break;
                 default:
                     break;
@@ -181,7 +162,11 @@ namespace cs.project07.pokemon.game.states.list
         }
 
 
-
+        //####### BATTLETEAM #######//
+        public Pokemon[] _pokemonInInventory { get; private set; }
+        bool drawInventory = false;
+        int showMoreStatPoke = -1;
+        bool moreStatPoke = false;
         public void addPokemon(Pokemon pokemonToADD)
         {
             //if(_pokemonInInventory.Count <= 6)
@@ -371,7 +356,7 @@ namespace cs.project07.pokemon.game.states.list
                 Offsets = new Vector2(Xpos, Ypos),
                 Action = () =>
                 {
-                    SwitchView(InventoryView.ITEM);
+                    SwitchView(InventoryView.ITEMS);
                 },
                 BackgroundColor = ConsoleColor.Gray,
                 ForegroundColor = ConsoleColor.Black,
@@ -393,6 +378,72 @@ namespace cs.project07.pokemon.game.states.list
             };
         }
 
+
+        //####### ITEM MENU #######//
+        public List<Item> _itemList { get; private set; }
+        bool showItems = false;
+        private void InitItem()
+        {
+            _itemList = new List<Item>();
+            for (int i = 0; i < 4; i++)
+            {
+                _itemList.Add(new Pokeball(i));
+            }
+            for (int i = 0; i < 4; i++)
+            {
+                _itemList.Add(new Potion(i));
+            }
+            _itemList.Add(new Spray());
+        }
+
+        private void ShowItems()
+        {
+            int Xpos = Console.WindowWidth / 3;
+            int Ypos = 5;
+            showItems = true;
+            _dialogBox.Left = 0;
+            _dialogBox.Top = 0;
+            _buttons["POKEBALLS"] = new Button(_dialogBox, "Pokeballs")
+            {
+                Offsets = new Vector2(0, Ypos),
+                Selected = true,
+                Action = () =>
+                {
+                    //SwitchView(InventoryView.POKEMON);
+                },
+                BackgroundColor = ConsoleColor.Gray,
+                ForegroundColor = ConsoleColor.Black,
+                ActiveBackgroundColor = ConsoleColor.DarkGray,
+                ActiveForegroundColor = ConsoleColor.Black
+            };
+            _buttons["POTIONS"] = new Button(_dialogBox, "Potions")
+            {
+                Selected = false,
+                Offsets = new Vector2(Xpos, Ypos),
+                Action = () =>
+                {
+                    //SwitchView(InventoryView.ITEMS);
+                },
+                BackgroundColor = ConsoleColor.Gray,
+                ForegroundColor = ConsoleColor.Black,
+                ActiveBackgroundColor = ConsoleColor.DarkGray,
+                ActiveForegroundColor = ConsoleColor.Black
+            };
+            _buttons["SPRAYS"] = new Button(_dialogBox, "Sprays")
+            {
+                Selected = false,
+                Offsets = new Vector2(Xpos*2, Ypos),
+                Action = () =>
+                {
+                    //Game.StatesList?.Pop();
+                },
+                                BackgroundColor = ConsoleColor.Gray,
+                ForegroundColor = ConsoleColor.Black,
+                ActiveBackgroundColor = ConsoleColor.DarkGray,
+                ActiveForegroundColor = ConsoleColor.Black
+            };
+        }
+
         public override void Update()
         {
             _buttonManager.Update();
@@ -402,9 +453,9 @@ namespace cs.project07.pokemon.game.states.list
         {
             PaintBackground();
             if (drawInventory)
-            {
                 drawBattelTeam();
-            }
+            if (showItems)
+                ShowItems();
             _buttonManager.Render();
         }
     }
