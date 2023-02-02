@@ -6,7 +6,7 @@ using System.Text;
 namespace cs.project07.pokemon
 {
     public static class PokemonRegistry
-    {
+    {        
         public enum StarterPokemon { Bulbasaur, Charmander, Squirtle }
 
         // Stats (HP, Attack, Defense, Sp Attack, Sp Defense, Speed)
@@ -72,6 +72,13 @@ namespace cs.project07.pokemon
                 })
             },
         };
+
+        public static PokedexEntry[] _starterPokemons = {
+            GetStarterPokemon(StarterPokemon.Bulbasaur),
+            GetStarterPokemon(StarterPokemon.Charmander),
+            GetStarterPokemon(StarterPokemon.Squirtle),
+        };
+
 
         public static PokedexEntry GetRandomStarter() => GetStarterPokemon((StarterPokemon)new Random().Next(0, 3));
 

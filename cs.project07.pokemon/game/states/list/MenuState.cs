@@ -10,6 +10,7 @@ namespace cs.project07.pokemon.game.states.list
         private ButtonManager _buttonManager;
         private Dictionary<string, Button> _buttons;
         private DialogBox _dialogBox;
+        private Sprite _mainMenu;
 
         public MenuState(Game game) : base(game)
         {
@@ -22,6 +23,8 @@ namespace cs.project07.pokemon.game.states.list
             _dialogBox = new DialogBox(this);
             _dialogBox.Top = Console.WindowHeight / 2 + 5;
             _dialogBox.Left = Console.WindowWidth / 2 - 5;
+            _mainMenu = new Sprite(new Vector2(Console.WindowWidth /2 - 40, Console.WindowHeight / 2 - 17), ConsoleColor.White, ConsoleColor.Black);
+            _mainMenu.LoadSprite("menu_title");
 
             InitButtons();
         }
@@ -37,14 +40,15 @@ namespace cs.project07.pokemon.game.states.list
                 Selected = true,
                 Action = () =>
                 {
-                    Game.StatesList?.Push(new GameState(Parent));
+                    Game.StatesList?.Push(new StarterSelectionState(Parent));
+                    //Game.StatesList?.Push(new GameState(Parent));
                 }
             };
             _buttons["CREDITS"] = new Button(_dialogBox, "Credits")
             {
                 Action = () =>
                 {
-                    
+                    //TODO: Add credits
                 }
             };
             _buttons["QUIT"] = new Button(_dialogBox, "Quit")
@@ -89,6 +93,7 @@ namespace cs.project07.pokemon.game.states.list
 
             // Render state childs
             // ------ Buttons
+            _mainMenu.Render();
             _buttonManager?.Render();
         }
     }

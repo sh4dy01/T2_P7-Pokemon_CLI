@@ -16,18 +16,12 @@
         {
             _battleTeam = new Pokemon[6];
             _pokemonCaptured = new List<Pokemon>();
-            SetStarter();
             _activePokemon = -1;
         }
 
-        private static void SetStarter()
+        public static void SetStarter(Pokemon pokemon)
         {
-            _battleTeam[0] = new Pokemon(PokemonRegistry.GetRandomStarter());
-            _battleTeam[1] = new Pokemon(PokemonRegistry.GetPokemonByPokedexId(25));
-            _battleTeam[2] = new Pokemon(PokemonRegistry.GetPokemonByPokedexId(493));
-            _battleTeam[3] = new Pokemon(PokemonRegistry.GetRandomStarter());
-            _battleTeam[4] = new Pokemon(PokemonRegistry.GetRandomStarter());
-            _battleTeam[5] = new Pokemon(PokemonRegistry.GetRandomStarter());
+            _battleTeam[0] = pokemon;
         }
 
         public static void AddPokemon(Pokemon pokemon)
@@ -97,6 +91,21 @@
                     break;
                 }
             }
+        }
+
+        internal static int GetPokemonCount()
+        {
+            int pokemonInBattle = 0;
+            
+            foreach (var pokemon in _battleTeam)
+            {
+                if (pokemon is not null)
+                {
+                    pokemonInBattle++;
+                }
+            }
+
+            return pokemonInBattle;
         }
     }
 }
