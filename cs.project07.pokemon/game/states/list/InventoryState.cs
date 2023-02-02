@@ -16,9 +16,7 @@ namespace cs.project07.pokemon.game.states.list
             MENU,
             POKEMON,
             POKEDEX,
-            POTION,
-            POKEBALL,
-            SPRAY
+            ITEM
         }
 
         enum AllItemList
@@ -86,12 +84,6 @@ namespace cs.project07.pokemon.game.states.list
             ShowMenu();
 
             _buttonManager.InitHandleKeyEvent();
-
-
-            for (int i = 0; i < _buttons.Count; i++)
-            {
-                _buttons.ElementAt(i).Value.Offsets += new Vector2(3, 1 + i);
-            }
         }
 
         private void ShowMenu()
@@ -101,7 +93,7 @@ namespace cs.project07.pokemon.game.states.list
             _buttons["POKEMON_INV"] = new Button(_dialogBox, "Pokemon Inventory")
             {
                 Selected = true,
-                //Offsets = new Vector2(150, 0),
+                //Offsets = new Vector2(3, 1),
                 Action = () =>
                 {
                     SwitchView(InventoryView.POKEMON);
@@ -110,7 +102,7 @@ namespace cs.project07.pokemon.game.states.list
             _buttons["SAVE"] = new Button(_dialogBox, "Save")
             {
                 Selected = false,
-                //Offsets = new Vector2(150, 0),
+                //Offsets = new Vector2(3, 2),
                 Action = () =>
                 {
                     //TO DO SAVE THE GAME
@@ -119,17 +111,32 @@ namespace cs.project07.pokemon.game.states.list
             _buttons["EXIT"] = new Button(_dialogBox, "Exit")
             {
                 Selected = false,
-                //Offsets = new Vector2(150, 0),
+                //Offsets = new Vector2(3, 3),
                 Action = () =>
                 {
                     Game.StatesList?.Pop();
                 }
             };
+            for (int i = 0; i < _buttons.Count; i++)
+            {
+                _buttons.ElementAt(i).Value.Offsets += new Vector2(3, 1 + i);
+            }
         }
 
         public override void HandleKeyEvent(ConsoleKey pressedKey)
         {
             _buttonManager.HandleKeyEvent(pressedKey);
+            if(_currentView == InventoryView.POKEMON && pressedKey == ConsoleKey.Backspace && !moreStatPoke)
+            {
+                drawInventory = false;
+                SwitchView(InventoryView.MENU);
+            }
+            if (_currentView == InventoryView.POKEMON && pressedKey == ConsoleKey.Backspace && moreStatPoke)
+            {
+                showMoreStatPoke = -1;
+                moreStatPoke = false;
+                SwitchView(InventoryView.POKEMON);
+            }
         }
 
         //private void HandleKeyEventButtons(ConsoleKey pressedKey)
@@ -140,10 +147,8 @@ namespace cs.project07.pokemon.game.states.list
         private void SwitchView(InventoryView view)
         {
             _currentView = view;
-            foreach (var button in _buttons)
-            {
-                _buttons.Remove(button.Key);
-            }
+
+            _buttons.Clear();
             switch (view)
             {
                 case InventoryView.MENU:
@@ -155,11 +160,7 @@ namespace cs.project07.pokemon.game.states.list
                 case InventoryView.POKEDEX:
                     //_dialogBox.SwitchState(CombatDialogBox.CombatButtonState.SELECT_ATTACK);
                     break;
-                case InventoryView.POTION:
-                    break;
-                case InventoryView.POKEBALL:
-                    break;
-                case InventoryView.SPRAY:
+                case InventoryView.ITEM:
                     break;
                 default:
                     break;
@@ -312,10 +313,7 @@ namespace cs.project07.pokemon.game.states.list
                     if (!moreStatPoke)
                     {
                         moreStatPoke = true;
-                        foreach (var button in _buttons)
-                        {
-                            _buttons.Remove(button.Key);
-                        }
+                        _buttons.Clear();
                     }
                     navButtonPokeStat((int)Xpos - increX, (int)Ypos + increY * 9);
                 }
@@ -346,6 +344,7 @@ namespace cs.project07.pokemon.game.states.list
                 count = tempCount;
                 inlineX = tempX;
                 inlineY = tempY;
+                Console.SetCursorPosition(0, 0);
             }
         }
 
@@ -359,7 +358,7 @@ namespace cs.project07.pokemon.game.states.list
                 Offsets = new Vector2(Xpos, Ypos),
                 Action = () =>
                 {
-                    //TO DO SAVE THE GAME
+                    SwitchView(InventoryView.ITEM);
                 },
                 BackgroundColor = ConsoleColor.Gray,
                 ForegroundColor = ConsoleColor.Black,
