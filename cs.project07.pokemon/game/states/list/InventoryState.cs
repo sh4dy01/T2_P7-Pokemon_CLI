@@ -209,7 +209,8 @@ namespace cs.project07.pokemon.game.states.list
                         //showPokemonStats(pokemon, Xpos, Ypos);
                         showMoreStatPoke = numb;
                         //TO DO: SHOW Pokemon interface
-                    }
+                    },
+                    BackgroundColor = ConsoleColor.Gray
                 };
 
 
@@ -275,11 +276,11 @@ namespace cs.project07.pokemon.game.states.list
 
                 if(count == showMoreStatPoke)
                 {
-                    for (int i = 0; i <= 6; i++)
+                    for (int i = 0; i <= 9; i++)
                     {
                         for (int j = 0; j <= 47; j++)
                         {
-                            Console.SetCursorPosition((int)Xpos - increX - 3 + j, (int)Ypos + 6 + 1 * i);
+                            Console.SetCursorPosition((int)Xpos - increX - 3 + j, (int)Ypos + 6 + + 1 * i);
                             Console.WriteLine(" ");
                         }
                     }
