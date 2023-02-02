@@ -28,6 +28,7 @@ namespace cs.project07.pokemon
     public class PokedexEntry
     {
 		private readonly int _pokedexID;
+        private readonly int _catchRate;
         private readonly string _name;
         private readonly Stat _stat;
 
@@ -37,17 +38,19 @@ namespace cs.project07.pokemon
 		public int PokedexID => _pokedexID;
         public string Name => _name;
         public Stat Stat => _stat;
-
         public ElementType Element => _element;
         public Attack[] Attacks => _attacks;
+        public int CatchRate => _catchRate;
 
-        public PokedexEntry(int pokedexId, string name, ElementType element, (float, float, float, float, float, float) stat, Attack[] attacks)
+
+        public PokedexEntry(int pokedexId, string name, ElementType element, (float, float, float, float, float, float) stat, Attack[] attacks, int catchRate)
         {
 			_pokedexID = pokedexId;
 			_name = name;
             _stat = new Stat(stat);
             _element = element;
 			_attacks = attacks;
+            _catchRate = catchRate;
         }
     }
 }
