@@ -167,11 +167,16 @@ namespace cs.project07.pokemon.game.states.gui
                     Selected = selected,
                     Action = () =>
                     {
-                        item.Add();
                         if (item.GetQuantity() > 0)
                         {
                             if (item.GetType() == typeof(Potion))
-                                item.Use(PokemonListManager.ActivePokemon);
+                            {
+                                if (PokemonListManager.ActivePokemon.Currenthealth < PokemonListManager.ActivePokemon.Stat.MaxHP)
+                                {
+                                    item.Use(PokemonListManager.ActivePokemon);
+                                    ((CombatState)Parent)._playerPokemonUi?.UpdateHealth(PokemonListManager.ActivePokemon);
+                                }
+                            }
                             
                             else if (item.GetType() == typeof(Pokeball))
                             {
@@ -179,7 +184,10 @@ namespace cs.project07.pokemon.game.states.gui
                                 ((CombatState)Parent).TryToCatch(((Pokeball)item).GetMultiplicator());
                                 return;
                             }
-                            ((CombatState)Parent).SwitchView(CombatState.CombatView.END_TURN);
+                            
+                            StringBuilder sb = new();
+                            sb.Append("You used a ").Append(item.Name).Append(" !");
+                            ((CombatState)Parent).UsedAnItem(sb.ToString());
                         }
                         else
                             UpdateText("No more uses left");

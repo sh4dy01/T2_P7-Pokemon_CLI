@@ -44,13 +44,13 @@ namespace cs.project07.pokemon.game.states.list
                     //Game.StatesList?.Push(new GameState(Parent));
                 }
             };
-            _buttons["CREDITS"] = new Button(_dialogBox, "Credits")
+            /*_buttons["CREDITS"] = new Button(_dialogBox, "Credits")
             {
                 Action = () =>
                 {
                     //TODO: Add credits
                 }
-            };
+            };*/
             _buttons["QUIT"] = new Button(_dialogBox, "Quit")
             {
                 Offsets = new Vector2(0, 10),
@@ -95,6 +95,15 @@ namespace cs.project07.pokemon.game.states.list
             // ------ Buttons
             _mainMenu.Render();
             _buttonManager?.Render();
+            
+            Console.SetCursorPosition(10, Parent.Height-1);
+            Console.Write("Made by these 3 beautiful people :");
+            Console.SetCursorPosition(70, Parent.Height-1);
+            Console.Write("Guilian PIPART");
+            Console.SetCursorPosition(120, Parent.Height-1);
+            Console.Write("Hugo MAESTRACCI");
+            Console.SetCursorPosition(160, Parent.Height-1);
+            Console.Write("Quentin RIPOT");
         }
     }
 }

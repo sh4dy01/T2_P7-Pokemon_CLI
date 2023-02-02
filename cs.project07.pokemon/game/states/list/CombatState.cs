@@ -43,7 +43,7 @@ namespace cs.project07.pokemon.game.states.list
 
         private Pokemon? _playerPokemon;
         private AttackInfoBox? _attackInfoUi;
-        private PokemonInfoBox? _playerPokemonUi;
+        public PokemonInfoBox? _playerPokemonUi;
 
         public CombatState(Game game, bool isBoss) : base(game)
         {
@@ -59,8 +59,6 @@ namespace cs.project07.pokemon.game.states.list
             _playerSprite = new PokemonSprite(false, new Vector2(25, 27), ForegroundColor, BackgroundColor);
             _enemySprite = new PokemonSprite(true, new Vector2(130, 5), ForegroundColor, BackgroundColor);
             
-            PokemonListManager.SetStarter(new Pokemon(PokemonRegistry.GetRandomPokemon(), 5));
-
             Init();
         }
 
@@ -109,7 +107,6 @@ namespace cs.project07.pokemon.game.states.list
                     _dialogBox.UpdateText(_effectivenessMessage);
                     break;
                 case CombatView.ACTION_USE:
-                    //TODO
                     break;
                 case CombatView.ENEMY_ATTACK:
                     DealPlayerDamage();
@@ -128,6 +125,12 @@ namespace cs.project07.pokemon.game.states.list
         {
             SwitchView(CombatView.SELECT_POKEMON);
             _isPlayerTurn = false;
+        }
+
+        public void UsedAnItem(string message)
+        {
+            SwitchView(CombatView.ACTION_USE);
+            _dialogBox.UpdateText(message);
         }
 
         public void SwapPlayerPokemon(Pokemon pokemon)
@@ -266,6 +269,9 @@ namespace cs.project07.pokemon.game.states.list
                     {
                         switch (_currentView)
                         {
+                            case CombatView.ACTION_USE:
+                                SwitchView(CombatView.END_TURN);
+                                break;
                             case CombatView.ENEMY_ATTACK:
                                 SwitchView(CombatView.EFFECTIVE);
                                 break;
@@ -295,7 +301,7 @@ namespace cs.project07.pokemon.game.states.list
                     switch (_currentView)
                     {
                         case CombatView.SELECT_ATTACK or CombatView.SELECT_ITEM:
-                            _attackInfoUi.Hide();
+                            _attackInfoUi?.Hide();
                             SwitchView(CombatView.SELECT_ACTION);
                             break;
                         case CombatView.SELECT_POKEMON:
@@ -323,7 +329,6 @@ namespace cs.project07.pokemon.game.states.list
             base.Render();
 
             _dialogBox.Render();
-            //Me: Print me all the chars in the _playerSprite
 
             if (!_isInit)
             {
@@ -333,19 +338,11 @@ namespace cs.project07.pokemon.game.states.list
             
             if (_playerPokemon is not null)
             {
-                _playerPokemonUi.Render();
-                _attackInfoUi.Render();
-
-                if (!_playerSprite.IsEmpty())
-                {
-                    //_playerSprite.Render();
-                }
+                _playerPokemonUi?.Render();
+                _attackInfoUi?.Render();
             }
 
-            if (_enemySprite is not null)
-            {
-                _enemySprite.Render();
-            }
+            _enemySprite?.Render();
             _enemyPokemonUi.Render();
             // Render childs
             // ------ Map
