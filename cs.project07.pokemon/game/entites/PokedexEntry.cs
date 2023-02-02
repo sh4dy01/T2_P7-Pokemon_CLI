@@ -22,8 +22,10 @@ namespace cs.project07.pokemon
 		DARK,
 		STEEL
 	};
+    
 
-	public class PokedexEntry
+
+    public class PokedexEntry
     {
 		private readonly int _pokedexID;
         private readonly string _name;

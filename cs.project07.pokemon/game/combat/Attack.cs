@@ -7,6 +7,17 @@ namespace cs.project07.pokemon
 {
     public class Attack
     {
+        static ElementType[] _specialTypes = new[]
+        {   
+            ElementType.DARK,
+            ElementType.ELECTRIC,
+            ElementType.FIRE,
+            ElementType.WATER,
+            ElementType.GRASS,
+            ElementType.PSYCHIC,
+        };
+        
+        
         private readonly string _name;
         private int _power;
         private readonly ElementType _type;
@@ -29,18 +40,11 @@ namespace cs.project07.pokemon
 
         public void Use()
         {
-            _currentUsage--;
+            if (_currentUsage > 0)
+            {
+                _currentUsage--;
+            }
         }
-
-        static ElementType[] _specialTypes = new[]
-        {
-            ElementType.DARK,
-            ElementType.ELECTRIC,
-            ElementType.FIRE,
-            ElementType.WATER,
-            ElementType.GRASS,
-            ElementType.PSYCHIC,
-        };
 
         public bool IsSpecialMove() => _specialTypes.Contains(Element);
         public bool IsPhysicalMove() => !IsSpecialMove();

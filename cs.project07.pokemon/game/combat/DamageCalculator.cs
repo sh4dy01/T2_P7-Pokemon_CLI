@@ -22,7 +22,7 @@ namespace cs.project07.pokemon.game.combat
             
             double damage = ((((2 * attacker.Level * critical) / 5.0f + 2) * attack.Power * (a / d)) / 50.0f + 2) * STAB * damageMultiplier * random;
 
-            return (int)Math.Ceiling(damage);
+            return (int)Math.Round(damage);
         }
 
         public static float GetSTAB(ElementType attackType, ElementType attackerType)

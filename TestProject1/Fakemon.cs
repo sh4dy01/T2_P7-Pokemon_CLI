@@ -1,4 +1,5 @@
 ﻿using cs.project07.pokemon;
+using cs.project07.pokemon.game.combat;
 using cs.project07.pokemon.game.entites;
 using System;
 using System.Collections.Generic;
@@ -11,20 +12,27 @@ namespace UnitTest
     public class Fakemon : Pokemon
     {
         ElementType _et;
-        int atk;
-        int def;
-        int atkS;
-        int defS;
+
         public override ElementType Element => _et;
 
-        public override float Attack => atk;
-
-
-        public Fakemon(ElementType et, (int, int, int, int) stat) : base()
+        public Fakemon(ElementType et, (float, float, float, float, float, float) stat) : base()
         {
-            (atk, def, atkS, defS) = stat;
+            _dex = new PokedexEntry(0, "Fakemon", et, stat, new Attack[0]);
+            _stat = new(stat);
             _et = et;
+            _level = 1;
+            _requiredExperience = LEVEL_UP_STEP;
         }
 
+        public void SetLevel(int level)
+        {
+            _level = level;
+        }
+        public void InitHealth(int amount)
+        {
+            if (amount < 0) amount = 0;
+
+            _currentHealth = amount;
+        }
     }
 }

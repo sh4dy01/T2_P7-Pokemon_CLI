@@ -12,14 +12,14 @@ namespace cs.project07.pokemon.game.entites
         public const int LEVEL_UP_STEP = 25;
         public const int LEVEL_UP_GAINED = 50;
 
-        private readonly PokedexEntry _dex;
-        private readonly Stat _stat;
-
+        protected PokedexEntry _dex;
+        protected Stat _stat;
+        
         private bool _isDead;
-        private float _currentHealth;
-        private int _level;
+        protected float _currentHealth;
+        protected int _level;
         private float _experience;
-        private float _requiredExperience;
+        protected float _requiredExperience;
 
         public PokedexEntry Dex => _dex;
         public Stat Stat => _stat;
@@ -92,13 +92,6 @@ namespace cs.project07.pokemon.game.entites
             _requiredExperience += LEVEL_UP_STEP;
         }
 
-        public void InitHealth(int amount)
-        {
-            if (amount < 0) amount = 0;
-            
-            _currentHealth = amount;
-        }
-
         public void TakeDamage(float damage)
         {
             if (damage < 0) return;
@@ -127,6 +120,8 @@ namespace cs.project07.pokemon.game.entites
 
         public void GainExperience(int experience)
         {
+            if (experience <= 0) return;
+            
             _experience += experience;
 
             while (_experience >= _requiredExperience)
