@@ -57,8 +57,6 @@ namespace cs.project07.pokemon.game.states.list
             _dialogBox = new DialogBox(this);
             InitItem();
             InitMenu();
-            Pokemon rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
-            addPokemon(rdpoke);
             //rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());
             //addPokemon(rdpoke);
             //rdpoke = new Pokemon(PokemonRegistry.GetRandomPokemon());

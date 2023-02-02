@@ -40,10 +40,8 @@ namespace cs.project07.pokemon.game.states.list
                 Selected = true,
                 Action = () =>
                 {
-                    //If no save
-                        //Push starter state
-                    //Else
-                    Game.StatesList?.Push(new GameState(Parent));
+                    Game.StatesList?.Push(new StarterSelectionState(Parent));
+                    //Game.StatesList?.Push(new GameState(Parent));
                 }
             };
             _buttons["CREDITS"] = new Button(_dialogBox, "Credits")
