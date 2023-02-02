@@ -1,5 +1,6 @@
 ﻿using cs.project07.pokemon.game.items;
 using cs.project07.pokemon.game.items.list;
+using System.Reflection.Metadata;
 
 namespace cs.project07.pokemon.game.Registry
 {
@@ -19,6 +20,8 @@ namespace cs.project07.pokemon.game.Registry
         };
 
         public static List<Item> Inventory => _inventory;
+        private static char[] _itemsPossibilities = { 'p', 'P', 'h', 'H', 'b', 'B', 'c', 'C', 'S' };
+        public static char[] ItemsPossibilities => _itemsPossibilities;
 
     }
 }

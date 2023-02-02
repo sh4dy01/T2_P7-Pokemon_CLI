@@ -18,6 +18,7 @@ using System.Xml.Linq;
 using cs.project07.pokemon.game.save;
 using cs.project07.pokemon.game;
 using cs.project07.pokemon.game.states.list;
+using cs.project07.pokemon.game.Registry;
 
 namespace cs.project07.pokemon.game.map
 {
@@ -185,7 +186,7 @@ namespace cs.project07.pokemon.game.map
                 }
                 //Zoom = 4;
             }
-            char[] ItemsPossibilities = { 'p', 'P', 'h', 'H', 'b','B','c','C','S' };
+            char[] ItemsPossibilities = InventoryManager.ItemsPossibilities;
             grid = new char[rows, cols];
 
             foreach (char possibility in ItemsPossibilities)

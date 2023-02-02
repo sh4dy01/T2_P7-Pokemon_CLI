@@ -96,6 +96,14 @@ namespace cs.project07.pokemon.game.entites
                 if (pokemon != null) pokemon.Save();
             }
 
+
+            //Save Items
+            foreach (var item in InventoryManager.Inventory)
+            {
+                SaveManager.PrepareData(
+                new Tuple<string, int>(Convert.ToString(item.ID), item.GetQuantity())
+                );
+            }
         }
 
       public void Load()
@@ -191,6 +199,18 @@ namespace cs.project07.pokemon.game.entites
 
 
                 }
+
+                // load items
+                char[] ItemsPossibilities = InventoryManager.ItemsPossibilities;
+                foreach (var id in ItemsPossibilities)
+                {
+                    string strID = id.ToString();
+                    foreach (var item in InventoryManager.Inventory)
+                    {
+                        if (id == item.ID) if (data.ContainsKey(strID)) item.SetQuantity(data[strID]);
+                    }
+                }
+
             }
 
 
@@ -295,7 +315,7 @@ namespace cs.project07.pokemon.game.entites
 
         public void collisionItems(char[,] grid, Map map)
         {
-            char[] ItemsPossibilities = { 'p', 'P', 'h', 'H', 'b', 'B', 'c', 'C', 'S' };
+            char[] ItemsPossibilities = InventoryManager.ItemsPossibilities;
             foreach (var element in ItemsPossibilities)
             {
                 if (grid[(int)playerPosition.X, (int)playerPosition.Y] == element)

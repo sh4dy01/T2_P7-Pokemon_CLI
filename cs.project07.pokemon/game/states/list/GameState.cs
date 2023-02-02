@@ -234,6 +234,8 @@ namespace cs.project07.pokemon.game.states.list
                 new Tuple<string, int>("map", Convert.ToInt32(mapNumber))
                 );
             CurrentMap?.Save();
+
+
         }
 
         public override void Load()
