@@ -132,6 +132,12 @@ namespace cs.project07.pokemon.game.map
                     BackgroundColor = ConsoleColor.Black,
                     ForegroundColor = ConsoleColor.Black
                 },
+                ["BOSS"] = new Layer(this)
+                {
+                    Spawnable = true,
+                    BackgroundColor = ConsoleColor.Black,
+                    ForegroundColor = ConsoleColor.Black
+                },
                 ["ITEMS"] = new Layer(this)
                 {
                     BackgroundColor = ConsoleColor.Yellow,
@@ -145,7 +151,7 @@ namespace cs.project07.pokemon.game.map
         public char[,] grid;
         public void ParseFileToLayers(string filePath)
         {
-            char[] possibilities = { '#', '*', ' ', '@','T' };
+            char[] possibilities = { '#', '*', ' ', '@','T', 'A' };
 
             string[] lines = File.ReadAllLines(filePath);
             string firstLine = lines[0];
@@ -183,6 +189,9 @@ namespace cs.project07.pokemon.game.map
                     case 'T':
                         Layers?["TELEPORTER"].InitData(grid);
                         break;
+                    case 'A':
+                        Layers?["BOSS"].InitData(grid);
+                        break;
                 }
                 //Zoom = 4;
             }
@@ -206,7 +215,6 @@ namespace cs.project07.pokemon.game.map
 
                 Layers?["ITEMS"].InitData(grid);
             }
-
         }
 
         public void Update()

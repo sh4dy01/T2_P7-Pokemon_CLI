@@ -1,9 +1,9 @@
-﻿using cs.project07.pokemon.game.entites;
-using cs.project07.pokemon.game.states.gui;
-using cs.project07.pokemon.game.combat;
-using System.Text;
-using System.Numerics;
+﻿using cs.project07.pokemon.game.combat;
+using cs.project07.pokemon.game.entites;
 using cs.project07.pokemon.game.Registry;
+using cs.project07.pokemon.game.states.gui;
+using System.Numerics;
+using System.Text;
 
 namespace cs.project07.pokemon.game.states.list
 {
@@ -30,8 +30,9 @@ namespace cs.project07.pokemon.game.states.list
 
         private bool _isPlayerTurn = true;
         private string _effectivenessMessage = "";
-        private float _runChance = 50;
         
+        private float _runChance = 50;
+
         private CombatView _currentView;
         private readonly CombatDialogBox _dialogBox;
         private readonly Pokemon _enemyPokemon;
@@ -44,17 +45,21 @@ namespace cs.project07.pokemon.game.states.list
         private AttackInfoBox? _attackInfoUi;
         private PokemonInfoBox? _playerPokemonUi;
 
-        public CombatState(Game game) : base(game)
+        public CombatState(Game game, bool isBoss) : base(game)
         {
+            Console.Clear();
+
             BackgroundColor = ConsoleColor.White;
 
-            _enemyPokemon = new Pokemon(PokemonRegistry.GetRandomPokemon(), 2);
+            _enemyPokemon = isBoss ? new BossPokemon(PokemonRegistry.GetPokemonByPokedexId(493)) : // FIGHT ARCEUS
+                new Pokemon(PokemonRegistry.GetRandomPokemon(), 2); // Fight pokemon
             _dialogBox = new CombatDialogBox(this);
             _enemyPokemonUi = new PokemonInfoBox(this, _enemyPokemon, true);
             _attackInfoUi = new AttackInfoBox(this);
             _playerSprite = new PokemonSprite(false, new Vector2(25, 27), ForegroundColor, BackgroundColor);
             _enemySprite = new PokemonSprite(true, new Vector2(130, 5), ForegroundColor, BackgroundColor);
             
+            PokemonListManager.SetStarter(new Pokemon(PokemonRegistry.GetRandomPokemon(), 5));
 
             Init();
         }
@@ -289,7 +294,7 @@ namespace cs.project07.pokemon.game.states.list
                 case ConsoleKey.Backspace:
                     switch (_currentView)
                     {
-                        case CombatView.SELECT_ATTACK:
+                        case CombatView.SELECT_ATTACK or CombatView.SELECT_ITEM:
                             _attackInfoUi.Hide();
                             SwitchView(CombatView.SELECT_ACTION);
                             break;
@@ -319,8 +324,6 @@ namespace cs.project07.pokemon.game.states.list
 
             _dialogBox.Render();
             //Me: Print me all the chars in the _playerSprite
-
-
 
             if (!_isInit)
             {
@@ -363,6 +366,66 @@ namespace cs.project07.pokemon.game.states.list
                 _isPlayerTurn = false;
                 SwitchView(CombatView.ENEMY_ATTACK);
             }
+        }
+
+        public void TryToCatch(float multiplicator)
+        {
+            Random rnd = new();
+            
+            int n = 0;
+            int ballUsed = 8; // All pokeball except Hyperball
+
+            switch (multiplicator)
+            {
+                case 1 :
+                    n = 255;
+                    break;
+                case 1.5f:
+                    n = 200;
+                    break;
+                case 2:
+                    n = 150;
+                    ballUsed = 12;
+                    break;
+                case 255:
+                    CatchPokemon();
+                    return;
+                default:
+                    n = 255;
+                    break;
+            }
+
+            n = rnd.Next(0, n);
+
+            if (n > _enemyPokemon.Dex.CatchRate) //Second try
+            { 
+                rnd = new();
+                int m = rnd.Next(0, 255);
+
+                float f = _enemyPokemon.Stat.MaxHP * 255 * 4 / (_enemyPokemon.Currenthealth * ballUsed); //Official algorithm
+                if (f < 1) f = 1;
+                else if (f > 255) f = 255;
+
+                if (f >= m) 
+                    CatchPokemon();
+                else
+                {
+                    _dialogBox.UpdateText("You failed to catch the pokemon !");
+                    _isPlayerTurn = false;
+                    SwitchView(CombatView.ENEMY_ATTACK);
+                }
+            }
+            else
+            {
+                CatchPokemon();
+            }
+        }
+
+        private void CatchPokemon()
+        {
+            _dialogBox.UpdateText("You caught the pokemon !");
+            PokemonListManager.AddPokemon(_enemyPokemon);
+            SwitchView(CombatView.END_COMBAT);
         }
     }
 }

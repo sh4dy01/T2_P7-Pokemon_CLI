@@ -29,6 +29,8 @@ namespace cs.project07.pokemon.game.states.list
 
         protected override void Init()
         {
+            Console.Clear();
+            
             Name = "Pokemon";
             InitMap();
             InitPlayer();
@@ -91,7 +93,7 @@ namespace cs.project07.pokemon.game.states.list
 
             Maps["map1"].ParseFileToLayers("game/map/list/Map1.txt");
             Maps["map2"].ParseFileToLayers("game/map/list/Map2.txt");
-            CurrentMap = Maps["map1"];
+            CurrentMap = Maps["map2"];
         }
 
         private void InitPlayer()
@@ -176,12 +178,11 @@ namespace cs.project07.pokemon.game.states.list
                         break;
                 }
 
-                if (mouv != true) return;
-                Player.collisionGrass(CurrentMap.Layers["GRASS"].ZoomedData, game);
+                if (!mouv) return;
                 Player.collisionTeleporter(CurrentMap._Teleporters);
                 Player.collisionItems(CurrentMap.Layers["ITEMS"].ZoomedData, CurrentMap);
-                if (mouv == true)
-                    Player.collisionGrass(CurrentMap.Layers["GRASS"].ZoomedData, game);
+                Player.collisionGrass(CurrentMap.Layers["GRASS"].ZoomedData, game);
+                Player.collisionBoss(CurrentMap.Layers["BOSS"].ZoomedData, game);
             }
         }
 
