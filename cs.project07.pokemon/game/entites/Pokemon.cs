@@ -57,7 +57,6 @@ namespace cs.project07.pokemon.game.entites
 
         public Pokemon(PokedexEntry dex, int level, Stat stat, int experience, int currentHP) // Load Pokemon from save file
         {
-            SetId();
             _dex = dex;
             _stat = stat;
             _currentHealth = currentHP;
