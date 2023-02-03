@@ -17,7 +17,7 @@ namespace UnitTest
 
         public Fakemon(ElementType et, (float, float, float, float, float, float) stat) : base()
         {
-            _dex = new PokedexEntry(0, "Fakemon", et, stat, new Attack[0]);
+            _dex = new PokedexEntry(0, "Fakemon", et, stat, Array.Empty<Attack>(), 0);
             _stat = new(stat);
             _et = et;
             _level = 1;
