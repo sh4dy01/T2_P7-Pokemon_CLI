@@ -73,7 +73,7 @@ namespace cs.project07.pokemon.game.Registry
 
         public static bool IsAllPokemonDead()
         {
-            return BattleTeam.All(pokemon => pokemon.IsDead);
+            return BattleTeam.All(pokemon => pokemon is not null && pokemon.IsDead);
         }
 
         public static bool SetPokemonInBattleTeam(Pokemon pokemonToAdd)

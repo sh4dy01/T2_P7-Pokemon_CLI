@@ -31,18 +31,18 @@ namespace cs.project07.pokemon.game.states.list
         private bool _isPlayerTurn = true;
         private string _effectivenessMessage = "";
         
-        private float _runChance = 50;
+        private float _runChance = 33;
 
         private CombatView _currentView;
         private readonly CombatDialogBox _dialogBox;
         private readonly Pokemon _enemyPokemon;
         private readonly PokemonInfoBox _enemyPokemonUi;
 
-        private PokemonSprite _playerSprite;
+        private readonly PokemonSprite _playerSprite;
         private PokemonSprite _enemySprite;
 
         public Pokemon? _playerPokemon;
-        private AttackInfoBox? _attackInfoUi;
+        private readonly AttackInfoBox? _attackInfoUi;
         public PokemonInfoBox? _playerPokemonUi;
 
         public CombatState(Game game, bool isBoss) : base(game)
@@ -152,9 +152,9 @@ namespace cs.project07.pokemon.game.states.list
             _playerPokemonUi.Render();
             
             if (_enemyPokemon.Level > _playerPokemon.Level)
-                _runChance *= 0.5f;
+                _runChance = 25;
             else if (_enemyPokemon.Level < _playerPokemon.Level)
-                _runChance *= 1.5f;
+                _runChance = 70;
 
             SwitchView(_isPlayerTurn ? CombatView.SELECT_ACTION : CombatView.ENEMY_ATTACK);
         }
@@ -164,13 +164,11 @@ namespace cs.project07.pokemon.game.states.list
             if (_playerPokemon.IsDead)
             {
                 _playerPokemon = null;
-                _playerPokemonUi.Clear();
+                _playerPokemonUi?.Clear();
                 _playerSprite.Clear();
 
                 if (!PokemonListManager.IsAllPokemonDead())
-                {
                     SwitchPokemonFromAction();
-                }
                 else
                 {
                     _dialogBox.UpdateText("You have no more pokemon ! You lost !");
@@ -257,7 +255,8 @@ namespace cs.project07.pokemon.game.states.list
 
         private void UpdateAttackInfoUi()
         {
-            if (_currentView == CombatView.SELECT_ATTACK)
+            if (_currentView != CombatView.SELECT_ATTACK) return;
+            if (_dialogBox.ButtonManager.GetSelectedButtonIndex() < _playerPokemon.Attacks.Length)
             {
                 _attackInfoUi.Show(_playerPokemon.Attacks[_dialogBox.ButtonManager.GetSelectedButtonIndex()]);
             }
@@ -339,14 +338,12 @@ namespace cs.project07.pokemon.game.states.list
                 _isInit = true;
             }
             
-            if (_playerPokemon is not null)
-            {
-                _playerPokemonUi?.Render();
-                _attackInfoUi?.Render();
-            }
-
             _enemySprite?.Render();
             _enemyPokemonUi.Render();
+
+            if (_playerPokemon is null) return;
+            _playerPokemonUi?.Render();
+            _attackInfoUi?.Render();
             // Render childs
             // ------ Map
 
@@ -397,8 +394,9 @@ namespace cs.project07.pokemon.game.states.list
 
             n = rnd.Next(0, n);
 
-            if (n > _enemyPokemon.Dex.CatchRate) //Second try
-            { 
+            if (n > _enemyPokemon.Dex.CatchRate*0.75f) 
+            {
+                //Second try
                 rnd = new();
                 int m = rnd.Next(0, 255);
 

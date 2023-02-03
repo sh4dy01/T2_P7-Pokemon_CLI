@@ -119,14 +119,8 @@ namespace cs.project07.pokemon.game.entites
             int avgLevel = PokemonListManager.GetAverageLevel();
             int pkmCount = PokemonListManager.GetPokemonInBattleCount();
 
-            if (pkmCount < 2)
-            {
-                threshold = avgLevel / 1.5f;
-            }
-            else threshold = avgLevel;
-            
-            Random rnd = new Random();
-            _level = rnd.Next(1, (int)threshold);
+            Random rnd = new();
+            _level = rnd.Next(avgLevel, 2 * pkmCount);
             
             InitStat();
         }
