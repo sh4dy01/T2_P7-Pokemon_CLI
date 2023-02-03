@@ -98,6 +98,11 @@ namespace cs.project07.pokemon.game.entites
             _id = PokemonListManager.GetNextId();
         }
 
+        public void SetId(int value)
+        {
+            _id = value;
+        }
+
         protected void InitStat()
         {
             for (int i = 1; i < _level; i++)
