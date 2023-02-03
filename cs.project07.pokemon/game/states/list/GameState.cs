@@ -19,7 +19,12 @@ namespace cs.project07.pokemon.game.states.list
         private ButtonManager _buttonManager;
         private Dictionary<string, Button> _buttons;
         private DialogBox _dialogBox;
-        bool showMenu = false;
+        private bool showMenu = false;
+
+        public void switchShowMenu()
+        {
+            showMenu = false;
+        }
         public GameState(Game gameReceive) : base(gameReceive)
         {
             game = gameReceive;
