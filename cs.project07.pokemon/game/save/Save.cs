@@ -44,6 +44,8 @@ namespace cs.project07.pokemon.game.save
 
         static public void LoadData() 
         {
+            if (Loaded != null) return;
+
             string? line = "";
             string? key;
             string? value;
