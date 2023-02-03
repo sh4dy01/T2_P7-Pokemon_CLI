@@ -49,7 +49,7 @@ namespace cs.project07.pokemon.game
 
         private void InitStates()
         {
-            StatesList?.Push(new InventoryState(this));
+            StatesList?.Push(new MenuState(this));
         }
 
         private void Init()
