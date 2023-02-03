@@ -1,11 +1,6 @@
 ﻿using cs.project07.pokemon.game.combat;
 using cs.project07.pokemon.game.save;
 using cs.project07.pokemon.game.Registry;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace cs.project07.pokemon.game.entites
 {
@@ -60,8 +55,9 @@ namespace cs.project07.pokemon.game.entites
             InitStat();
         }
 
-        public Pokemon(PokedexEntry dex, int level, Stat stat, int experience, int currentHP)
+        public Pokemon(PokedexEntry dex, int level, Stat stat, int experience, int currentHP) // Load Pokemon from save file
         {
+            SetId();
             _dex = dex;
             _stat = stat;
             _currentHealth = currentHP;
@@ -100,6 +96,11 @@ namespace cs.project07.pokemon.game.entites
         public void SetId()
         {
             _id = PokemonListManager.GetNextId();
+        }
+
+        public void SetId(int value)
+        {
+            _id = value;
         }
 
         protected void InitStat()

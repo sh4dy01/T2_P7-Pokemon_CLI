@@ -178,6 +178,7 @@ namespace cs.project07.pokemon.game.states.gui
                                     item.Use(PokemonListManager.ActivePokemon);
                                     ((CombatState)Parent)._playerPokemonUi?.UpdateHealth(((CombatState)Parent)
                                         ._playerPokemon);
+                                    
                                 }
                                 else return;
                             }

@@ -52,13 +52,6 @@ namespace cs.project07.pokemon.game.states.list
                     //Game.StatesList?.Push(new GameState(Parent));
                 }
             };
-            /*_buttons["CREDITS"] = new Button(_dialogBox, "Credits")
-            {
-                Action = () =>
-                {
-                    //TODO: Add credits
-                }
-            };*/
             _buttons["QUIT"] = new Button(_dialogBox, "Quit")
             {
                 Offsets = new Vector2(0, 10),

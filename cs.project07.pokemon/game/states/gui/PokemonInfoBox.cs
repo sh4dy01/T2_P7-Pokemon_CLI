@@ -1,18 +1,14 @@
 ﻿using cs.project07.pokemon.game.combat;
 using cs.project07.pokemon.game.entites;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace cs.project07.pokemon.game.states.gui
 {
     public class PokemonInfoBox : IRenderable<State>
     {        
         private Pokemon _pokemon;
-        private bool _isEnemy;
+        private readonly bool _isEnemy;
         
         private float _healthPercentage;
         private float _oldLifePercentage;
@@ -86,6 +82,9 @@ namespace cs.project07.pokemon.game.states.gui
             int startIndex = (int)(_oldLifePercentage / 5);
             int endIndex = (int)((_oldLifePercentage - _healthPercentage) / 5);
 
+            if (_healthPercentage <= 0)
+                endIndex = 0;
+
             if (_healthPercentage > _oldLifePercentage)
             {
                 endIndex = (int)(_healthPercentage - _oldLifePercentage) / 5;
@@ -111,11 +110,6 @@ namespace cs.project07.pokemon.game.states.gui
                 }
             }
             
-            if (_healthPercentage <= 0)
-                endIndex = 0;
-
-           
-
             _oldLifePercentage = _healthPercentage;
         }
 

@@ -12,7 +12,7 @@ namespace cs.project07.pokemon.game.states.list
 {
     public class InventoryState : State
     {
-        enum InventoryView
+        private enum InventoryView
         {
             MENU,
             POKEMON,
@@ -20,7 +20,7 @@ namespace cs.project07.pokemon.game.states.list
             ITEMS
         }
 
-        enum AllItemList
+        private enum AllItemList
         {
             POKEBALL,
             SUPERBALL,
@@ -32,8 +32,6 @@ namespace cs.project07.pokemon.game.states.list
             POTIONMAX,
             SPRAY
         }
-
-        private const int IncrementX = 3;
 
         public Game game;
         private InventoryView _currentView;

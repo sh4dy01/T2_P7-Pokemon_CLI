@@ -1,12 +1,4 @@
 ﻿using cs.project07.pokemon.game.states.gui.managers;
-using cs.project07.pokemon.game.states.list;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace cs.project07.pokemon.game.states.gui
 {

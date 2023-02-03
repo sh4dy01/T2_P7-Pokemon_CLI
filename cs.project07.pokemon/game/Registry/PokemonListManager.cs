@@ -15,7 +15,6 @@ namespace cs.project07.pokemon.game.Registry
         public static Pokemon ActivePokemon { get => _battleTeam[_activePokemon]; private set => _battleTeam[_activePokemon] = value; }
         public static int ActivePokemonIndex { get => _activePokemon; }
 
-
         public static void Init()
         {
             _battleTeam = new Pokemon[6];
@@ -74,15 +73,7 @@ namespace cs.project07.pokemon.game.Registry
 
         public static bool IsAllPokemonDead()
         {
-            foreach (var pokemon in BattleTeam)
-            {
-                if (!pokemon.IsDead)
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return BattleTeam.All(pokemon => pokemon.IsDead);
         }
 
         public static bool SetPokemonInBattleTeam(Pokemon pokemonToAdd)
@@ -91,11 +82,10 @@ namespace cs.project07.pokemon.game.Registry
 
             for (int i = 0; i < _battleTeam.Length; i++)
             {
-                if (_battleTeam[i] == null)
-                {
-                    _battleTeam[i] = pokemonToAdd;
-                    return true;
-                }
+                if (_battleTeam[i] != null) continue;
+                
+                _battleTeam[i] = pokemonToAdd;
+                return true;
             }
 
             return false;
@@ -103,17 +93,7 @@ namespace cs.project07.pokemon.game.Registry
 
         internal static int GetPokemonInBattleCount()
         {
-            int pokemonInBattle = 0;
-
-            foreach (var pokemon in _battleTeam)
-            {
-                if (pokemon is not null)
-                {
-                    pokemonInBattle++;
-                }
-            }
-
-            return pokemonInBattle;
+            return _battleTeam.Count(pokemon => pokemon is not null);
         }
 
         internal static int GetNextId()
