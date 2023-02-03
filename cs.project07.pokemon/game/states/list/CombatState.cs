@@ -66,7 +66,9 @@ namespace cs.project07.pokemon.game.states.list
         {
             Name = "Combat";
             _currentView = CombatView.INTRO;
-            _enemyPokemon.InitEnemyStats();
+            if (_enemyPokemon.GetType() != typeof(BossPokemon))
+                _enemyPokemon.InitEnemyStats();
+            
             _enemySprite.LoadSprite(_enemyPokemon.Name);
             SwitchView(_currentView);
         }
@@ -129,6 +131,7 @@ namespace cs.project07.pokemon.game.states.list
 
         public void UsedAnItem(string message)
         {
+            _isPlayerTurn = false;
             SwitchView(CombatView.ACTION_USE);
             _dialogBox.UpdateText(message);
         }
