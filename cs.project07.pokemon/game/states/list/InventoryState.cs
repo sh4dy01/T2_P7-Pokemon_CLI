@@ -106,6 +106,8 @@ namespace cs.project07.pokemon.game.states.list
                 Action = () =>
                 {
                     Game.StatesList?.Pop();
+                    ((GameState)Game.StatesList.First()).switchShowMenu();
+                    //Game.StatesList?.Push(new GameState(Parent));
                 },
                 BackgroundColor = ConsoleColor.Gray,
                 ForegroundColor = ConsoleColor.Black,

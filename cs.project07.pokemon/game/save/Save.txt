@@ -1,2 +1,29 @@
-
+PlayerPosX 184
+PlayerPosY 128
+CapturedPokemonNumber 0
+BattleTeamPokemonNumber 1
+PokemonID1 1
+PokemonMaxHP1 58
+PokemonAttack1 63
+PokemonDefense1 63
+PokemonSPAttack1 83
+PokemonSPDefense1 83
+PokemonSpeed1 58
+PokemonLevel1 5
+PokemonCurrentHP1 58
+PokemonExperience1 0
+PokemonNumberOfAttacks1 2
+AttackPP10 10
+AttackPP11 35
+b 10
+B 0
+c 0
+C 0
+p 10
+P 0
+h 0
+H 0
+S 3
+map 1
+NumberOfTakenItems 0
 endFile

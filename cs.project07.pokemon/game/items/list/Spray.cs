@@ -27,7 +27,7 @@ namespace cs.project07.pokemon.game.items.list
             _id = 'S';
         }
 
-        public override void Use(Player player)
+        public override void Use()
         {
             if (_quantity <= 0) return ;
             _quantity--;
