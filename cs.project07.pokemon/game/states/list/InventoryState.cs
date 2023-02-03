@@ -364,7 +364,7 @@ namespace cs.project07.pokemon.game.states.list
                     int calcY = (int)Ypos + increY * 9;
                     _dialogBox.Left = 0;
                     _dialogBox.Top = 0;
-                    navButtonPokeStat(calcX, calcY);
+                    navButtonPokeStat(calcX, calcY, pokemon);
                     _buttonManager.Update();
 
                 }
@@ -399,17 +399,18 @@ namespace cs.project07.pokemon.game.states.list
             }
         }
 
-        private void navButtonPokeStat(int Xpos, int Ypos)
+        private void navButtonPokeStat(int Xpos, int Ypos, Pokemon pokemon)
         {
             if(initUseButton) 
             {
                 _buttons["POTIONS"] = new Button(_dialogBox, "Potions")
                 {
                     Selected = true,
-                    Offsets = new Vector2(Xpos, Ypos),
+                    Offsets = new Vector2(Xpos, Ypos-1),
                     Action = () =>
                     {
-                        SwitchView(InventoryView.ITEMS);
+                        _buttons.Clear();
+                        UsePotionFromPokemon(Xpos, Ypos, pokemon);
                     },
                     BackgroundColor = ConsoleColor.Gray,
                     ForegroundColor = ConsoleColor.Black,
@@ -419,7 +420,7 @@ namespace cs.project07.pokemon.game.states.list
                 _buttons["SWAP_TEAM"] = new Button(_dialogBox, "Swap pokemon")
                 {
                     Selected = false,
-                    Offsets = new Vector2(Xpos+30, Ypos),
+                    Offsets = new Vector2(Xpos+30, Ypos-1),
                     Action = () =>
                     {
                         SwitchView(InventoryView.POKEMON);
@@ -430,6 +431,37 @@ namespace cs.project07.pokemon.game.states.list
                     ActiveForegroundColor = ConsoleColor.Black
                 };
                 initUseButton = false;
+            }
+        }
+
+        private void UsePotionFromPokemon(int Xpos, int Ypos, Pokemon pokemon)
+        {
+            int count = 0;
+            bool first = false;
+            foreach (var potion in InventoryManager.Inventory.Where(Item => Item.GetType() == typeof(Potion)))
+            {
+                if (count == 1) //Why first show is 3 ????
+                    first = true;
+                else
+                    first = false;
+                string temp = potion.Name + " " + potion.GetQuantity();
+                _buttons[potion.Name] = new Button(_dialogBox, temp)
+                {
+                    Selected = first,
+                    Offsets = new Vector2(Xpos -15 + 20 * count, Ypos),
+                    Action = () =>
+                    {
+                        _buttons.Clear();
+                        potion.Use(pokemon);
+                        initUseButton = true;
+                        navButtonPokeStat(Xpos, Ypos, pokemon);
+                    },
+                    BackgroundColor = ConsoleColor.Gray,
+                    ForegroundColor = ConsoleColor.Black,
+                    ActiveBackgroundColor = ConsoleColor.DarkGray,
+                    ActiveForegroundColor = ConsoleColor.Black
+                };
+                count++;
             }
         }
 
