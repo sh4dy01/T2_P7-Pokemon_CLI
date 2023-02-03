@@ -28,6 +28,14 @@ namespace cs.project07.pokemon.game.map
         private int _itemsId;
         public int ItemsId { get { _itemsId++; return _itemsId;  } }
 
+        public int GetItemID() { return _itemsId; }
+        public int SetItemID(int value)
+        {
+            _itemsId = value;
+            return _itemsId;
+        }
+
+
         public List<Tuple<string, int, int, string, int, int>>? _Teleporters { get; private set; }
         private string _Name;
         private int _zoom;
