@@ -118,7 +118,7 @@ namespace cs.project07.pokemon.game.states.list
                     break;
                 case CombatView.END_COMBAT:
                     PokemonListManager.EndCombat();
-                    Game.StatesList.Pop();
+                    Game.StatesList.Clear();
                     break;
             }
         }
@@ -172,8 +172,6 @@ namespace cs.project07.pokemon.game.states.list
                 else
                 {
                     _dialogBox.UpdateText("You have no more pokemon ! You lost !");
-                    Game.StatesList.Pop(); //Return to map
-                    Game.StatesList.Pop(); //Return to main menu
                 }
             }
             else if (_enemyPokemon.IsDead)
