@@ -86,9 +86,6 @@ namespace cs.project07.pokemon.game
 
             switch (pressedKey)
             {
-                /*case ConsoleKey.Escape:
-                    End();
-                    break;*/
                 default:
                     if (StatesList?.Count > 0)
                         StatesList.First().HandleKeyEvent(pressedKey);
