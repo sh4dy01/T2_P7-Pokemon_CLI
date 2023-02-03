@@ -60,6 +60,18 @@ namespace cs.project07.pokemon.game.entites
             InitStat();
         }
 
+        public Pokemon(PokedexEntry dex, int level, Stat stat, int experience, int currentHP)
+        {
+            _dex = dex;
+            _stat = stat;
+            _currentHealth = currentHP;
+            _level = level;
+            _experience = experience;
+            _requiredExperience = LEVEL_UP_STEP * level;
+            if (_currentHealth <= 0) _isDead = true;
+            else IsDead = false;
+        }
+
         public void Save() {
             SaveManager.PrepareData(
                 new Tuple<string, int>("PokemonID"              + Id, _dex.PokedexID),
