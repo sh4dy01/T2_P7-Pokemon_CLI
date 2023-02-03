@@ -32,7 +32,7 @@ namespace cs.project07.pokemon.game.items.list
             if (_quantity <= 0) return ;
             _quantity--;
 
-            player.SetSprayMovementLeft(50);
+            Player.SetSprayMovementLeft(50);
         }
     }
     

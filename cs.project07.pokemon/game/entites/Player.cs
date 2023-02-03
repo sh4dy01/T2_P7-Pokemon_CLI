@@ -29,8 +29,9 @@ namespace cs.project07.pokemon.game.entites
         private ConsoleColor BackgroundColor;
         private ConsoleColor ForegroundColor;
         private DialogBox? dialog;
-        private int _SprayMovementLeft { get; set; }
-        public void SetSprayMovementLeft (int sprayMovementLeft) { _SprayMovementLeft = sprayMovementLeft;  }
+        
+        public static int _SprayMovementLeft { get; set; }
+        public static void SetSprayMovementLeft (int sprayMovementLeft) { _SprayMovementLeft = sprayMovementLeft;  }
         public State _parent { get; set; }
 
         public Player(Vector2 playerSpawnPoint, State Parent)

@@ -4,7 +4,7 @@ using System.Reflection.Metadata;
 
 namespace cs.project07.pokemon.game.Registry
 {
-    internal static class InventoryManager
+    public static class InventoryManager
     {
         private static List<Item> _inventory = new()
         {
