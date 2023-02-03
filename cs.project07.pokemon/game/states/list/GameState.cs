@@ -62,7 +62,7 @@ namespace cs.project07.pokemon.game.states.list
                 Offsets = new Vector2(150, 0),
                 Action = () =>
                 {
-                    //TO DO SAVE THE GAME
+                    Parent.Parent.Save();
                 }
             };
             _buttons["EXIT"] = new Button(_dialogBox, "Exit")
@@ -262,7 +262,9 @@ namespace cs.project07.pokemon.game.states.list
 
         public void ChangeMap (string mapName)
         {
+            int itemIds = CurrentMap.GetItemID();
             CurrentMap = Maps[mapName];
+            CurrentMap.SetItemID(itemIds);
             CurrentMap.Zoom = 4;
         }
 

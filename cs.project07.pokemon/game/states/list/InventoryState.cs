@@ -187,7 +187,7 @@ namespace cs.project07.pokemon.game.states.list
                     showInventoryPokemon();
                     break;
                 case InventoryView.POKEDEX:
-                    //_dialogBox.SwitchState(CombatDialogBox.CombatButtonState.SELECT_ATTACK);
+                    
                     break;
                 case InventoryView.ITEMS:
                     renderBattleTeam = false;
@@ -422,6 +422,7 @@ namespace cs.project07.pokemon.game.states.list
                     Action = () =>
                     {
                         SwitchView(InventoryView.POKEMON);
+                        //Change pokemon from the pokemon captured
                     },
                     BackgroundColor = ConsoleColor.Gray,
                     ForegroundColor = ConsoleColor.Black,

@@ -36,6 +36,8 @@ namespace cs.project07.pokemon
         }
 
         public void SetPP(int pp) => _currentUsage = pp;
+        public void SetPPToMax() => _currentUsage = _maxUsage;
+
 
         public void Use()
         {

@@ -118,7 +118,7 @@ namespace cs.project07.pokemon.game.states.list
                     break;
                 case CombatView.END_COMBAT:
                     PokemonListManager.EndCombat();
-                    Game.StatesList.Clear(); // End game
+                    Game.StatesList.Pop(); // End game
                     break;
             }
         }
@@ -172,6 +172,7 @@ namespace cs.project07.pokemon.game.states.list
                 else
                 {
                     _dialogBox.UpdateText("You have no more pokemon ! You lost !");
+                    Game.StatesList.Clear();
                 }
             }
             else if (_enemyPokemon.IsDead)
@@ -298,6 +299,12 @@ namespace cs.project07.pokemon.game.states.list
                 case ConsoleKey.DownArrow:
                     Button.SelectNext(_dialogBox.ButtonManager.Buttons);
                     UpdateAttackInfoUi();
+                    break;
+                case ConsoleKey.P:
+                    foreach (var attack in _playerPokemon.Attacks)
+                    {
+                        attack.SetPPToMax(); //Temporary because we forget to add the PP Potion item :/
+                    }
                     break;
                 case ConsoleKey.Backspace:
                     switch (_currentView)
