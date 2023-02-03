@@ -3,6 +3,8 @@ using cs.project07.pokemon.game.combat;
 using cs.project07.pokemon.game.entites;
 using NUnit.Framework;
 using System;
+using cs.project07.pokemon.game.items;
+using cs.project07.pokemon.game.Registry;
 
 namespace UnitTest
 {

@@ -20,7 +20,6 @@ namespace cs.project07.pokemon.game.items
         public Item() { }
         public virtual void Use() {}
         public virtual void Use(Pokemon pokemon) {}
-        public virtual void Use(Player pokemon) {}
         protected virtual void Init() {}
 
         public void Add ( ) { _quantity += 1; }
