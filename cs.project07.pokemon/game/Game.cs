@@ -131,8 +131,10 @@ namespace cs.project07.pokemon.game
         public void Save()
         {
             // Save the state instance
-            if (StatesList?.Count > 0)
-                StatesList.First().Save();
+            foreach (State s in StatesList)
+            {
+                s.Save();
+            }
             SaveManager.SaveData();
         }
 
@@ -141,8 +143,10 @@ namespace cs.project07.pokemon.game
             // Load the state instance
 
             SaveManager.LoadData();
-            if (StatesList?.Count > 0)
-                StatesList.First().Load();
+            foreach (State s in StatesList)
+            {
+                s.Load();
+            }
         }
 
         private void End()

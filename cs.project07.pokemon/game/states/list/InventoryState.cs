@@ -229,6 +229,9 @@ namespace cs.project07.pokemon.game.states.list
             PokemonListManager.AddPokemon(pokemonToADD);
         }
 
+        public override void Load() { }
+        public override void Save() { }
+
         public void showInventoryPokemon()
         {
             int count = 0;

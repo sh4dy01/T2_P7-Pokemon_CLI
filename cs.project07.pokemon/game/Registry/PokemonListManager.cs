@@ -9,7 +9,9 @@ namespace cs.project07.pokemon.game.Registry
         private static List<Pokemon> _pokemonCaptured;
         private static Pokemon[] _battleTeam;
         public static Pokemon[] BattleTeam { get => _battleTeam; }
+        public static void SetBattleTeam(Pokemon[] battleTeam) { _battleTeam = battleTeam; }
         public static List<Pokemon> PokemonCaptured { get => _pokemonCaptured; }
+        public static void SetPokemonCaptured(List<Pokemon> PokemonCaptured) { _pokemonCaptured = PokemonCaptured; }
         public static Pokemon ActivePokemon { get => _battleTeam[_activePokemon]; private set => _battleTeam[_activePokemon] = value; }
         public static int ActivePokemonIndex { get => _activePokemon; }
 
