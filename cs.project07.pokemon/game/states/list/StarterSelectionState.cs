@@ -125,5 +125,8 @@ namespace cs.project07.pokemon.game.states.list
             _buttonManager?.Render();
             init = true;
         }
+
+        public override void Load() { }
+        public override void Save() { }
     }
 }

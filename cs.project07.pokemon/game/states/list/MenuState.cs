@@ -2,6 +2,7 @@
 using cs.project07.pokemon.game.states.gui;
 using cs.project07.pokemon.game.states.gui.managers;
 using System.Numerics;
+using cs.project07.pokemon.game.save;
 
 namespace cs.project07.pokemon.game.states.list
 {
@@ -11,6 +12,7 @@ namespace cs.project07.pokemon.game.states.list
         private Dictionary<string, Button> _buttons;
         private DialogBox _dialogBox;
         private Sprite _mainMenu;
+        private bool _firstGame;
 
         public MenuState(Game game) : base(game)
         {
@@ -25,6 +27,8 @@ namespace cs.project07.pokemon.game.states.list
             _dialogBox.Left = Console.WindowWidth / 2 - 5;
             _mainMenu = new Sprite(new Vector2(Console.WindowWidth /2 - 40, Console.WindowHeight / 2 - 17), ConsoleColor.White, ConsoleColor.Black);
             _mainMenu.LoadSprite("menu_title");
+            _firstGame = true;
+            Load();
 
             InitButtons();
         }
@@ -40,7 +44,11 @@ namespace cs.project07.pokemon.game.states.list
                 Selected = true,
                 Action = () =>
                 {
-                    Game.StatesList?.Push(new StarterSelectionState(Parent));
+                    if (_firstGame)
+                    {
+                        Game.StatesList?.Push(new StarterSelectionState(Parent));
+                    }
+                    else { Game.StatesList?.Push(new GameState(Parent)); }
                     //Game.StatesList?.Push(new GameState(Parent));
                 }
             };
@@ -76,6 +84,20 @@ namespace cs.project07.pokemon.game.states.list
         private void HandleKeyEventButtons(ConsoleKey pressedKey)
         {
             _buttonManager.HandleKeyEvent(pressedKey);
+        }
+
+        override public void Load()
+        {
+            SaveManager.LoadData();
+            var data = SaveManager.Loaded;
+            if (data.ContainsKey("firstGame")) if (data["firstGame"] == 1) _firstGame = false; else _firstGame = true;
+        }
+
+        override public void Save() 
+        {
+            SaveManager.PrepareData(
+                new Tuple<string, int>("firstGame", 1)
+                );
         }
 
         public override void Update()

@@ -156,6 +156,7 @@ namespace cs.project07.pokemon.game.entites
                         index += PokemonNumberOfAttacks;
                         CapturedPokemon.Add(LoadPokemon(MaxHP, Attack, Defense, SPAttack, SPDeffense, Speed, ID, Level, Experience, CurrentHP, PokemonAttackPP));
                     }
+                    PokemonListManager.SetPokemonCaptured(CapturedPokemon);
                 }
             }
 
@@ -195,6 +196,14 @@ namespace cs.project07.pokemon.game.entites
                         index += PokemonNumberOfAttacks;
                         BattleTeam.Add(LoadPokemon(MaxHP, Attack, Defense, SPAttack, SPDeffense, Speed, ID, Level, Experience, CurrentHP, PokemonAttackPP));
                     }
+                    index = 0;
+                    Pokemon[] result = new Pokemon[6];
+                    foreach (Pokemon p in BattleTeam) 
+                    {
+                        result[(int)index] = p;
+                        index++;
+                    }
+                    PokemonListManager.SetBattleTeam(result);
                 }
 
                 // load items
