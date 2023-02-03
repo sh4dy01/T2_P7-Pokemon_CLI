@@ -1,12 +1,7 @@
 ﻿using cs.project07.pokemon.game.map;
 using cs.project07.pokemon.game.states;
 using cs.project07.pokemon.game.states.list;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 using cs.project07.pokemon.game.combat;
 using cs.project07.pokemon.game.save;
 using cs.project07.pokemon.game.Registry;

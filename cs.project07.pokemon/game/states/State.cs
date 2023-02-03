@@ -1,13 +1,9 @@
-﻿#pragma warning disable CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
-using cs.project07.pokemon.game.states.gui;
-using cs.project07.pokemon.game.states.gui.managers;
-using System.Numerics;
-
+﻿
 namespace cs.project07.pokemon.game.states
 {
     public abstract class State : IUpdatable, IRenderable<Game>, ISavable
     {
-        string _name;
+        private string _name;
         public string Name { get => _name; set => _name = value; }
 
         public Game Parent { get; set; }

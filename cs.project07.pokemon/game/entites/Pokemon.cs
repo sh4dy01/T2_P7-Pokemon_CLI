@@ -1,11 +1,6 @@
 ﻿using cs.project07.pokemon.game.combat;
 using cs.project07.pokemon.game.save;
 using cs.project07.pokemon.game.Registry;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace cs.project07.pokemon.game.entites
 {

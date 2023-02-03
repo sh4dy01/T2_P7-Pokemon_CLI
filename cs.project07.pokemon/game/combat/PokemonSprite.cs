@@ -1,5 +1,4 @@
-﻿using cs.project07.pokemon.game.states;
-using cs.project07.pokemon.game.states.gui;
+﻿using cs.project07.pokemon.game.states.gui;
 using System.Numerics;
 
 namespace cs.project07.pokemon.game.combat

@@ -1,5 +1,4 @@
-﻿using cs.project07.pokemon.game.entites;
-using cs.project07.pokemon.game.states.list;
+﻿using cs.project07.pokemon.game.states.list;
 
 namespace cs.project07.pokemon.game.states.gui
 {
@@ -46,17 +45,15 @@ namespace cs.project07.pokemon.game.states.gui
 
         public void Render()
         {
-            if (_isVisible && _attackInfo is not null)
-            {
-                Console.SetCursorPosition(Left, Top);
-                Console.WriteLine(_attackInfo.Name);
-                Console.SetCursorPosition(Left, Top+1);
-                Console.WriteLine("Damage: " + _attackInfo.Power);
-                Console.SetCursorPosition(Left, Top + 2);
-                Console.WriteLine("Type: " + _attackInfo.Element);
-                Console.SetCursorPosition(Left, Top + 3);
-                Console.WriteLine("PP: " + _attackInfo.Usage);
-            }
+            if (!_isVisible || _attackInfo is null) return;
+            Console.SetCursorPosition(Left, Top);
+            Console.WriteLine(_attackInfo.Name);
+            Console.SetCursorPosition(Left, Top+1);
+            Console.WriteLine("Damage: " + _attackInfo.Power);
+            Console.SetCursorPosition(Left, Top + 2);
+            Console.WriteLine("Type: " + _attackInfo.Element);
+            Console.SetCursorPosition(Left, Top + 3);
+            Console.WriteLine("PP: " + _attackInfo.Usage);
         }
     }
 }

@@ -1,11 +1,4 @@
-﻿using cs.project07.pokemon.game.entites;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace cs.project07.pokemon.game.items.list
 {
     public class Pokeball : Item

@@ -1,12 +1,11 @@
 ﻿using cs.project07.pokemon.game.items;
 using cs.project07.pokemon.game.items.list;
-using System.Reflection.Metadata;
 
 namespace cs.project07.pokemon.game.Registry
 {
     public static class InventoryManager
     {
-        private static List<Item> _inventory = new()
+        private static readonly List<Item> _inventory = new()
         {
             new Pokeball(0, 10),
             new Pokeball(1),
@@ -20,7 +19,7 @@ namespace cs.project07.pokemon.game.Registry
         };
 
         public static List<Item> Inventory => _inventory;
-        private static char[] _itemsPossibilities = { 'p', 'P', 'h', 'H', 'b', 'B', 'c', 'C', 'S' };
+        private static readonly char[] _itemsPossibilities = { 'p', 'P', 'h', 'H', 'b', 'B', 'c', 'C', 'S' };
         public static char[] ItemsPossibilities => _itemsPossibilities;
 
     }

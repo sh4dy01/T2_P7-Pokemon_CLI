@@ -1,43 +1,40 @@
-﻿
-
-namespace cs.project07.pokemon
+﻿namespace cs.project07.pokemon
 {
     public static class AttackRegistry
     {
-        private const int TYPE_PP = 10;
         private const int SPECIAL_PP = 5;
 
-        private static Attack[] _attacks =
+        private static readonly Attack[] _attacks =
         {
-            new Attack("Tackle", 35, ElementType.NORMAL, 35),
-            new Attack("Scratch", 40, ElementType.NORMAL, 35),
-            new Attack("Growl", 10, ElementType.NORMAL, 40),
-            new Attack("Quick attack", 40, ElementType.NORMAL, 30),
-            new Attack("Splash", 0, ElementType.NORMAL, 40),
+            new("Tackle", 35, ElementType.NORMAL, 35),
+            new("Scratch", 40, ElementType.NORMAL, 35),
+            new("Growl", 10, ElementType.NORMAL, 40),
+            new("Quick attack", 40, ElementType.NORMAL, 30),
+            new("Splash", 0, ElementType.NORMAL, 40),
 
-            new Attack("Vine whip", 35, ElementType.GRASS, 10),
-            new Attack("Ember", 40, ElementType.FIRE, 25),
-            new Attack("Water gun", 40, ElementType.WATER, 25),
-            new Attack("Thunder shock", 40, ElementType.ELECTRIC, 30),
-            new Attack("Rollout", 30, ElementType.GROUND, 20),
-            new Attack("Confusion", 50, ElementType.PSYCHIC, 25),
-            new Attack("Judgment", 100, ElementType.NORMAL, SPECIAL_PP),
-            new Attack("Hyper beam", 150, ElementType.NORMAL, SPECIAL_PP),
+            new("Vine whip", 35, ElementType.GRASS, 10),
+            new("Ember", 40, ElementType.FIRE, 25),
+            new("Water gun", 40, ElementType.WATER, 25),
+            new("Thunder shock", 40, ElementType.ELECTRIC, 30),
+            new("Rollout", 30, ElementType.GROUND, 20),
+            new("Confusion", 50, ElementType.PSYCHIC, 25),
+            new("Judgment", 100, ElementType.NORMAL, SPECIAL_PP),
+            new("Hyper beam", 150, ElementType.NORMAL, SPECIAL_PP),
         };
 
-        static public Attack TACKLE = _attacks[0];
-        static public Attack SCRATCH = _attacks[1];
-        static public Attack GROWL = _attacks[2];
-        static public Attack QUICK_ATTACK = _attacks[3];
-        static public Attack SPLASH = _attacks[4];
+        public static Attack TACKLE = _attacks[0];
+        public static Attack SCRATCH = _attacks[1];
+        public static Attack GROWL = _attacks[2];
+        public static Attack QUICK_ATTACK = _attacks[3];
+        public static Attack SPLASH = _attacks[4];
 
-        static public Attack VINE_WHIP = _attacks[5];
-        static public Attack EMBER = _attacks[6];
-        static public Attack WATER_GUN = _attacks[7];
-        static public Attack THUNDER_SHOCK = _attacks[8];
-        static public Attack ROLLOUT = _attacks[9];
-        static public Attack CONFUSION = _attacks[10];
-        static public Attack JUDGMENT = _attacks[11];
-        static public Attack HYPER_BEAM = _attacks[12];
+        public static Attack VINE_WHIP = _attacks[5];
+        public static Attack EMBER = _attacks[6];
+        public static Attack WATER_GUN = _attacks[7];
+        public static Attack THUNDER_SHOCK = _attacks[8];
+        public static Attack ROLLOUT = _attacks[9];
+        public static Attack CONFUSION = _attacks[10];
+        public static Attack JUDGMENT = _attacks[11];
+        public static Attack HYPER_BEAM = _attacks[12];
     }
 }

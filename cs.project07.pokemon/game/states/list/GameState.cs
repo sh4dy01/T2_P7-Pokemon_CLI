@@ -4,7 +4,6 @@ using cs.project07.pokemon.game.entites;
 using cs.project07.pokemon.game.states.gui.managers;
 using cs.project07.pokemon.game.states.gui;
 using System.Numerics;
-using System.Runtime.CompilerServices;
 
 namespace cs.project07.pokemon.game.states.list
 {
@@ -106,84 +105,78 @@ namespace cs.project07.pokemon.game.states.list
 
         public override void HandleKeyEvent(ConsoleKey pressedKey)
         {
-            if(CurrentMap != null)
+            if (CurrentMap == null) return;
+            
+            if (pressedKey == ConsoleKey.Escape)
+                HandleKeyEventButtons(pressedKey);
+            bool mouv = false;
+            switch (pressedKey)
             {
-                if (pressedKey == ConsoleKey.Escape)
-                    HandleKeyEventButtons(pressedKey);
-                bool mouv = false;
-                switch (pressedKey)
-                {
-                    case ConsoleKey.Insert:
-                        // TODO Remove when Pause menu is complete
-                        // Back to previous menu
-                        Game.StatesList?.Pop();
-                        break;
-                    case ConsoleKey.UpArrow:
-                        // TODO Player move up
-                        if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'N') == true 
-                            && CurrentMap.Zoom == 4 && !showMenu)
-                        {
-                            Player.mouvPlayer('N');
-                            mouv = true;
-                        }
-                        if(showMenu) 
-                            Button.SelectPrevious(_buttonManager.Buttons); 
-                        break;
-                    case ConsoleKey.DownArrow:
-                        // TODO Player move down
-                        if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'S') == true
-                            && CurrentMap.Zoom == 4 && !showMenu)
-                        {
-                            Player.mouvPlayer('S');
-                            mouv = true;
-                        }
-                        if(showMenu)
-                            Button.SelectNext(_buttonManager.Buttons);
-                        break;
-                    case ConsoleKey.LeftArrow:
-                        // TODO Player move left
-                        if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'O') == true 
-                            && CurrentMap.Zoom == 4 && !showMenu)
-                        {
-                            Player.mouvPlayer('O');
-                            mouv = true;
-                        }
-                        break;
-                    case ConsoleKey.RightArrow:
-                        // TODO Player move right
-                        if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'E') == true
-                            && CurrentMap.Zoom == 4 && !showMenu)
-                        {
-                            Player.mouvPlayer('E');
-                            mouv = true;
-                        }
-                        break;
-                    case ConsoleKey.Enter:
-                        // TODO Player use action
-                        if(showMenu)
-                            Button.ExecuteAction(_buttonManager.Buttons);
-                        Player.StopDialog();
-                        break;
-                    case ConsoleKey.M:
-                        if (CurrentMap.Zoom == 4 && !showMenu)
-                        {
-                            CurrentMap.Zoom = 1;
-                            Player.zoomPlayer(CurrentMap.Zoom);
-                        }
-                        else if (CurrentMap.Zoom == 1 && !showMenu)
-                        {
-                            CurrentMap.Zoom = 4;
-                            Player.zoomPlayer(CurrentMap.Zoom);
-                        }
-                        break;
-                }
-
-                if (!mouv) return;
-                Player.collisionTeleporter(CurrentMap._Teleporters);
-                Player.collisionItems(CurrentMap.Layers["ITEMS"].ZoomedData, CurrentMap);
-                Player.collisionGrass(CurrentMap.Layers["GRASS"].ZoomedData, game);
-                Player.collisionBoss(CurrentMap.Layers["BOSS"].ZoomedData, game);
+                case ConsoleKey.UpArrow:
+                    // Player move up
+                    if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'N') == true 
+                        && CurrentMap.Zoom == 4 && !showMenu)
+                    {
+                        Player.mouvPlayer('N');
+                        mouv = true;
+                    }
+                    if(showMenu) 
+                        Button.SelectPrevious(_buttonManager.Buttons); 
+                    break;
+                case ConsoleKey.DownArrow:
+                    // Player move down
+                    if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'S') == true
+                        && CurrentMap.Zoom == 4 && !showMenu)
+                    {
+                        Player.mouvPlayer('S');
+                        mouv = true;
+                    }
+                    if(showMenu)
+                        Button.SelectNext(_buttonManager.Buttons);
+                    break;
+                case ConsoleKey.LeftArrow:
+                    // Player move left
+                    if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'O') == true 
+                        && CurrentMap.Zoom == 4 && !showMenu)
+                    {
+                        Player.mouvPlayer('O');
+                        mouv = true;
+                    }
+                    break;
+                case ConsoleKey.RightArrow:
+                    // Player move right
+                    if (Player.collisionWall(CurrentMap.Layers["WALL"].ZoomedData, 'E') == true
+                        && CurrentMap.Zoom == 4 && !showMenu)
+                    {
+                        Player.mouvPlayer('E');
+                        mouv = true;
+                    }
+                    break;
+                case ConsoleKey.Enter:
+                    // Player use action
+                    if(showMenu)
+                        Button.ExecuteAction(_buttonManager.Buttons);
+                    Player.StopDialog();
+                    break;
+                case ConsoleKey.M:
+                    if (CurrentMap.Zoom == 4 && !showMenu)
+                    {
+                        CurrentMap.Zoom = 1;
+                        Player.zoomPlayer(CurrentMap.Zoom);
+                    }
+                    else if (CurrentMap.Zoom == 1 && !showMenu)
+                    {
+                        CurrentMap.Zoom = 4;
+                        Player.zoomPlayer(CurrentMap.Zoom);
+                    }
+                    break;
             }
+
+            if (!mouv) return;
+            Player.collisionTeleporter(CurrentMap._Teleporters);
+            Player.collisionItems(CurrentMap.Layers["ITEMS"].ZoomedData, CurrentMap);
+            Player.collisionGrass(CurrentMap.Layers["GRASS"].ZoomedData, game);
+            Player.collisionBoss(CurrentMap.Layers["BOSS"].ZoomedData, game);
         }
 
         private void HandleKeyEventButtons(ConsoleKey pressedKey)
@@ -273,20 +266,15 @@ namespace cs.project07.pokemon.game.states.list
             int ConsoleWidth = Convert.ToInt32(Game.ConsoleSize.X);
             int ConsoleHeight = Convert.ToInt32(Game.ConsoleSize.Y);
 
-            int cameraOffsetX;
-            int cameraOffsetY;
-
-            Tuple<int, int> result;
-
-            cameraOffsetX = Convert.ToInt32(Player.playerPosition.X) - ConsoleHeight / 2;
-            cameraOffsetY = Convert.ToInt32(Player.playerPosition.Y) - ConsoleWidth / 2;
+            var cameraOffsetX = Convert.ToInt32(Player.playerPosition.X) - ConsoleHeight / 2;
+            var cameraOffsetY = Convert.ToInt32(Player.playerPosition.Y) - ConsoleWidth / 2;
 
             if (cameraOffsetX < 0) cameraOffsetX = 0;
             if (cameraOffsetY < 0) cameraOffsetY = 0;
             if (cameraOffsetY > ConsoleWidth*4) cameraOffsetY = ConsoleWidth * 4;
             if (cameraOffsetX > ConsoleHeight*4) cameraOffsetX = ConsoleHeight * 4;
 
-            result = new Tuple<int, int>(cameraOffsetX, cameraOffsetY);
+            var result = new Tuple<int, int>(cameraOffsetX, cameraOffsetY);
 
             return result;
         }

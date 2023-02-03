@@ -3,13 +3,7 @@ using cs.project07.pokemon.game.entites;
 using cs.project07.pokemon.game.Registry;
 using cs.project07.pokemon.game.states.gui;
 using cs.project07.pokemon.game.states.gui.managers;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace cs.project07.pokemon.game.states.list
 {
@@ -20,8 +14,6 @@ namespace cs.project07.pokemon.game.states.list
         private DialogBox _dialogBox;
         private PokemonSprite _sprite;
 
-        bool init = false;
-        
         public StarterSelectionState(Game game) : base(game)
         {
             Init();
@@ -33,7 +25,7 @@ namespace cs.project07.pokemon.game.states.list
             Console.Clear();
             
             Name = "Starter Selection Menu";
-            _dialogBox = new DialogBox(this);
+            _dialogBox = new(this);
             _dialogBox.Top = Console.WindowHeight / 2;
             _dialogBox.Left = Console.WindowWidth / 2 - 45;
 
@@ -123,7 +115,6 @@ namespace cs.project07.pokemon.game.states.list
             // Render state childs
             // ------ Buttons
             _buttonManager?.Render();
-            init = true;
         }
     }
 }

@@ -7,6 +7,7 @@
  * | | => Ground             *
  * |@| => Player spawn       *
  * |T| => Teleporter         *
+ * |A| => Arceus Boss        *
  *                           *
  *****************************/
 
