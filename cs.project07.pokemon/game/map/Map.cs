@@ -12,14 +12,12 @@
  *****************************/
 
 using cs.project07.pokemon.game.states;
-using System.Collections;
 using System.Numerics;
-using System.Security.Cryptography.X509Certificates;
-using System.Xml.Linq;
 using cs.project07.pokemon.game.save;
-using cs.project07.pokemon.game;
 using cs.project07.pokemon.game.states.list;
 using cs.project07.pokemon.game.Registry;
+using static cs.project07.pokemon.game.map.Map;
+using System.Xml.Linq;
 
 namespace cs.project07.pokemon.game.map
 {
@@ -73,15 +71,18 @@ namespace cs.project07.pokemon.game.map
 
         public void ModifyMap (int x, int y , string layerName, char newChar)
         {
+            char[,] data = Layers[layerName].Data;
             char[,] tempData = Layers[layerName].ZoomedData;
             for (int i = 0; i < 4; i++)
             {
                 for (int j = 0; j < 4; j++)
                 {
                     tempData[x+i,y+j] = newChar;
+                    data[x / Zoom, y / Zoom] = newChar;
                 }
             }
 
+            Layers[layerName].SetData(data);
             Layers[layerName].SetZoomData(tempData);
         }
 
@@ -272,6 +273,8 @@ namespace cs.project07.pokemon.game.map
             public char[,]? Data;
             private char[,]? _zoomedData;
             public char[,]? ZoomedData { get => _zoomedData;}
+            public void SetData(char[,] truc) { Data = truc; }
+
             private int _zoom;
             public int Zoom
             {

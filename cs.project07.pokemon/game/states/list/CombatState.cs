@@ -31,7 +31,7 @@ namespace cs.project07.pokemon.game.states.list
         private bool _isPlayerTurn = true;
         private string _effectivenessMessage = "";
         
-        private float _runChance = 33;
+        private float _runChance = 50;
 
         private CombatView _currentView;
         private readonly CombatDialogBox _dialogBox;
@@ -152,9 +152,9 @@ namespace cs.project07.pokemon.game.states.list
             _playerPokemonUi.Render();
             
             if (_enemyPokemon.Level > _playerPokemon.Level)
-                _runChance = 25;
+                _runChance = 35;
             else if (_enemyPokemon.Level < _playerPokemon.Level)
-                _runChance = 70;
+                _runChance = 75;
 
             SwitchView(_isPlayerTurn ? CombatView.SELECT_ACTION : CombatView.ENEMY_ATTACK);
         }
@@ -258,9 +258,9 @@ namespace cs.project07.pokemon.game.states.list
         private void UpdateAttackInfoUi()
         {
             if (_currentView != CombatView.SELECT_ATTACK) return;
-            if (_dialogBox.ButtonManager.GetSelectedButtonIndex() < _playerPokemon.Attacks.Length)
+            if (_dialogBox.ButtonManager.GetSelectedButtonIndex() < _playerPokemon?.Attacks.Length)
             {
-                _attackInfoUi.Show(_playerPokemon.Attacks[_dialogBox.ButtonManager.GetSelectedButtonIndex()]);
+                _attackInfoUi?.Show(_playerPokemon.Attacks[_dialogBox.ButtonManager.GetSelectedButtonIndex()]);
             }
         }
 
