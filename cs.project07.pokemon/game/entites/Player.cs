@@ -116,46 +116,10 @@ namespace cs.project07.pokemon.game.entites
                 }
             }
 
-            
-            //load captured pokemon
-            if (data.ContainsKey("CapturedPokemonNumber")) { 
-            var NumberOfCapturedPokemon = data?["CapturedPokemonNumber"];
-            int? index = data?.Keys.ToList().IndexOf("CapturedPokemonNumber");
-            List<Pokemon> CapturedPokemon = new List<Pokemon>();
 
-                if (NumberOfCapturedPokemon != null)
-                {
-                    index += 1;
-                    for (int i = 0; i < NumberOfCapturedPokemon; i++)
-                    {
-                        int ID, MaxHP, Attack, Defense, SPAttack, SPDeffense, Speed, Level, CurrentHP, Experience, PokemonNumberOfAttacks = 0;
-                        List<int> PokemonAttackPP = new List<int>();
 
-                        ID                     = data.ElementAt((int)index + i * 11 + 0).Value;
-                        MaxHP                  = data.ElementAt((int)index + i * 11 + 1).Value;
-                        Attack                 = data.ElementAt((int)index + i * 11 + 2).Value;
-                        Defense                = data.ElementAt((int)index + i * 11 + 3).Value;
-                        SPAttack               = data.ElementAt((int)index + i * 11 + 4).Value;
-                        SPDeffense             = data.ElementAt((int)index + i * 11 + 5).Value;
-                        Speed                  = data.ElementAt((int)index + i * 11 + 6).Value;
-                        Level                  = data.ElementAt((int)index + i * 11 + 7).Value;
-                        CurrentHP              = data.ElementAt((int)index + i * 11 + 8).Value;
-                        Experience             = data.ElementAt((int)index + i * 11 + 9).Value;
-                        PokemonNumberOfAttacks = data.ElementAt((int)index + i * 11 + 10).Value;
 
-                        for (int y = 1; y < PokemonNumberOfAttacks + 1; y++)
-                        {
-                            PokemonAttackPP.Add(data.ElementAt((int)index + i * 11 + 10 + y).Value);
-                        }
-
-                        index += PokemonNumberOfAttacks;
-                        CapturedPokemon.Add(LoadPokemon(MaxHP, Attack, Defense, SPAttack, SPDeffense, Speed, ID, Level, Experience, CurrentHP, PokemonAttackPP));
-                    }
-                    PokemonListManager.SetPokemonCaptured(CapturedPokemon);
-                }
-            }
-
-            
+            int id = 1;
 
             //load battleTeam pokemon
             if (data.ContainsKey("BattleTeamPokemonNumber")) { 
@@ -189,7 +153,8 @@ namespace cs.project07.pokemon.game.entites
                         }
 
                         index += PokemonNumberOfAttacks;
-                        BattleTeam.Add(LoadPokemon(MaxHP, Attack, Defense, SPAttack, SPDeffense, Speed, ID, Level, Experience, CurrentHP, PokemonAttackPP));
+                        BattleTeam.Add(LoadPokemon(MaxHP, Attack, Defense, SPAttack, SPDeffense, Speed, ID, Level, Experience, CurrentHP, PokemonAttackPP,id));
+                        id++;
                     }
                     index = 0;
                     Pokemon[] result = new Pokemon[6];
@@ -201,14 +166,54 @@ namespace cs.project07.pokemon.game.entites
                     PokemonListManager.SetBattleTeam(result);
                 }
 
+                //load captured pokemon
+                if (data.ContainsKey("CapturedPokemonNumber"))
+                {
+                    var NumberOfCapturedPokemon = data?["CapturedPokemonNumber"];
+                    index = data?.Keys.ToList().IndexOf("CapturedPokemonNumber");
+                    List<Pokemon> CapturedPokemon = new List<Pokemon>();
+
+                    if (NumberOfCapturedPokemon != null)
+                    {
+                        index += 1;
+                        for (int i = 0; i < NumberOfCapturedPokemon; i++)
+                        {
+                            int ID, MaxHP, Attack, Defense, SPAttack, SPDeffense, Speed, Level, CurrentHP, Experience, PokemonNumberOfAttacks = 0;
+                            List<int> PokemonAttackPP = new List<int>();
+
+                            ID = data.ElementAt((int)index + i * 11 + 0).Value;
+                            MaxHP = data.ElementAt((int)index + i * 11 + 1).Value;
+                            Attack = data.ElementAt((int)index + i * 11 + 2).Value;
+                            Defense = data.ElementAt((int)index + i * 11 + 3).Value;
+                            SPAttack = data.ElementAt((int)index + i * 11 + 4).Value;
+                            SPDeffense = data.ElementAt((int)index + i * 11 + 5).Value;
+                            Speed = data.ElementAt((int)index + i * 11 + 6).Value;
+                            Level = data.ElementAt((int)index + i * 11 + 7).Value;
+                            CurrentHP = data.ElementAt((int)index + i * 11 + 8).Value;
+                            Experience = data.ElementAt((int)index + i * 11 + 9).Value;
+                            PokemonNumberOfAttacks = data.ElementAt((int)index + i * 11 + 10).Value;
+
+                            for (int y = 1; y < PokemonNumberOfAttacks + 1; y++)
+                            {
+                                PokemonAttackPP.Add(data.ElementAt((int)index + i * 11 + 10 + y).Value);
+                            }
+
+                            index += PokemonNumberOfAttacks;
+                            CapturedPokemon.Add(LoadPokemon(MaxHP, Attack, Defense, SPAttack, SPDeffense, Speed, ID, Level, Experience, CurrentHP, PokemonAttackPP,id));
+                            id++;
+                        }
+                        PokemonListManager.SetPokemonCaptured(CapturedPokemon);
+                    }
+                }
+
                 // load items
                 char[] ItemsPossibilities = InventoryManager.ItemsPossibilities;
-                foreach (var id in ItemsPossibilities)
+                foreach (var ID in ItemsPossibilities)
                 {
-                    string strID = id.ToString();
+                    string strID = ID.ToString();
                     foreach (var item in InventoryManager.Inventory)
                     {
-                        if (id == item.ID) if (data.ContainsKey(strID)) item.SetQuantity(data[strID]);
+                        if (ID == item.ID) if (data.ContainsKey(strID)) item.SetQuantity(data[strID]);
                     }
                 }
 
@@ -218,10 +223,11 @@ namespace cs.project07.pokemon.game.entites
         }
 
       private static Pokemon LoadPokemon(int MaxHP, int Attack, int Defense, int SPAttack, int SPDeffense, int Speed, int ID,
-          int Level, int Experience, int CurrentHP, List<int> PokemonAttackPP)
+          int Level, int Experience, int CurrentHP, List<int> PokemonAttackPP,int id)
       {
           var stat = new Stat((MaxHP, Attack, Defense, SPAttack, SPDeffense, Speed));
           var pokemon = new Pokemon(PokemonRegistry.GetPokemonByPokedexId(ID), Level, stat, Experience, CurrentHP);
+            pokemon.SetId(id);
 
           int count = 0;
           foreach (var attack in pokemon.Attacks)
