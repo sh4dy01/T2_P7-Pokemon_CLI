@@ -167,15 +167,19 @@ namespace cs.project07.pokemon.game.states.gui
                     Selected = selected,
                     Action = () =>
                     {
+                        UpdateText("");
                         if (item.GetQuantity() > 0)
                         {
                             if (item.GetType() == typeof(Potion))
                             {
-                                if (PokemonListManager.ActivePokemon.Currenthealth < PokemonListManager.ActivePokemon.Stat.MaxHP)
+                                if (PokemonListManager.ActivePokemon.Currenthealth <
+                                    PokemonListManager.ActivePokemon.Stat.MaxHP)
                                 {
                                     item.Use(PokemonListManager.ActivePokemon);
-                                    ((CombatState)Parent)._playerPokemonUi?.UpdateHealth(PokemonListManager.ActivePokemon);
+                                    ((CombatState)Parent)._playerPokemonUi?.UpdateHealth(((CombatState)Parent)
+                                        ._playerPokemon);
                                 }
+                                else return;
                             }
                             
                             else if (item.GetType() == typeof(Pokeball))

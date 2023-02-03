@@ -38,6 +38,8 @@ namespace cs.project07.pokemon
             _currentUsage = _maxUsage;
         }
 
+        public void SetPP(int pp) => _currentUsage = pp;
+
         public void Use()
         {
             if (_currentUsage > 0)

@@ -41,7 +41,7 @@ namespace cs.project07.pokemon.game.states.list
         private PokemonSprite _playerSprite;
         private PokemonSprite _enemySprite;
 
-        private Pokemon? _playerPokemon;
+        public Pokemon? _playerPokemon;
         private AttackInfoBox? _attackInfoUi;
         public PokemonInfoBox? _playerPokemonUi;
 

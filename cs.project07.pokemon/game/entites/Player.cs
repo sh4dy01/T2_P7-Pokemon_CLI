@@ -7,6 +7,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using cs.project07.pokemon.game.combat;
 using cs.project07.pokemon.game.save;
 using cs.project07.pokemon.game.Registry;
 using cs.project07.pokemon.game.states.gui;
@@ -152,10 +153,8 @@ namespace cs.project07.pokemon.game.entites
                         }
 
                         index += PokemonNumberOfAttacks;
-                        //to-do fonction de création de poké
-                        // CapturedPokemon.add(pokemon);
+                        CapturedPokemon.Add(LoadPokemon(MaxHP, Attack, Defense, SPAttack, SPDeffense, Speed, ID, Level, Experience, CurrentHP, PokemonAttackPP));
                     }
-
                 }
             }
 
@@ -193,11 +192,8 @@ namespace cs.project07.pokemon.game.entites
                         }
 
                         index += PokemonNumberOfAttacks;
-                        //to-do fonction de création de poké
-                        // BattleTeam.add(pokemon);
+                        BattleTeam.Add(LoadPokemon(MaxHP, Attack, Defense, SPAttack, SPDeffense, Speed, ID, Level, Experience, CurrentHP, PokemonAttackPP));
                     }
-
-
                 }
 
                 // load items
@@ -216,7 +212,23 @@ namespace cs.project07.pokemon.game.entites
 
         }
 
-        public void Render()
+      private static Pokemon LoadPokemon(int MaxHP, int Attack, int Defense, int SPAttack, int SPDeffense, int Speed, int ID,
+          int Level, int Experience, int CurrentHP, List<int> PokemonAttackPP)
+      {
+          var stat = new Stat((MaxHP, Attack, Defense, SPAttack, SPDeffense, Speed));
+          var pokemon = new Pokemon(PokemonRegistry.GetPokemonByPokedexId(ID), Level, stat, Experience, CurrentHP);
+
+          int count = 0;
+          foreach (var attack in pokemon.Attacks)
+          {
+              attack.SetPP(PokemonAttackPP[count]);
+              count++;
+          }
+
+          return pokemon;
+      }
+
+      public void Render()
         {
             if (dialog != null) dialog.Render();
         }
