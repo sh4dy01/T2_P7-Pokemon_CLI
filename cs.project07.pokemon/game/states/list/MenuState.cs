@@ -16,6 +16,7 @@ namespace cs.project07.pokemon.game.states.list
 
         public MenuState(Game game) : base(game)
         {
+            Console.Clear();
             Init();
         }
 
@@ -23,9 +24,9 @@ namespace cs.project07.pokemon.game.states.list
         {
             Name = "Main Menu";
             _dialogBox = new DialogBox(this);
-            _dialogBox.Top = Console.WindowHeight / 2 + 5;
-            _dialogBox.Left = Console.WindowWidth / 2 - 5;
-            _mainMenu = new Sprite(new Vector2(Console.WindowWidth /2 - 40, Console.WindowHeight / 2 - 17), ConsoleColor.White, ConsoleColor.Black);
+            _dialogBox.Top = Console.WindowHeight / 2;
+            _dialogBox.Left = Console.WindowWidth / 2;
+            _mainMenu = new Sprite(new Vector2(Console.WindowWidth /2 - 55, Console.WindowHeight / 2 - 23), ConsoleColor.White, ConsoleColor.Black);
             _mainMenu.LoadSprite("menu_title");
             _firstGame = true;
             Load();
