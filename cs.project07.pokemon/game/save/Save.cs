@@ -12,7 +12,7 @@ namespace cs.project07.pokemon.game.save
 
     static class SaveManager
     {
-        private const string SAVEPATH = "../../../game/save/Save.txt";
+        private const string SAVEPATH = "game/save/Save.txt";
         private const string METAPATH = "game/save/Meta.txt";
         static private Dictionary<string, int>? _toSave { get; set; }
         static private Dictionary<string, int>? _Loaded;
