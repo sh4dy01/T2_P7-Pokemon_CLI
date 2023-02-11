@@ -115,12 +115,11 @@ namespace cs.project07.pokemon.game.entites
 
         public virtual void InitEnemyStats()
         {
-            float threshold;
             int avgLevel = PokemonListManager.GetAverageLevel();
             int pkmCount = PokemonListManager.GetPokemonInBattleCount();
 
             Random rnd = new();
-            _level = rnd.Next(pkmCount, pkmCount + avgLevel + 2);
+            _level = rnd.Next(pkmCount, pkmCount*2 + avgLevel /2);
 
             InitStat();
         }
