@@ -8,14 +8,14 @@ namespace cs.project07.pokemon.game.Registry
         private static readonly List<Item> _inventory = new()
         {
             new Pokeball(0, 10),
-            new Pokeball(1),
-            new Pokeball(2),
+            new Pokeball(1, 5),
+            new Pokeball(2, 3),
             new Pokeball(3),
             new Potion(0, 10),
-            new Potion(1),
-            new Potion(2),
-            new Potion(3),
-            new Spray(3),
+            new Potion(1, 5),
+            new Potion(2, 3),
+            new Potion(3, 1),
+            new Spray(5),
         };
 
         public static List<Item> Inventory => _inventory;
