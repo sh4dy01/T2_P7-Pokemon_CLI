@@ -153,6 +153,7 @@ namespace cs.project07.pokemon.game.entites
         {
             if (amount < 0) return;
 
+            SetPokemonAlive();
             _currentHealth += amount;
             if (_currentHealth >= _stat.MaxHP) _currentHealth = _stat.MaxHP;
         }
@@ -160,7 +161,10 @@ namespace cs.project07.pokemon.game.entites
         public void HealMax()
         {
             _currentHealth = _stat.MaxHP;
+            SetPokemonAlive();
         }
+
+        private void SetPokemonAlive() => _isDead = false;
 
         public void GainExperience(int experience)
         {
