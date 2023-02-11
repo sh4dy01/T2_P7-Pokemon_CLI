@@ -45,6 +45,8 @@ namespace cs.project07.pokemon.game.states.gui
 
         public void Render()
         {
+            
+            
             if (!_isVisible || _attackInfo is null) return;
             Console.SetCursorPosition(Left, Top);
             Console.WriteLine(_attackInfo.Name);

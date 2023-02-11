@@ -13,7 +13,6 @@ namespace cs.project07.pokemon.game.states.list
         private Dictionary<string, Map> Maps;
 
         public Player Player { get; set; }
-        private CombatState Combat;
         private Game game;
 
         private ButtonManager _buttonManager;

@@ -39,7 +39,7 @@ namespace cs.project07.pokemon.game.states.list
         private readonly PokemonInfoBox _enemyPokemonUi;
 
         private readonly PokemonSprite _playerSprite;
-        private PokemonSprite _enemySprite;
+        private PokemonSprite? _enemySprite;
 
         public Pokemon? _playerPokemon;
         private readonly AttackInfoBox? _attackInfoUi;
@@ -96,11 +96,12 @@ namespace cs.project07.pokemon.game.states.list
                     _dialogBox.InitSelectItemsButtons();
                     break;
                 case CombatView.SELECT_ATTACK:
-                    _currentView = CombatView.SELECT_ATTACK;
                     _dialogBox.InitSelectAttackButtons(_playerPokemon.Attacks);
-                    _attackInfoUi.Show(_playerPokemon.Attacks[0]);
+                    UpdateAttackInfoUi();
                     break;
                 case CombatView.EFFECTIVE:
+                    _dialogBox.ResetButtons();
+                    _attackInfoUi.Hide();
                     if (_effectivenessMessage == "")
                     {
                         SwitchView(CombatView.END_TURN);
@@ -111,9 +112,11 @@ namespace cs.project07.pokemon.game.states.list
                 case CombatView.ACTION_USE:
                     break;
                 case CombatView.ENEMY_ATTACK:
+                    _dialogBox.ResetButtons();
                     DealPlayerDamage();
                     break;
                 case CombatView.END_TURN:
+                    _dialogBox.ResetButtons();
                     CheckIfCombatEnd();
                     break;
                 case CombatView.END_COMBAT:
@@ -168,28 +171,31 @@ namespace cs.project07.pokemon.game.states.list
                 _playerSprite.Clear();
 
                 if (!PokemonListManager.IsAllPokemonDead())
-                    SwitchPokemonFromAction();
+                    SwitchView(CombatView.SELECT_POKEMON);
                 else
                 {
                     _dialogBox.UpdateText("You have no more pokemon ! You lost !");
-                    Game.StatesList.Clear();
+                    Game.StatesList?.Clear();
+                    Game.StatesList?.Push(new MenuState(Parent));
                 }
             }
             else if (_enemyPokemon.IsDead)
             {
+                StringBuilder sb = new();
+
                 int oldLevel = _playerPokemon.Level;
                 int experience = Pokemon.LEVEL_UP_GAINED * _enemyPokemon.Level;
 
-                _enemySprite.Clear();
+                _enemySprite?.Clear();
                 _enemySprite = null;
 
-                _playerPokemonUi.UpdateExperience(experience);
+                _playerPokemonUi?.UpdateExperience(experience);
                 _playerPokemon.GainExperience(experience);
                 PokemonListManager.UpdatePokemon(_playerPokemon);
+                sb.Append("You gained").Append(experience).Append(" experience !");
 
                 if (oldLevel >= _playerPokemon.Level) return;
 
-                StringBuilder sb = new();
                 sb.Append("Your ").Append(_playerPokemon.Name).Append(" gained ").Append(_playerPokemon.Level - oldLevel).Append(" level !");
                 _dialogBox.UpdateText(sb.ToString());
             }
@@ -213,14 +219,16 @@ namespace cs.project07.pokemon.game.states.list
             _isPlayerTurn = false;
             _dialogBox.ResetButtons();
         }
-        
+
         private void DealPlayerDamage()
         {
+            _attackInfoUi.Hide();
             Attack attack = _enemyPokemon.ChooseBestAttack(_playerPokemon.Element);
             _dialogBox.UpdateText("The enemy " + _enemyPokemon.Name + " used " + attack.Name + " !");
             _playerPokemon.TakeDamage(GetDamageWithMultiplier(attack, _enemyPokemon, _playerPokemon));
             _playerPokemonUi.UpdateHealth(_playerPokemon);
             _isPlayerTurn = true;
+            _dialogBox.ResetButtons();
         }
 
         private int GetDamageWithMultiplier(Attack attack, Pokemon attacker, Pokemon defender)

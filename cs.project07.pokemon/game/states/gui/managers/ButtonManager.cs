@@ -33,6 +33,7 @@
 
         public int GetSelectedButtonIndex()
         {
+            if (Buttons?.Count == 0) return 0;
             return (int)(Buttons?.Values.ToList().FindIndex(button => button.Selected));
         }
 
