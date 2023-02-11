@@ -312,7 +312,7 @@ namespace cs.project07.pokemon.game.states.list
                 }
                 //HP
                 Console.SetCursorPosition((int)Xpos - increX, (int)Ypos + increY);
-                Console.WriteLine("HP : " + pokemon.Currenthealth + "/" + pokemon.Stat.MaxHP);
+                Console.WriteLine("HP : " + Math.Round(pokemon.Currenthealth) + "/" + Math.Round(pokemon.Stat.MaxHP));
                 //Lvl
                 Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY);
                 Console.WriteLine("Lvl : " + pokemon.Level);
@@ -340,19 +340,19 @@ namespace cs.project07.pokemon.game.states.list
                     Console.WriteLine("STATS");
                     //Attack
                     Console.SetCursorPosition((int)Xpos - increX, (int)Ypos + increY * 5);
-                    Console.WriteLine("Attack : " + pokemon.Stat.Attack);
+                    Console.WriteLine("Attack : " + Math.Round(pokemon.Stat.Attack));
                     //Defense
                     Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY * 5);
-                    Console.WriteLine("Defense : " + pokemon.Stat.Defense);
+                    Console.WriteLine("Defense : " + Math.Round(pokemon.Stat.Defense));
                     //SPAttack
                     Console.SetCursorPosition((int)Xpos - increX - 2, (int)Ypos + increY * 6);
-                    Console.WriteLine("SPAttack : " + pokemon.Stat.SPAttack);
+                    Console.WriteLine("SPAttack : " + Math.Round(pokemon.Stat.SPAttack));
                     //SPDefense
                     Console.SetCursorPosition((int)Xpos + increX, (int)Ypos + increY * 6);
-                    Console.WriteLine("SPDefense : " + pokemon.Stat.SPDefense);
+                    Console.WriteLine("SPDefense : " + Math.Round(pokemon.Stat.SPDefense));
                     //Speed
                     Console.SetCursorPosition((int)Xpos, (int)Ypos + increY * 7);
-                    Console.WriteLine("Speed : " + pokemon.Stat.Speed);
+                    Console.WriteLine("Speed : " + Math.Round(pokemon.Stat.Speed));
                     if (!moreStatPoke)
                     {
                         moreStatPoke = true;
@@ -415,7 +415,7 @@ namespace cs.project07.pokemon.game.states.list
                     ActiveBackgroundColor = ConsoleColor.DarkGray,
                     ActiveForegroundColor = ConsoleColor.Black
                 };
-                _buttons["SWAP_TEAM"] = new Button(_dialogBox, "Swap pokemon")
+                /*_buttons["SWAP_TEAM"] = new Button(_dialogBox, "Swap pokemon")
                 {
                     Selected = false,
                     Offsets = new Vector2(Xpos+30, Ypos-1),
@@ -428,7 +428,7 @@ namespace cs.project07.pokemon.game.states.list
                     ForegroundColor = ConsoleColor.Black,
                     ActiveBackgroundColor = ConsoleColor.DarkGray,
                     ActiveForegroundColor = ConsoleColor.Black
-                };
+                };*/
                 initUseButton = false;
             }
         }
@@ -439,7 +439,7 @@ namespace cs.project07.pokemon.game.states.list
             bool first = false;
             foreach (var potion in InventoryManager.Inventory.Where(Item => Item.GetType() == typeof(Potion)))
             {
-                if (count == 1) //Why first show is 3 ????
+                if (count == 0) //Why first show is 3 ????
                     first = true;
                 else
                     first = false;
@@ -450,6 +450,7 @@ namespace cs.project07.pokemon.game.states.list
                     Offsets = new Vector2(Xpos -15 + 20 * count, Ypos),
                     Action = () =>
                     {
+                        if (pokemon.IsAtMaxHealth()) return;
                         _buttons.Clear();
                         potion.Use(pokemon);
                         initUseButton = true;
@@ -615,6 +616,7 @@ namespace cs.project07.pokemon.game.states.list
                     Offsets = new Vector2(Xpos * 2, Ypos + 2 * count + 1),
                     Action = () =>
                     {
+                        if(pokemon.IsAtMaxHealth()) return;
                         potion.Use(pokemon);
                         _buttons.Clear();
                         ShowPotionList();
