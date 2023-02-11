@@ -127,8 +127,9 @@ namespace cs.project07.pokemon.game.entites
 
         protected void LevelUpStat()
         {
-            _currentHealth += (int)Math.Round(_stat.MaxHP * Stat.LEVEL_UP_STEP);
             _stat.LevelUpStat(_dex.Stat);
+            _currentHealth += (float)Math.Round(_stat.MaxHP * Stat.LEVEL_UP_STEP, 0);
+            _stat.RoundToInt();
             _requiredExperience += LEVEL_UP_STEP;
         }
 
@@ -144,10 +145,14 @@ namespace cs.project07.pokemon.game.entites
             }
         }
 
+        public bool IsAtMaxHealth()
+        {
+            return Math.Round(_currentHealth) >= Math.Round(_stat.MaxHP);
+        }
+
         public void Heal(int amount)
         {
             if (amount < 0) return;
-            if (_currentHealth <= 0) return;
 
             _currentHealth += amount;
             if (_currentHealth >= _stat.MaxHP) _currentHealth = _stat.MaxHP;
