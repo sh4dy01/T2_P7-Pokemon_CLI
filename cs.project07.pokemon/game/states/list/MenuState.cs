@@ -17,6 +17,7 @@ namespace cs.project07.pokemon.game.states.list
         public MenuState(Game game) : base(game)
         {
             Console.Clear();
+            Console.ResetColor();
             Init();
         }
 

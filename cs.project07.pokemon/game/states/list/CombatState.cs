@@ -176,7 +176,6 @@ namespace cs.project07.pokemon.game.states.list
                 {
                     _dialogBox.UpdateText("You have no more pokemon ! You lost !");
                     Game.StatesList?.Clear();
-                    Game.StatesList?.Push(new MenuState(Parent));
                 }
             }
             else if (_enemyPokemon.IsDead)
@@ -192,11 +191,11 @@ namespace cs.project07.pokemon.game.states.list
                 _playerPokemonUi?.UpdateExperience(experience);
                 _playerPokemon.GainExperience(experience);
                 PokemonListManager.UpdatePokemon(_playerPokemon);
-                sb.Append("You gained").Append(experience).Append(" experience !");
+                sb.Append("You gained ").Append(experience).Append(" experience !");
 
                 if (oldLevel >= _playerPokemon.Level) return;
 
-                sb.Append("Your ").Append(_playerPokemon.Name).Append(" gained ").Append(_playerPokemon.Level - oldLevel).Append(" level !");
+                sb.Append(" Your ").Append(_playerPokemon.Name).Append(" gained ").Append(_playerPokemon.Level - oldLevel).Append(" level !");
                 _dialogBox.UpdateText(sb.ToString());
             }
             else switch (_isPlayerTurn)
