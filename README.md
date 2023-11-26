@@ -13,7 +13,7 @@ This game includes the following elements:
 * An inventory menu showcasing items such as potions. 
 * A menu for saving and loading the game (serialization).
 
-## How to Use
+## How to use
 To run the game, follow these steps:
 
 1. Download the game from the release section.
@@ -21,7 +21,15 @@ To run the game, follow these steps:
 3. Once the game is open, go to our command line settings and set the `columns to 237` and `rows to 60`.
 4. Have fun!
 
-## How to Play
+## How to play
+
+### Controls
+* Arrows to move and navigate in the menus
+* Enter to select
+* Backspace to return
+* Echap to open the pause menu  
+
+### Gameplay overview
 The game unfolds in two main phases:
 
 1. Map Exploration:
